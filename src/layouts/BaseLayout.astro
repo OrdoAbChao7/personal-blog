@@ -1,0 +1,75 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  active?: string;
+}
+
+const {
+  title = 'JJ Lab | Technology, Investment & Thinking',
+  description = '个人实验室 — 技术探索、工程实践、投资研究与思考。',
+  active = '',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>{title}</title>
+
+    <!-- 防闪烁：在首次绘制前应用持久化的主题与语言 -->
+    <script is:inline>
+      (function () {
+        var theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.dataset.theme = theme;
+        var lang = localStorage.getItem('lang') || 'zh';
+        document.documentElement.lang = lang;
+      })();
+    </script>
+  </head>
+  <body>
+    <Nav active={active} />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+
+    <!-- i18n 引擎：根据 lang 替换所有 [data-i18n] 文案 -->
+    <script>
+      import { translations } from '../lib/i18n';
+      function applyLang(lang) {
+        document.documentElement.lang = lang;
+        var dict = translations[lang] || translations.zh;
+        document.querySelectorAll('[data-i18n]').forEach(function (el) {
+          var key = el.dataset.i18n;
+          if (dict[key]) el.textContent = dict[key];
+        });
+        localStorage.setItem('lang', lang);
+        window.dispatchEvent(new CustomEvent('lang:applied', { detail: lang }));
+      }
+      window.__applyLang = applyLang;
+      var savedLang = localStorage.getItem('lang') || 'zh';
+      applyLang(savedLang);
+    </script>
+  </body>
+</html>

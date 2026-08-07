@@ -1,0 +1,72 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  href?: string;
+  linkLabel?: string;
+  eyebrowKey?: string;
+  titleKey?: string;
+  linkKey?: string;
+}
+const {
+  eyebrow,
+  title,
+  href,
+  linkLabel = '查看全部 →',
+  eyebrowKey,
+  titleKey,
+  linkKey,
+} = Astro.props;
+---
+
+<div class="section-header">
+  <div class="text">
+    {eyebrow && <span class="eyebrow mono" data-i18n={eyebrowKey}>{eyebrow}</span>}
+    <h2 class="title" data-i18n={titleKey}>{title}</h2>
+  </div>
+  {
+    href && (
+      <a href={href} class="link" data-i18n={linkKey}>
+        {linkLabel}
+      </a>
+    )
+  }
+</div>
+
+<style>
+  .section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: var(--space-6);
+    gap: var(--space-4);
+  }
+  .text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .eyebrow {
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+  }
+  .title {
+    font-size: var(--text-2xl);
+  }
+  .link {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+    padding-bottom: 4px;
+  }
+  .link:hover {
+    color: var(--color-accent-hover);
+  }
+  @media (max-width: 640px) {
+    .title {
+      font-size: var(--text-xl);
+    }
+  }
+</style>

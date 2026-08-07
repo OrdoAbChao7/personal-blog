@@ -1,0 +1,73 @@
+---
+title: Edge Impulse 模型 INT8 量化的精度回退
+description: 把浮点模型量化到 INT8 部署到 ESP32-S3，精度从 92% 掉到 74% 的排查与修复。
+hardware: ESP32-S3
+software: Edge Impulse + TensorFlow Lite Micro
+difficulty: 5
+date: '2026-08-03'
+tags:
+  - tinyml
+  - quantization
+  - edge-ai
+---
+
+## 背景
+
+MicroGlow 的分类模型在 Edge Impulse 上用浮点训练，准确率 92%。一键导出 INT8 量化版部署到 ESP32-S3 后，实测准确率掉到 74%。
+
+18 个百分点的回退，不可接受。
+
+## 量化为什么掉精度
+
+INT8 量化的本质是把 `float32` 的权重和激活映射到 `[-128, 127]`。问题出在**激活值的分布**：
+
+- 大部分激活值集中在 `[0, 1]`，量化后只占十几个 bucket
+- 少数离群激活值在 `[5, 10]`，却把整个量化范围撑大
+- 结果是大部分正常样本被压在低分辨率区间
+
+## 排查步骤
+
+### 1. 用 Edge Impulse 的量化分析工具
+
+导出量化前后模型，对比每层的激活分布。发现第一层全连接的激活值范围是 `[0.1, 8.7]`，严重不均衡。
+
+### 2. 尝试 QAT（量化感知训练）
+
+Edge Impulse 默认是 PTQ（训练后量化）。切换到 QAT，让模型在训练时就感知量化噪声：
+
+```
+Training mode: Quantization-aware training (QAT)
+Epochs: 50 (原 PTQ 用 100)
+Learning rate decay: cosine
+```
+
+QAT 后浮点准确率 91%，INT8 部署准确率 86%。回退从 18 个点缩到 5 个点。
+
+### 3. 输入归一化调整
+
+原来的输入是原始通道值除以基线，范围 `[0, 3]`。改成 `log(1 + x)` 压缩后，输入分布更利于量化：
+
+```c
+float preprocess(float raw, float baseline) {
+    float ratio = raw / baseline;
+    return logf(1.0f + ratio);  // log 压缩
+}
+```
+
+这一步把 INT8 准确率从 86% 推到 89%。
+
+## 最终结果
+
+| 方案 | 浮点准确率 | INT8 准确率 | 回退 |
+|---|---|---|---|
+| PTQ（默认） | 92% | 74% | -18 |
+| QAT | 91% | 86% | -5 |
+| QAT + log 归一化 | 91% | 89% | -2 |
+
+模型体积 78KB，ESP32-S3 上单次推理 58ms。
+
+## 教训
+
+1. **永远不要相信"一键量化"**，必须做量化前后的精度对比
+2. 输入分布比模型结构更影响量化质量
+3. QAT 在小模型上收益巨大，值得多花训练时间

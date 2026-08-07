@@ -1,0 +1,181 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Tag from '../../components/Tag.astro';
+import StatusDot from '../../components/StatusDot.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', ({ data }) => !data.draft);
+  return projects.map((p) => ({
+    params: { slug: p.id },
+    props: { project: p },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const {
+  title,
+  description,
+  techStack,
+  status,
+  category,
+  github,
+  demo,
+  startDate,
+  endDate,
+  date,
+} = project.data;
+const period = startDate
+  ? `${startDate}${endDate ? ` → ${endDate}` : ' → now'}`
+  : null;
+---
+
+<BaseLayout active="projects" title={`${title} · JJ Lab`} description={description}>
+  <article class="project-detail">
+    <div class="container-narrow">
+      <a href="/projects" class="back mono">← Projects</a>
+      <header class="head">
+        <div class="head-meta">
+          <StatusDot status={status} />
+          <span class="cat mono">{category}</span>
+        </div>
+        <h1>{title}</h1>
+        <p class="desc">{description}</p>
+        <div class="meta-grid">
+          {
+            period && (
+              <div class="meta-item">
+                <span class="label">周期</span>
+                <span class="value mono">{period}</span>
+              </div>
+            )
+          }
+          <div class="meta-item">
+            <span class="label">更新</span>
+            <span class="value mono">{date}</span>
+          </div>
+          {
+            github && (
+              <a href={github} class="meta-link" target="_blank" rel="noopener">
+                GitHub ↗
+              </a>
+            )
+          }
+          {
+            demo && (
+              <a href={demo} class="meta-link" target="_blank" rel="noopener">
+                Demo ↗
+              </a>
+            )
+          }
+        </div>
+        {
+          techStack.length > 0 && (
+            <div class="stack">
+              <span class="stack-label mono">Stack</span>
+              <div class="stack-tags">
+                {techStack.map((t) => (
+                  <Tag text={t} />
+                ))}
+              </div>
+            </div>
+          )
+        }
+      </header>
+      <div class="prose">
+        <Content />
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .project-detail {
+    padding: var(--space-7) 0;
+  }
+  .back {
+    display: inline-block;
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--space-5);
+  }
+  .back:hover {
+    color: var(--color-accent);
+  }
+  .head {
+    margin-bottom: var(--space-4);
+  }
+  .head-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+  .cat {
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+  }
+  .head h1 {
+    font-size: var(--text-3xl);
+    font-weight: 500;
+    margin-bottom: var(--space-3);
+  }
+  .desc {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    line-height: var(--leading-relaxed);
+  }
+  .meta-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-5);
+    margin: var(--space-5) 0;
+    padding: var(--space-4) 0;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    align-items: center;
+  }
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .label {
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+  }
+  .value {
+    font-size: var(--text-sm);
+    color: var(--color-text);
+  }
+  .meta-link {
+    font-size: var(--text-sm);
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+  }
+  .stack {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+  .stack-label {
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    padding-top: 4px;
+  }
+  .stack-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  @media (max-width: 640px) {
+    .head h1 {
+      font-size: var(--text-2xl);
+    }
+  }
+</style>

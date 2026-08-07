@@ -1,0 +1,279 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import PostCard from '../components/PostCard.astro';
+import { getProjects, getResearch, getEngineering } from '../lib/content';
+
+console.log(
+  '%c[JJ Lab] === 首页数据加载开始 ===',
+  'color:#18181B;font-weight:bold'
+);
+console.time('[JJ Lab] 总加载耗时');
+
+console.log('[1/4] 加载 buildingProjects (status=building)...');
+let buildingProjects = (await getProjects({ status: 'building' })).slice(0, 5);
+if (buildingProjects.length === 0) {
+  console.log('[1/4] building 为空，回退到最近 5 个项目');
+  buildingProjects = (await getProjects()).slice(0, 5);
+}
+console.log('[1/4] ✓ homeProjects 完成', {
+  count: buildingProjects.length,
+  titles: buildingProjects.map((p) => p.data.title),
+});
+
+console.log('[2/4] 加载 latestResearch (top 3)...');
+const latestResearch = (await getResearch()).slice(0, 3);
+console.log('[2/4] ✓ latestResearch 完成', {
+  count: latestResearch.length,
+  titles: latestResearch.map((p) => p.data.title),
+});
+
+console.log('[3/4] 加载 latestEngineering (top 3)...');
+const latestEngineering = (await getEngineering()).slice(0, 3);
+console.log('[3/4] ✓ latestEngineering 完成', {
+  count: latestEngineering.length,
+  titles: latestEngineering.map((p) => p.data.title),
+});
+
+console.log(
+  '%c[JJ Lab] === 首页数据加载完成（顺序: building → research → engineering）===',
+  'color:#16A34A;font-weight:bold'
+);
+console.timeEnd('[JJ Lab] 总加载耗时');
+
+const renderSummary = {
+  intro: 'static',
+  currently: buildingProjects.length,
+  research: latestResearch.length,
+  engineering: latestEngineering.length,
+};
+console.log('[JJ Lab] 渲染数据汇总:', renderSummary);
+---
+
+<BaseLayout active="home">
+  <article class="home container">
+    <!-- 1. 自我介绍 -->
+    <section class="intro">
+      <h1 class="greeting" data-i18n="home.greeting">Hi, 我是 JJ。</h1>
+      <p class="intro-text" data-i18n="home.intro">
+        光电信息科学与工程本科生。在端侧 AI、近红外光谱传感与产业研究的交叉地带造东西、写东西。
+      </p>
+      <p class="stack-line">
+        <span class="stack-label mono" data-i18n="home.stackLabel">当前栈</span>
+        <span class="stack-value mono">ESP32-S3 · AS7263 · TinyML · Astro · TypeScript</span>
+      </p>
+    </section>
+
+    <!-- 2. 正在构建 -->
+    <section class="block">
+      <header class="block-head">
+        <h2 class="block-title" data-i18n="home.currently">正在构建</h2>
+        <span class="block-sub mono" data-i18n="home.currentlySub">（在做的几个原型，状态实时）</span>
+      </header>
+      {
+        buildingProjects.length === 0 ? (
+          <p class="empty" data-i18n="home.empty">暂无内容</p>
+        ) : (
+          <div class="list">
+            {buildingProjects.map((p) => (
+              <ProjectCard project={p} variant="compact" />
+            ))}
+          </div>
+        )
+      }
+    </section>
+
+    <!-- 3. 近期写作 -->
+    <section class="block">
+      <header class="block-head">
+        <h2 class="block-title" data-i18n="home.writing">近期写作</h2>
+      </header>
+
+      <div class="writing-group">
+        <h3 class="group-label mono" data-i18n="home.writingResearch">研究</h3>
+        <div class="list">
+          {
+            latestResearch.length === 0 ? (
+              <p class="empty" data-i18n="home.empty">暂无内容</p>
+            ) : (
+              latestResearch.map((p) => (
+                <PostCard
+                  title={p.data.title}
+                  date={p.data.date}
+                  tags={p.data.tags}
+                  href={`/research/${p.id}`}
+                />
+              ))
+            )
+          }
+        </div>
+      </div>
+
+      <div class="writing-group">
+        <h3 class="group-label mono" data-i18n="home.writingEngineering">工程</h3>
+        <div class="list">
+          {
+            latestEngineering.length === 0 ? (
+              <p class="empty" data-i18n="home.empty">暂无内容</p>
+            ) : (
+              latestEngineering.map((p) => (
+                <PostCard
+                  title={p.data.title}
+                  date={p.data.date}
+                  tags={p.data.tags}
+                  href={`/engineering/${p.id}`}
+                />
+              ))
+            )
+          }
+        </div>
+      </div>
+    </section>
+  </article>
+
+  <script>
+    // 客户端渲染验证：检查首页模块按预期渲染
+    const verifyRender = () => {
+      console.log(
+        '%c[JJ Lab] === 客户端渲染验证 ===',
+        'color:#18181B;font-weight:bold'
+      );
+      const sections = document.querySelectorAll('main > article > section');
+      console.log(`[渲染] 检测到 ${sections.length} 个模块（预期 3 个）`);
+      const moduleNames = ['Intro', 'Currently', 'Recent writing'];
+      sections.forEach((sec, i) => {
+        const heading = sec.querySelector('h1, h2');
+        const items = sec.querySelectorAll('.project-item, .post-item');
+        const name = moduleNames[i] || `(额外模块 ${i + 1})`;
+        console.log(
+          `  [模块 ${i + 1}/3] ${name} | 标题: "${(heading?.textContent?.trim() || '无').slice(0, 30)}" | 列表项: ${items.length}`
+        );
+      });
+      console.log(
+        '%c[JJ Lab] === 渲染验证完成 ===',
+        'color:#16A34A;font-weight:bold'
+      );
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', verifyRender);
+    } else {
+      verifyRender();
+    }
+  </script>
+</BaseLayout>
+
+<style>
+  .home {
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-8);
+  }
+
+  /* 1. 自我介绍 */
+  .intro {
+    padding-bottom: var(--space-7);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .greeting {
+    font-size: var(--text-2xl);
+    font-weight: 500;
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-4);
+  }
+  .intro-text {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: var(--leading-relaxed);
+    max-width: 640px;
+    margin-bottom: var(--space-4);
+  }
+  .stack-line {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    font-size: var(--text-sm);
+  }
+  .stack-label {
+    color: var(--color-text-tertiary);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+  }
+  .stack-value {
+    color: var(--color-text-secondary);
+    font-size: var(--text-xs);
+  }
+
+  /* 2/3. 区块 */
+  .block {
+    padding: var(--space-7) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .block:last-child {
+    border-bottom: none;
+  }
+  .block-head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+    flex-wrap: wrap;
+  }
+  .block-title {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+  }
+  .block-sub {
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+  }
+
+  /* 列表容器：仅顶/底分隔线，项目间无卡片 */
+  .list {
+    display: flex;
+    flex-direction: column;
+  }
+  .list > :global(*) {
+    border-bottom: 1px solid var(--color-border);
+  }
+  .list > :global(*:last-child) {
+    border-bottom: none;
+  }
+  .empty {
+    color: var(--color-text-tertiary);
+    font-size: var(--text-sm);
+    padding: var(--space-3) 0;
+  }
+
+  /* 写作分组 */
+  .writing-group {
+    margin-bottom: var(--space-6);
+  }
+  .writing-group:last-child {
+    margin-bottom: 0;
+  }
+  .group-label {
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    margin-bottom: var(--space-2);
+    padding-left: var(--space-4);
+  }
+
+  @media (max-width: 640px) {
+    .home {
+      padding-top: var(--space-6);
+      padding-bottom: var(--space-6);
+    }
+    .greeting {
+      font-size: var(--text-xl);
+    }
+    .group-label {
+      padding-left: var(--space-3);
+    }
+  }
+</style>

@@ -1,0 +1,46 @@
+---
+---
+
+<button class="lang-toggle mono" data-lang-toggle aria-label="切换语言">
+  <span data-lang-label>EN</span>
+</button>
+
+<style>
+  .lang-toggle {
+    display: inline-flex;
+    align-items: center;
+    padding: 0;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    transition: color var(--transition-fast);
+  }
+  .lang-toggle:hover {
+    color: var(--color-text);
+  }
+</style>
+
+<script>
+  // 中文态显示 "EN"（点击切到英文），英文态显示 "中"
+  function updateLangLabel() {
+    const lang = document.documentElement.lang || 'zh';
+    document.querySelectorAll('[data-lang-label]').forEach((el) => {
+      el.textContent = lang === 'zh' ? 'EN' : '中';
+    });
+  }
+
+  document.querySelector('[data-lang-toggle]')?.addEventListener('click', () => {
+    const current = document.documentElement.lang || 'zh';
+    const next = current === 'zh' ? 'en' : 'zh';
+    if (typeof window !== 'undefined' && window.__applyLang) {
+      window.__applyLang(next);
+    }
+    updateLangLabel();
+  });
+
+  updateLangLabel();
+  // i18n 引擎应用后同步刷新按钮
+  window.addEventListener('lang:applied', updateLangLabel);
+</script>

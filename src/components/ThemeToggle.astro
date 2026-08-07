@@ -1,0 +1,46 @@
+---
+---
+
+<button class="theme-toggle mono" data-theme-toggle aria-label="切换主题">
+  <span class="label-light">Light</span>
+  <span class="label-dark">Dark</span>
+</button>
+
+<style>
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    padding: 0;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    transition: color var(--transition-fast);
+  }
+  .theme-toggle:hover {
+    color: var(--color-text);
+  }
+  .label-light,
+  .label-dark {
+    display: none;
+  }
+  /* 浅色态显示 Dark（点击切到深色），深色态显示 Light */
+  :global([data-theme='light']) .label-dark {
+    display: inline;
+  }
+  :global([data-theme='dark']) .label-light {
+    display: inline;
+  }
+</style>
+
+<script>
+  document
+    .querySelector('[data-theme-toggle]')
+    ?.addEventListener('click', () => {
+      const current = document.documentElement.dataset.theme || 'light';
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = next;
+      localStorage.setItem('theme', next);
+    });
+</script>

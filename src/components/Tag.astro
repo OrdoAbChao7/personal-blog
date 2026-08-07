@@ -1,0 +1,22 @@
+---
+interface Props {
+  text: string;
+  variant?: 'default' | 'accent';
+}
+const { text, variant = 'default' } = Astro.props;
+---
+
+<span class:list={['tag', `tag-${variant}`]}>{text}</span>
+
+<style>
+  .tag {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    line-height: 1.5;
+    white-space: nowrap;
+  }
+  .tag-accent {
+    color: var(--color-text-secondary);
+  }
+</style>

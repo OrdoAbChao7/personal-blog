@@ -1,0 +1,190 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Tag from '../../components/Tag.astro';
+import { getEngineering, formatDate } from '../../lib/content';
+
+const posts = await getEngineering();
+const count = posts.length;
+---
+
+<BaseLayout active="engineering" title="Engineering · JJ Lab">
+  <section class="page-header container">
+    <span class="eyebrow mono" data-i18n="engineering.eyebrow">/engineering</span>
+    <h1 data-i18n="engineering.title">工程</h1>
+    <p class="sub" data-i18n="engineering.sub">工程实践日志。踩坑、调试与硬件记录。</p>
+    <p class="stat mono">{count} <span data-i18n="engineering.count">篇</span></p>
+  </section>
+
+  <section class="page-body container">
+    {
+      count === 0 ? (
+        <p class="empty" data-i18n="home.empty">暂无内容</p>
+      ) : (
+        <div class="log-list">
+          {posts.map((p) => (
+            <a href={`/engineering/${p.id}`} class="log-item">
+              <div class="log-meta">
+                <span class="date mono">{formatDate(p.data.date)}</span>
+                <span class:list={['difficulty', 'mono', `lv-${p.data.difficulty}`]}>
+                  {'■'.repeat(p.data.difficulty)}
+                  <span class="dim">{'■'.repeat(5 - p.data.difficulty)}</span>
+                </span>
+              </div>
+              <div class="log-body">
+                <h3>{p.data.title}</h3>
+                {p.data.description && <p>{p.data.description}</p>}
+                <div class="log-env">
+                  {p.data.hardware && (
+                    <span class="env">
+                      <span class="env-label mono">HW</span>
+                      {p.data.hardware}
+                    </span>
+                  )}
+                  {p.data.software && (
+                    <span class="env">
+                      <span class="env-label mono">SW</span>
+                      {p.data.software}
+                    </span>
+                  )}
+                </div>
+                {p.data.tags.length > 0 && (
+                  <div class="tags">
+                    {p.data.tags.map((t) => (
+                      <Tag text={t} />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding: var(--space-7) 0 var(--space-5);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .eyebrow {
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+  }
+  .page-header h1 {
+    font-size: var(--text-3xl);
+    font-weight: 500;
+    margin: var(--space-2) 0;
+  }
+  .sub {
+    color: var(--color-text-secondary);
+    font-size: var(--text-base);
+    max-width: 560px;
+  }
+  .stat {
+    margin-top: var(--space-3);
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+  }
+  .page-body {
+    padding: var(--space-5) 0 var(--space-7);
+  }
+  .log-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .log-item {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: var(--space-5);
+    padding: var(--space-4) var(--space-4);
+    border-left: 2px solid transparent;
+    border-bottom: 1px solid var(--color-border);
+    transition: border-color var(--transition-fast),
+      background var(--transition-fast);
+    text-decoration: none;
+  }
+  .log-item:last-child {
+    border-bottom: none;
+  }
+  .log-item:hover {
+    border-left-color: var(--color-accent);
+    background: var(--color-bg-subtle);
+  }
+  .log-item:hover h3 {
+    color: var(--color-accent-hover);
+  }
+  .log-meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding-top: 2px;
+  }
+  .date {
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+  }
+  .difficulty {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    letter-spacing: 1px;
+  }
+  .difficulty .dim {
+    color: var(--color-border-strong);
+  }
+  .log-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    min-width: 0;
+  }
+  .log-body h3 {
+    font-size: var(--text-base);
+    font-weight: 500;
+    color: var(--color-text);
+    transition: color var(--transition-fast);
+  }
+  .log-body p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: var(--leading-relaxed);
+  }
+  .log-env {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: 2px;
+  }
+  .env {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+  }
+  .env-label {
+    color: var(--color-text-tertiary);
+    font-size: var(--text-xs);
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: 2px;
+  }
+  .empty {
+    color: var(--color-text-tertiary);
+    font-size: var(--text-sm);
+  }
+  @media (max-width: 640px) {
+    .log-item {
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+    }
+    .log-meta {
+      flex-direction: row;
+      gap: var(--space-3);
+    }
+  }
+</style>

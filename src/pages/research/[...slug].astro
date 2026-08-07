@@ -1,0 +1,199 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Tag from '../../components/Tag.astro';
+import { formatDate } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('research', ({ data }) => !data.draft);
+  return posts.map((p) => ({
+    params: { slug: p.id },
+    props: { post: p },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const { title, description, date, tags, category } = post.data;
+
+const categoryLabel: Record<string, string> = {
+  'ai-trend': 'AI Trend',
+  society: 'Society',
+  startup: 'Startup',
+  'tech-analysis': 'Tech Analysis',
+};
+
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+<BaseLayout active="research" title={`${title} · JJ Lab`} description={description}>
+  <div class="progress" id="progress"></div>
+  <article class="post-detail">
+    <div class="post-layout">
+      <div class="content">
+        <a href="/research" class="back mono">← Research</a>
+        <header class="head">
+          <div class="head-meta">
+            <span class="eyebrow mono">{categoryLabel[category]}</span>
+            <span class="date mono">{formatDate(date)}</span>
+          </div>
+          <h1>{title}</h1>
+          {description && <p class="desc">{description}</p>}
+          {
+            tags.length > 0 && (
+              <div class="tags">
+                {tags.map((t) => (
+                  <Tag text={t} />
+                ))}
+              </div>
+            )
+          }
+        </header>
+        <div class="prose">
+          <Content />
+        </div>
+      </div>
+      {
+        toc.length > 0 && (
+          <aside class="toc">
+            <div class="toc-inner">
+              <span class="toc-label mono">目录</span>
+              <nav>
+                {toc.map((h) => (
+                  <a href={`#${h.slug}`} class:list={['toc-link', `depth-${h.depth}`]}>
+                    {h.text}
+                  </a>
+                ))}
+              </nav>
+            </div>
+          </aside>
+        )
+      }
+    </div>
+  </article>
+
+  <script>
+    const progress = document.getElementById('progress');
+    const update = () => {
+      const h = document.documentElement;
+      const max = h.scrollHeight - h.clientHeight;
+      const scrolled = max > 0 ? h.scrollTop / max : 0;
+      progress.style.transform = `scaleX(${scrolled})`;
+    };
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  </script>
+</BaseLayout>
+
+<style>
+  .progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    z-index: 100;
+    transition: transform 50ms linear;
+  }
+  .post-detail {
+    padding: var(--space-7) 0;
+  }
+  .post-layout {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+    display: flex;
+    gap: var(--space-8);
+    align-items: flex-start;
+  }
+  .content {
+    flex: 1;
+    min-width: 0;
+    max-width: 720px;
+  }
+  .back {
+    display: inline-block;
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--space-5);
+  }
+  .back:hover {
+    color: var(--color-accent);
+  }
+  .head {
+    margin-bottom: var(--space-2);
+  }
+  .head-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+  }
+  .eyebrow {
+    color: var(--color-accent);
+    text-transform: uppercase;
+  }
+  .head h1 {
+    font-size: var(--text-3xl);
+    font-weight: 500;
+    margin-bottom: var(--space-3);
+  }
+  .desc {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    line-height: var(--leading-relaxed);
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: var(--space-4);
+  }
+  .toc {
+    width: 220px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 88px;
+  }
+  .toc-inner {
+    border-left: 1px solid var(--color-border);
+    padding-left: var(--space-4);
+  }
+  .toc-label {
+    display: block;
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    margin-bottom: var(--space-3);
+  }
+  .toc-link {
+    display: block;
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    line-height: 1.5;
+    padding: 4px 0;
+    transition: color var(--transition-fast);
+  }
+  .toc-link:hover {
+    color: var(--color-text);
+  }
+  .toc-link.depth-3 {
+    padding-left: var(--space-3);
+  }
+  @media (max-width: 1024px) {
+    .toc {
+      display: none;
+    }
+  }
+  @media (max-width: 640px) {
+    .head h1 {
+      font-size: var(--text-2xl);
+    }
+  }
+</style>

@@ -1,0 +1,110 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getResearch } from '../../lib/content';
+
+const posts = await getResearch();
+const count = posts.length;
+
+const categoryOrder = ['ai-trend', 'tech-analysis', 'startup', 'society'];
+const categoryLabel: Record<string, string> = {
+  'ai-trend': 'AI Trend',
+  'tech-analysis': 'Tech Analysis',
+  startup: 'Startup',
+  society: 'Society',
+};
+
+const grouped = categoryOrder
+  .map((cat) => ({ cat, items: posts.filter((p) => p.data.category === cat) }))
+  .filter((g) => g.items.length > 0);
+---
+
+<BaseLayout active="research" title="Research · JJ Lab">
+  <section class="page-header container">
+    <span class="eyebrow mono" data-i18n="research.eyebrow">/research</span>
+    <h1 data-i18n="research.title">研究</h1>
+    <p class="sub" data-i18n="research.sub">技术趋势、产业观察与思考。</p>
+    <p class="stat mono">{count} <span data-i18n="research.count">篇</span></p>
+  </section>
+
+  <section class="page-body container">
+    {
+      count === 0 ? (
+        <p class="empty" data-i18n="home.empty">暂无内容</p>
+      ) : (
+        grouped.map((group) => (
+          <div class="group">
+            <h2 class="group-label mono">{categoryLabel[group.cat]}</h2>
+            <div class="list">
+              {group.items.map((p) => (
+                <PostCard
+                  title={p.data.title}
+                  date={p.data.date}
+                  tags={p.data.tags}
+                  href={`/research/${p.id}`}
+                />
+              ))}
+            </div>
+          </div>
+        ))
+      )
+    }
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding: var(--space-7) 0 var(--space-5);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .eyebrow {
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+  }
+  .page-header h1 {
+    font-size: var(--text-3xl);
+    font-weight: 500;
+    margin: var(--space-2) 0;
+  }
+  .sub {
+    color: var(--color-text-secondary);
+    font-size: var(--text-base);
+    max-width: 560px;
+  }
+  .stat {
+    margin-top: var(--space-3);
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+  }
+  .page-body {
+    padding: var(--space-5) 0 var(--space-7);
+  }
+  .group {
+    margin-bottom: var(--space-7);
+  }
+  .group:last-child {
+    margin-bottom: 0;
+  }
+  .group-label {
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    margin-bottom: var(--space-2);
+    padding-left: var(--space-4);
+  }
+  .list {
+    display: flex;
+    flex-direction: column;
+  }
+  .list > :global(*) {
+    border-bottom: 1px solid var(--color-border);
+  }
+  .list > :global(*:last-child) {
+    border-bottom: none;
+  }
+  .empty {
+    color: var(--color-text-tertiary);
+    font-size: var(--text-sm);
+  }
+</style>

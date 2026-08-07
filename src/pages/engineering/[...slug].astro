@@ -1,0 +1,156 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Tag from '../../components/Tag.astro';
+import { formatDate } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('engineering', ({ data }) => !data.draft);
+  return posts.map((p) => ({
+    params: { slug: p.id },
+    props: { post: p },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const { title, description, hardware, software, difficulty, date, tags } = post.data;
+---
+
+<BaseLayout active="engineering" title={`${title} · JJ Lab`} description={description}>
+  <article class="eng-detail">
+    <div class="container-narrow">
+      <a href="/engineering" class="back mono">← Engineering</a>
+      <header class="head">
+        <div class="head-meta">
+          <span class="date mono">{formatDate(date)}</span>
+          <span class="difficulty mono">
+            难度
+            <span class="bars">
+              <span class="fill">{'■'.repeat(difficulty)}</span>
+              <span class="empty">{'■'.repeat(5 - difficulty)}</span>
+            </span>
+          </span>
+        </div>
+        <h1>{title}</h1>
+        {description && <p class="desc">{description}</p>}
+        <div class="env-grid">
+          {
+            hardware && (
+              <div class="env-item">
+                <span class="label mono">Hardware</span>
+                <span class="value">{hardware}</span>
+              </div>
+            )
+          }
+          {
+            software && (
+              <div class="env-item">
+                <span class="label mono">Software</span>
+                <span class="value">{software}</span>
+              </div>
+            )
+          }
+        </div>
+        {
+          tags.length > 0 && (
+            <div class="tags">
+              {tags.map((t) => (
+                <Tag text={t} />
+              ))}
+            </div>
+          )
+        }
+      </header>
+      <div class="prose">
+        <Content />
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .eng-detail {
+    padding: var(--space-7) 0;
+  }
+  .back {
+    display: inline-block;
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--space-5);
+  }
+  .back:hover {
+    color: var(--color-accent);
+  }
+  .head {
+    margin-bottom: var(--space-2);
+  }
+  .head-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-3);
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    flex-wrap: wrap;
+  }
+  .difficulty {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .bars {
+    letter-spacing: 1px;
+  }
+  .bars .fill {
+    color: var(--color-accent);
+  }
+  .bars .empty {
+    color: var(--color-border-strong);
+  }
+  .head h1 {
+    font-size: var(--text-3xl);
+    font-weight: 500;
+    margin-bottom: var(--space-3);
+  }
+  .desc {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    line-height: var(--leading-relaxed);
+  }
+  .env-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-5);
+    margin: var(--space-5) 0;
+    padding: var(--space-4) 0;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .env-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+  .label {
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+  }
+  .value {
+    font-size: var(--text-sm);
+    color: var(--color-text);
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: var(--space-3);
+  }
+  @media (max-width: 640px) {
+    .head h1 {
+      font-size: var(--text-2xl);
+    }
+  }
+</style>

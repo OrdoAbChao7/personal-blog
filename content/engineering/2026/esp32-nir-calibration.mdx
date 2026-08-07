@@ -1,0 +1,67 @@
+---
+title: ESP32-S3 近红外基线校准踩坑
+description: AS7263 光谱模块在 ESP32-S3 上的 I2C 读取稳定性问题与解决方案。
+hardware: ESP32-S3 + AS7263
+software: PlatformIO + Edge Impulse
+difficulty: 4
+date: '2026-08-05'
+tags:
+  - embedded
+  - nir
+  - i2c
+---
+
+## 现象
+
+同一物质、同一距离、同一光照，AS7263 连续采集 10 次，6 个通道值的 RSD（相对标准偏差）从 3% 到 18% 不等。这个方差直接毁掉了下游的分类模型——训练集准确率 92%，实测直接掉到 61%。
+
+## 排查过程
+
+### 1. 怀疑 I2C 时序
+
+ESP32-S3 默认 I2C 400kHz，AS7263 数据手册标的是 100kHz。降到 100kHz 后方差略有改善，但没根治。
+
+### 2. 怀疑供电
+
+用示波器看 3.3V 轨，采集瞬间有 80mV 的跌落。加了一颗 100μF + 0.1μF 去耦，跌落降到 20mV，方差进一步收窄到 8% 以内。
+
+### 3. 怀疑积分时间
+
+AS7263 的积分时间（ATIME）默认 0xFF，实际曝光约 14ms。对于近红外弱信号，这个时间偏短。把 ATIME 调到 0xEA（约 180ms）后，信噪比显著提升。
+
+```c
+// 关键寄存器配置
+write_register(0x04, 0x40); // RST
+delay(100);
+write_register(0x04, 0x00);
+write_register(0x01, 0xEA); // ATIME = 234 → ~180ms
+write_register(0x00, 0x40); // BANK 0
+```
+
+### 4. 真正的根因：白参考校准
+
+前三步都是物理层优化。真正解决问题的是**每次开机做一次白参考校准**：用 PTFE（聚四氟乙烯）漫反射板作为标准白，记录各通道基线值，后续采集都除以这个基线。
+
+```python
+def calibrate_white():
+    print("请放置白色漫反射板，3 秒后开始校准")
+    time.sleep(3)
+    samples = [read_channels() for _ in range(20)]
+    baseline = [sum(s[i] for s in samples) / 20 for i in range(6)]
+    save_baseline(baseline)  # 存到 NVS
+
+def read_normalized():
+    raw = read_channels()
+    baseline = load_baseline()
+    return [r / b for r, b in zip(raw, baseline)]
+```
+
+## 结果
+
+白参考校准 + 物理层优化后，RSD 稳定在 2% 以内，端到端分类准确率回到 89%。
+
+## 教训
+
+1. **嵌入式 ML 的精度问题，80% 在数据采集层，不在模型层**
+2. 示波器和数据手册是朋友，直觉是敌人
+3. 任何光谱类传感器，白参考校准是不能省的工序

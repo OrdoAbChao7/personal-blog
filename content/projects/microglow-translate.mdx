@@ -1,0 +1,45 @@
+---
+title: MicroGlow Translate
+description: 基于近红外光谱与 TinyML 的非侵入式成分检测装置，目标在端侧完成物质识别。
+category: hardware
+techStack:
+  - ESP32-S3
+  - TinyML
+  - NIR Spectroscopy
+  - Edge Impulse
+status: building
+github: https://github.com/JJ/microglow-translate
+featured: true
+startDate: '2026-03'
+endDate: null
+date: '2026-03-01'
+---
+
+## 项目动机
+
+近红外（NIR）光谱在工业检测里已经是成熟方案，但设备动辄上万、依赖云端推理。我想验证一个假设：**能不能用一颗 ESP32-S3 + 低成本 NIR 模块，在端侧完成常见物质的成分识别？**
+
+如果能跑通，意味着农业检测、食品分拣、DIY 化学实验都可以拿到一个「会思考的传感器」。
+
+## 技术路线
+
+整体链路分三段：
+
+1. **采集**：AS7263 6 通道 NIR 光谱模块经 I2C 输出到 ESP32-S3
+2. **预处理**：在 MCU 上做基线校正、归一化、SNV
+3. **推理**：Edge Impulse 导出的 INT8 量化模型，跑在 ESP32-S3 的向量指令上
+
+## 当前进度
+
+- ✅ 硬件原型搭建
+- ✅ 光谱基线校准流程
+- ⏳ 模型量化后的精度回退分析
+- ⏳ 多物质混淆矩阵测试
+
+## 难点
+
+最大的坑不在模型，而在**采集稳定性**——同一物质多次采样的通道值方差很大，详见工程日志里的基线校准记录。
+
+## 下一步
+
+把 5 类样本扩到 20 类，跑通端到端 demo，输出一份完整的精度报告。
