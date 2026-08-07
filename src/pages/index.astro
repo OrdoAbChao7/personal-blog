@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import PostCard from '../components/PostCard.astro';
 import { getProjects, getResearch, getEngineering } from '../lib/content';
+import { url } from '../lib/url';
 
 console.log(
   '%c[JJ Lab] === 首页数据加载开始 ===',
@@ -101,7 +102,7 @@ console.log('[JJ Lab] 渲染数据汇总:', renderSummary);
                   title={p.data.title}
                   date={p.data.date}
                   tags={p.data.tags}
-                  href={`/research/${p.id}`}
+                  href={url(`/research/${p.id}`)}
                 />
               ))
             )
@@ -121,7 +122,7 @@ console.log('[JJ Lab] 渲染数据汇总:', renderSummary);
                   title={p.data.title}
                   date={p.data.date}
                   tags={p.data.tags}
-                  href={`/engineering/${p.id}`}
+                  href={url(`/engineering/${p.id}`)}
                 />
               ))
             )

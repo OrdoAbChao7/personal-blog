@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Tag from '../../components/Tag.astro';
 import { formatDate } from '../../lib/content';
+import { url } from '../../lib/url';
 
 export async function getStaticPaths() {
   const posts = await getCollection('research', ({ data }) => !data.draft);
@@ -31,7 +32,7 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
   <article class="post-detail">
     <div class="post-layout">
       <div class="content">
-        <a href="/research" class="back mono">← Research</a>
+        <a href={url('/research')} class="back mono">← Research</a>
         <header class="head">
           <div class="head-meta">
             <span class="eyebrow mono">{categoryLabel[category]}</span>

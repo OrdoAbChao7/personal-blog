@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Tag from '../../components/Tag.astro';
 import StatusDot from '../../components/StatusDot.astro';
+import { url } from '../../lib/url';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects', ({ data }) => !data.draft);
@@ -34,7 +35,7 @@ const period = startDate
 <BaseLayout active="projects" title={`${title} · JJ Lab`} description={description}>
   <article class="project-detail">
     <div class="container-narrow">
-      <a href="/projects" class="back mono">← Projects</a>
+      <a href={url('/projects')} class="back mono">← Projects</a>
       <header class="head">
         <div class="head-meta">
           <StatusDot status={status} />

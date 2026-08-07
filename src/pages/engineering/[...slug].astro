@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Tag from '../../components/Tag.astro';
 import { formatDate } from '../../lib/content';
+import { url } from '../../lib/url';
 
 export async function getStaticPaths() {
   const posts = await getCollection('engineering', ({ data }) => !data.draft);
@@ -20,7 +21,7 @@ const { title, description, hardware, software, difficulty, date, tags } = post.
 <BaseLayout active="engineering" title={`${title} · JJ Lab`} description={description}>
   <article class="eng-detail">
     <div class="container-narrow">
-      <a href="/engineering" class="back mono">← Engineering</a>
+      <a href={url('/engineering')} class="back mono">← Engineering</a>
       <header class="head">
         <div class="head-meta">
           <span class="date mono">{formatDate(date)}</span>

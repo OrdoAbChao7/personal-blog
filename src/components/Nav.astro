@@ -1,6 +1,7 @@
 ---
 import ThemeToggle from './ThemeToggle.astro';
 import LangToggle from './LangToggle.astro';
+import { url } from '../lib/url';
 
 interface Props {
   active?: string;
@@ -8,16 +9,16 @@ interface Props {
 const { active = '' } = Astro.props;
 
 const links = [
-  { href: '/', label: '首页', key: 'home' },
-  { href: '/projects', label: '项目', key: 'projects' },
-  { href: '/engineering', label: '工程', key: 'engineering' },
-  { href: '/research', label: '研究', key: 'research' },
+  { href: url('/'), label: '首页', key: 'home' },
+  { href: url('/projects'), label: '项目', key: 'projects' },
+  { href: url('/engineering'), label: '工程', key: 'engineering' },
+  { href: url('/research'), label: '研究', key: 'research' },
 ];
 ---
 
 <header class="nav">
   <div class="nav-inner">
-    <a href="/" class="brand">
+    <a href={url('/')} class="brand">
       <span class="brand-mark mono">JJ</span>
       <span class="brand-name">Lab</span>
     </a>

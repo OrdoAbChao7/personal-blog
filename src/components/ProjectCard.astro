@@ -1,6 +1,7 @@
 ---
 import StatusDot from './StatusDot.astro';
 import type { Project } from '../lib/content';
+import { url } from '../lib/url';
 
 interface Props {
   project: Project;
@@ -8,7 +9,7 @@ interface Props {
 }
 const { project, variant = 'featured' } = Astro.props;
 const { title, description, techStack, status, category, startDate } = project.data;
-const href = `/projects/${project.id}`;
+const href = url(`/projects/${project.id}`);
 ---
 
 <a href={href} class="project-item">

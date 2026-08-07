@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Tag from '../../components/Tag.astro';
 import { getEngineering, formatDate } from '../../lib/content';
+import { url } from '../../lib/url';
 
 const posts = await getEngineering();
 const count = posts.length;
@@ -22,7 +23,7 @@ const count = posts.length;
       ) : (
         <div class="log-list">
           {posts.map((p) => (
-            <a href={`/engineering/${p.id}`} class="log-item">
+            <a href={url(`/engineering/${p.id}`)} class="log-item">
               <div class="log-meta">
                 <span class="date mono">{formatDate(p.data.date)}</span>
                 <span class:list={['difficulty', 'mono', `lv-${p.data.difficulty}`]}>

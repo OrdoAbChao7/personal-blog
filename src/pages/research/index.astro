@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
 import { getResearch } from '../../lib/content';
+import { url } from '../../lib/url';
 
 const posts = await getResearch();
 const count = posts.length;
@@ -41,7 +42,7 @@ const grouped = categoryOrder
                   title={p.data.title}
                   date={p.data.date}
                   tags={p.data.tags}
-                  href={`/research/${p.id}`}
+                  href={url(`/research/${p.id}`)}
                 />
               ))}
             </div>
