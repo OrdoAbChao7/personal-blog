@@ -219,3 +219,8 @@ draft: false
 **JJ** · 武汉理工大学 · 光电信息科学与工程
 
 研究方向：AI 工程 · 智能硬件 · 光电技术 · 产业研究
+
+
+---
+
+[English documentation](README.en.md)
