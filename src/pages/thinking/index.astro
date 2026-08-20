@@ -1,10 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
-import { getResearch } from '../../lib/content';
+import { getThinking } from '../../lib/content';
 import { url } from '../../lib/url';
 
-const posts = await getResearch();
+const posts = await getThinking();
 const count = posts.length;
 
 const categoryOrder = ['ai-trend', 'tech-analysis', 'startup', 'society'];
@@ -20,12 +20,12 @@ const grouped = categoryOrder
   .filter((g) => g.items.length > 0);
 ---
 
-<BaseLayout active="research" title="Research · JJ Lab">
+<BaseLayout active="thinking" title="Thinking · JJ Lab">
   <section class="page-header container">
-    <span class="eyebrow mono" data-i18n="research.eyebrow">/research</span>
-    <h1 data-i18n="research.title">研究</h1>
-    <p class="sub" data-i18n="research.sub">技术趋势、产业观察与思考。</p>
-    <p class="stat mono">{count} <span data-i18n="research.count">篇</span></p>
+    <span class="eyebrow mono" data-i18n="thinking.eyebrow">/thinking</span>
+    <h1 data-i18n="thinking.title">思考</h1>
+    <p class="sub" data-i18n="thinking.sub">技术趋势、产业观察与思考。</p>
+    <p class="stat mono">{count} <span data-i18n="thinking.count">篇</span></p>
   </section>
 
   <section class="page-body container">
@@ -42,7 +42,7 @@ const grouped = categoryOrder
                   title={p.data.title}
                   date={p.data.date}
                   tags={p.data.tags}
-                  href={url(`/research/${p.id}`)}
+                  href={url(`/thinking/${p.id}`)}
                 />
               ))}
             </div>

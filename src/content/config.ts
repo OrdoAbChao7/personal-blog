@@ -37,8 +37,8 @@ const engineering = defineCollection({
 });
 
 // 技术与社会思考
-const research = defineCollection({
-  loader: glob({ pattern: '**/*.mdx', base: './content/research' }),
+const thinking = defineCollection({
+  loader: glob({ pattern: '**/*.mdx', base: './content/thinking' }),
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),
@@ -51,4 +51,4 @@ const research = defineCollection({
   }),
 });
 
-export const collections = { projects, engineering, research };
+export const collections = { projects, engineering, thinking };

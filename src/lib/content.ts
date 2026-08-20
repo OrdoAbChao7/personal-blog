@@ -14,9 +14,9 @@ export async function getProjects(opts: { featured?: boolean; status?: string } 
   return items;
 }
 
-/** 获取研究文章 */
-export async function getResearch(opts: { featured?: boolean; category?: string } = {}) {
-  const all = await getCollection('research', ({ data }) => !data.draft);
+/** 获取思考文章 */
+export async function getThinking(opts: { featured?: boolean; category?: string } = {}) {
+  const all = await getCollection('thinking', ({ data }) => !data.draft);
   let items = sortByDate(all);
   if (opts.featured) items = items.filter((p) => p.data.featured);
   if (opts.category) items = items.filter((p) => p.data.category === opts.category);
@@ -35,5 +35,5 @@ export function formatDate(dateStr: string): string {
 }
 
 export type Project = CollectionEntry<'projects'>;
-export type Research = CollectionEntry<'research'>;
+export type Thinking = CollectionEntry<'thinking'>;
 export type Engineering = CollectionEntry<'engineering'>;

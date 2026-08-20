@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import PostCard from '../components/PostCard.astro';
-import { getProjects, getResearch, getEngineering } from '../lib/content';
+import { getProjects, getThinking, getEngineering } from '../lib/content';
 import { url } from '../lib/url';
 
 console.log(
@@ -22,11 +22,11 @@ console.log('[1/4] ✓ homeProjects 完成', {
   titles: buildingProjects.map((p) => p.data.title),
 });
 
-console.log('[2/4] 加载 latestResearch (top 3)...');
-const latestResearch = (await getResearch()).slice(0, 3);
-console.log('[2/4] ✓ latestResearch 完成', {
-  count: latestResearch.length,
-  titles: latestResearch.map((p) => p.data.title),
+console.log('[2/4] 加载 latestThinking (top 3)...');
+const latestThinking = (await getThinking()).slice(0, 3);
+console.log('[2/4] ✓ latestThinking 完成', {
+  count: latestThinking.length,
+  titles: latestThinking.map((p) => p.data.title),
 });
 
 console.log('[3/4] 加载 latestEngineering (top 3)...');
@@ -37,7 +37,7 @@ console.log('[3/4] ✓ latestEngineering 完成', {
 });
 
 console.log(
-  '%c[JJ Lab] === 首页数据加载完成（顺序: building → research → engineering）===',
+  '%c[JJ Lab] === 首页数据加载完成（顺序: building → thinking → engineering）===',
   'color:#16A34A;font-weight:bold'
 );
 console.timeEnd('[JJ Lab] 总加载耗时');
@@ -45,7 +45,7 @@ console.timeEnd('[JJ Lab] 总加载耗时');
 const renderSummary = {
   intro: 'static',
   currently: buildingProjects.length,
-  research: latestResearch.length,
+  thinking: latestThinking.length,
   engineering: latestEngineering.length,
 };
 console.log('[JJ Lab] 渲染数据汇总:', renderSummary);
@@ -91,18 +91,18 @@ console.log('[JJ Lab] 渲染数据汇总:', renderSummary);
       </header>
 
       <div class="writing-group">
-        <h3 class="group-label mono" data-i18n="home.writingResearch">研究</h3>
+        <h3 class="group-label mono" data-i18n="home.writingThinking">思考</h3>
         <div class="list">
           {
-            latestResearch.length === 0 ? (
+            latestThinking.length === 0 ? (
               <p class="empty" data-i18n="home.empty">暂无内容</p>
             ) : (
-              latestResearch.map((p) => (
+              latestThinking.map((p) => (
                 <PostCard
                   title={p.data.title}
                   date={p.data.date}
                   tags={p.data.tags}
-                  href={url(`/research/${p.id}`)}
+                  href={url(`/thinking/${p.id}`)}
                 />
               ))
             )

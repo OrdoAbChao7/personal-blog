@@ -1,21 +1,21 @@
 ---
-import { getProjects, getResearch, getEngineering } from '../lib/content';
+import { getProjects, getThinking, getEngineering } from '../lib/content';
 
 const year = new Date().getFullYear();
 
-const [projects, research, engineering] = await Promise.all([
+const [projects, thinking, engineering] = await Promise.all([
   getProjects(),
-  getResearch(),
+  getThinking(),
   getEngineering(),
 ]);
 
 const projectCount = projects.length;
-const postCount = research.length + engineering.length;
+const postCount = thinking.length + engineering.length;
 
 // 写作起始年：取所有内容中最早的 date 年份
 const allDates = [
   ...projects.map((p) => p.data.date),
-  ...research.map((p) => p.data.date),
+  ...thinking.map((p) => p.data.date),
   ...engineering.map((p) => p.data.date),
 ].filter(Boolean);
 const startYear = allDates.length

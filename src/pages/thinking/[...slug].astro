@@ -6,7 +6,7 @@ import { formatDate } from '../../lib/content';
 import { url } from '../../lib/url';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('research', ({ data }) => !data.draft);
+  const posts = await getCollection('thinking', ({ data }) => !data.draft);
   return posts.map((p) => ({
     params: { slug: p.id },
     props: { post: p },
@@ -27,12 +27,12 @@ const categoryLabel: Record<string, string> = {
 const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
 
-<BaseLayout active="research" title={`${title} · JJ Lab`} description={description}>
+<BaseLayout active="thinking" title={`${title} · JJ Lab`} description={description}>
   <div class="progress" id="progress"></div>
   <article class="post-detail">
     <div class="post-layout">
       <div class="content">
-        <a href={url('/research')} class="back mono">← Research</a>
+        <a href={url('/thinking')} class="back mono">← Thinking</a>
         <header class="head">
           <div class="head-meta">
             <span class="eyebrow mono">{categoryLabel[category]}</span>
