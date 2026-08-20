@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Tag from '../../components/Tag.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
+import ReadingProgress from '../../components/ReadingProgress.astro';
 import { formatDate } from '../../lib/content';
 import { url } from '../../lib/url';
 
@@ -20,6 +21,7 @@ const { title, description, hardware, software, difficulty, date, tags } = post.
 ---
 
 <BaseLayout active="engineering" title={`${title} · JJ Lab`} description={description}>
+  <ReadingProgress />
   <article class="eng-detail">
     <div class="post-layout">
       <div class="content">

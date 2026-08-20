@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Tag from '../../components/Tag.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
+import ReadingProgress from '../../components/ReadingProgress.astro';
 import { formatDate } from '../../lib/content';
 import { url } from '../../lib/url';
 
@@ -28,7 +29,7 @@ const categoryLabel: Record<string, string> = {
 ---
 
 <BaseLayout active="thinking" title={`${title} · JJ Lab`} description={description}>
-  <div class="progress" id="progress"></div>
+  <ReadingProgress />
   <article class="post-detail">
     <div class="post-layout">
       <div class="content">
@@ -58,33 +59,9 @@ const categoryLabel: Record<string, string> = {
     </div>
   </article>
 
-  <script>
-    const progress = document.getElementById('progress');
-    const update = () => {
-      const h = document.documentElement;
-      const max = h.scrollHeight - h.clientHeight;
-      const scrolled = max > 0 ? h.scrollTop / max : 0;
-      progress.style.transform = `scaleX(${scrolled})`;
-    };
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
-    update();
-  </script>
 </BaseLayout>
 
 <style>
-  .progress {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--color-accent);
-    transform: scaleX(0);
-    transform-origin: left;
-    z-index: 100;
-    transition: transform 50ms linear;
-  }
   .post-detail {
     padding: var(--space-7) 0;
   }
