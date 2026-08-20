@@ -1,379 +1,205 @@
 ---
-category: ai-agent
-date: 2026-08-20
-description: 基于多 Agent 架构的县域产业研究自动化系统
-featured: true
-github: "https://github.com/OrdoAbChao7/CountyResearchAI"
-startDate: 2026-07
-status: building
-techStack:
-- Python
-- LangGraph
-- LLM Agent
-- Playwright
-- Data Pipeline
 title: CountyResearchAI
+description: 基于多 Agent 架构的县域产业研究自动化系统
+category: software
+techStack:
+  - Python
+  - LangGraph
+  - LLM Agent
+  - Playwright
+  - Data Pipeline
+status: building
+github: https://github.com/OrdoAbChao7/CountyResearchAI
+featured: true
+startDate: '2026-07'
+endDate: null
+date: '2026-08-20'
+draft: false
 ---
 
-# CountyResearchAI
-
-> An AI-powered research agent system for automated county-level
-> industry analysis.
+> An AI-powered research agent system for automated county-level industry analysis.
 
 ## 项目简介
 
-CountyResearchAI 是一个探索 **AI Agent 如何辅助产业研究与区域经济分析**
-的项目。
+CountyResearchAI 是一个探索 **AI Agent 如何辅助产业研究与区域经济分析**的项目。
 
 传统产业研究通常需要大量人工完成：
 
--   搜集政策文件；
--   查阅统计数据；
--   分析企业信息；
--   梳理产业链关系；
--   撰写研究报告。
+- 搜集政策文件；
+- 查阅统计数据；
+- 分析企业信息；
+- 梳理产业链关系；
+- 撰写研究报告。
 
 这些流程存在信息分散、人工成本高、难以规模化的问题。
 
 本项目尝试构建一个基于多 Agent 架构的自动化研究系统，使 AI 能够完成：
 
-    研究规划
-        ↓
-    信息采集
-        ↓
-    数据整理
-        ↓
-    产业分析
-        ↓
-    报告生成
+研究规划 ↓ 信息采集 ↓ 数据整理 ↓ 产业分析 ↓ 报告生成
 
 最终输出结构化的产业研究报告。
 
-------------------------------------------------------------------------
+## 项目动机
 
-# 项目动机
+县域经济是产业变化的重要组成部分。大量产业升级、制造业迁移和企业成长发生在地方层面，但相关信息通常分散于：
 
-县域经济是产业变化的重要组成部分。
+- 政府公开资料；
+- 新闻报道；
+- 企业信息；
+- 招投标数据；
+- 招聘信息。
 
-大量产业升级、制造业迁移和企业成长发生在地方层面，但相关信息通常分散于：
+传统研究方式需要研究人员不断搜索、整理和分析。因此，我希望探索：
 
--   政府公开资料；
--   新闻报道；
--   企业信息；
--   招投标数据；
--   招聘信息。
+> 能否利用 AI Agent 构建一个自动化研究助手，将复杂的信息搜集和分析流程转化为可复用的工作流？
 
-传统研究方式需要研究人员不断搜索、整理和分析。
+## 系统架构
 
-因此，我希望探索：
+CountyResearchAI 采用基于 LangGraph 的多 Agent 工作流设计。整体流程：
 
-> 能否利用 AI Agent
-> 构建一个自动化研究助手，将复杂的信息搜集和分析流程转化为可复用的工作流？
+用户需求 ↓ Research Planner ↓ Data Collection Agent ↓ Data Processing Agent ↓ Industry Analysis Agent ↓ Report Generator
 
-------------------------------------------------------------------------
+## Agent 设计
 
-# 系统架构
+### Research Planner
 
-CountyResearchAI 采用基于 LangGraph 的多 Agent 工作流设计。
+负责理解研究目标，并拆解任务。例如：
 
-整体流程：
+**输入**：分析某县新能源汽车产业发展情况
 
-    用户需求
+**拆解**：
 
-        ↓
+- 当前产业规模；
+- 核心企业；
+- 上下游产业链；
+- 政策环境；
+- 发展机会。
 
-    Research Planner
-
-        ↓
-
-    Data Collection Agent
-
-        ↓
-
-    Data Processing Agent
-
-        ↓
-
-    Industry Analysis Agent
-
-        ↓
-
-    Report Generator
-
-------------------------------------------------------------------------
-
-# Agent 设计
-
-## Research Planner
-
-负责理解研究目标，并拆解任务。
-
-例如：
-
-输入：
-
-    分析某县新能源汽车产业发展情况
-
-拆解：
-
--   当前产业规模；
--   核心企业；
--   上下游产业链；
--   政策环境；
--   发展机会。
-
-------------------------------------------------------------------------
-
-## Data Collection Agent
+### Data Collection Agent
 
 负责多源信息采集。
 
-目标数据来源：
+**目标数据来源**：
 
--   政府公开信息；
--   新闻报道；
--   企业资料；
--   招投标信息；
--   招聘信息。
+- 政府公开信息；
+- 新闻报道；
+- 企业资料；
+- 招投标信息；
+- 招聘信息。
 
-技术方向：
+**技术方向**：
 
--   Web crawling；
--   Browser automation；
--   Structured extraction。
+- Web crawling
+- Browser automation
+- Structured extraction
 
-------------------------------------------------------------------------
-
-## Data Processing Agent
+### Data Processing Agent
 
 负责将非结构化信息转换为可分析数据。
 
-主要任务：
+**主要任务**：
 
--   信息清洗；
--   实体识别；
--   企业名称统一；
--   数据去重；
--   分类整理。
+- 信息清洗；
+- 实体识别；
+- 企业名称统一；
+- 数据去重；
+- 分类整理。
 
-------------------------------------------------------------------------
-
-## Industry Analysis Agent
+### Industry Analysis Agent
 
 负责产业逻辑分析。
 
-包括：
+**包括**：
 
--   产业链上下游关系；
--   企业竞争格局；
--   区域产业优势；
--   发展阶段判断。
+- 产业链上下游关系；
+- 企业竞争格局；
+- 区域产业优势；
+- 发展阶段判断。
 
 目标不是简单总结资料，而是形成具有分析价值的研究结果。
 
-------------------------------------------------------------------------
-
-## Report Generation Agent
+### Report Generation Agent
 
 负责生成结构化研究报告。
 
-输出包括：
+**输出包括**：
 
--   产业概况；
--   核心企业；
--   产业链结构；
--   发展机会；
--   潜在风险。
+- 产业概况；
+- 核心企业；
+- 产业链结构；
+- 发展机会；
+- 潜在风险。
 
-------------------------------------------------------------------------
+## 为什么选择 Multi-Agent 架构？
 
-# 为什么选择 Multi-Agent 架构？
+早期可以采用 `Single Agent + Tools`，但产业研究任务具有明显阶段性：
 
-早期可以采用：
+Research ↓ Information Processing ↓ Analysis ↓ Writing
 
-    Single Agent + Tools
+单 Agent 容易出现上下文过长、任务目标漂移、中间过程难以调试等问题。因此采用 LangGraph 将复杂任务拆分为多个可控节点。
 
-但产业研究任务具有明显阶段性：
+**优势**：
 
-    Research
+- 每个阶段状态可追踪；
+- Agent 可以独立优化；
+- 方便加入人工反馈。
 
-    ↓
+## 技术栈
 
-    Information Processing
+- **Backend**: Python
+- **Agent Framework**: LangGraph
+- **LLM**: Large Language Model API
+- **Data Collection**: Playwright
+- **Output**: Markdown Research Report
 
-    ↓
+## 当前进展
 
-    Analysis
+**已完成**：
 
-    ↓
+- [x] 基础 Agent workflow 搭建
+- [x] Research planning 流程设计
+- [x] 数据采集模块验证
+- [x] 基础研究报告生成流程
 
-    Writing
+**正在优化**：
 
-单 Agent 容易出现：
+- [ ] 提升数据可信度评估
+- [ ] 建立信息来源追踪机制
+- [ ] 优化产业链分析能力
+- [ ] 构建研究报告评价体系
 
--   上下文过长；
--   任务目标漂移；
--   中间过程难以调试。
+## 当前挑战
 
-因此采用 LangGraph 将复杂任务拆分为多个可控节点。
-
-优势：
-
--   每个阶段状态可追踪；
--   Agent 可以独立优化；
--   方便加入人工反馈。
-
-------------------------------------------------------------------------
-
-# 技术栈
-
-## Backend
-
--   Python
-
-## Agent Framework
-
--   LangGraph
-
-## LLM
-
--   Large Language Model API
-
-## Data Collection
-
--   Playwright
-
-## Output
-
--   Markdown Research Report
-
-------------------------------------------------------------------------
-
-# 当前进展
-
-已完成：
-
--   [x] 基础 Agent workflow 搭建
--   [x] Research planning 流程设计
--   [x] 数据采集模块验证
--   [x] 基础研究报告生成流程
-
-正在优化：
-
--   [ ] 提升数据可信度评估
--   [ ] 建立信息来源追踪机制
--   [ ] 优化产业链分析能力
--   [ ] 构建研究报告评价体系
-
-------------------------------------------------------------------------
-
-# 当前挑战
-
-## 信息可信度
+### 信息可信度
 
 AI 系统最大的挑战不是生成内容，而是保证：
 
 > 信息真实、来源可靠、结论可信。
 
-未来需要加入：
+未来需要加入来源记录、多源验证与可信度评分。
 
--   来源记录；
--   多源验证；
--   可信度评分。
+### 产业分析复杂性
 
-------------------------------------------------------------------------
+产业研究不仅是信息总结。真正有价值的是发现产业趋势、企业关系与区域竞争优势。
 
-## 产业分析复杂性
+### Agent 评价体系
 
-产业研究不仅是信息总结。
+Agent 系统需要建立新的评价方式：信息覆盖率、来源质量、分析深度与报告质量。
 
-真正有价值的是发现：
-
--   产业趋势；
--   企业关系；
--   区域竞争优势。
-
-------------------------------------------------------------------------
-
-## Agent 评价体系
-
-Agent 系统需要建立新的评价方式：
-
--   信息覆盖率；
--   来源质量；
--   分析深度；
--   报告质量。
-
-------------------------------------------------------------------------
-
-# Future Work
+## Future Work
 
 未来计划：
 
-## 1. 建立研究质量评分体系
+1. **建立研究质量评分体系**：通过人工评价与自动指标结合，评估 Agent 输出质量。
+2. **增加知识图谱能力**：建立企业、产业链、政策与地区之间的关联。
+3. **打造自动化产业研究平台**：输入“县域名称 + 研究主题”，输出结构化产业研究报告。
 
-通过人工评价与自动指标结合，评估 Agent 输出质量。
+## Project Reflection
 
-## 2. 增加知识图谱能力
-
-建立：
-
-    企业
-     |
-    产业链
-     |
-    政策
-     |
-    地区
-
-之间的关联。
-
-## 3. 打造自动化产业研究平台
-
-目标：
-
-输入：
-
-    县域名称 + 研究主题
-
-输出：
-
-    结构化产业研究报告
-
-------------------------------------------------------------------------
-
-# Project Reflection
-
-CountyResearchAI 是我探索 AI Agent 工程化应用的一次实践。
-
-这个项目让我认识到：
+CountyResearchAI 是我探索 AI Agent 工程化应用的一次实践。这个项目让我认识到：
 
 AI Agent 并不只是调用大语言模型，而是一个完整的软件系统：
 
-    任务设计
-
-    +
-
-    工具连接
-
-    +
-
-    状态管理
-
-    +
-
-    数据处理
-
-    +
-
-    反馈优化
+任务设计 + 工具连接 + 状态管理 + 数据处理 + 反馈优化
 
 可靠的 Agent 系统需要结合软件工程思想进行架构设计和持续迭代。
-
-------------------------------------------------------------------------
-
-# Repository
-
-GitHub:
-
-https://github.com/OrdoAbChao7/CountyResearchAI
