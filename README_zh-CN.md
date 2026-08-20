@@ -1,7 +1,7 @@
 <div align="center">
   <h1>JJ Lab</h1>
 
-  [**English**](./README.md) | **中文**
+  <a href="./README.md"><b>English</b></a> | <b>中文</b>
 
   <p><b>一个围绕技术、工程实践与深度思考构建的个人实验室。</b></p>
 </div>
