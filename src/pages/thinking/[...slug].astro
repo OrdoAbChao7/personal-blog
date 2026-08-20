@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Tag from '../../components/Tag.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
 import { formatDate } from '../../lib/content';
 import { url } from '../../lib/url';
 
@@ -24,8 +25,6 @@ const categoryLabel: Record<string, string> = {
   'tech-analysis': 'Tech Analysis',
 };
 
-// 目录严格对应 Markdown 正文中的全部标题，不人为筛选层级。
-const toc = headings;
 ---
 
 <BaseLayout active="thinking" title={`${title} · JJ Lab`} description={description}>
@@ -55,22 +54,7 @@ const toc = headings;
           <Content />
         </div>
       </div>
-      {
-        toc.length > 0 && (
-          <aside class="toc">
-            <div class="toc-inner">
-              <span class="toc-label mono">目录</span>
-              <nav>
-                {toc.map((h) => (
-                  <a href={`#${h.slug}`} class:list={['toc-link', `depth-${h.depth}`]}>
-                    {h.text}
-                  </a>
-                ))}
-              </nav>
-            </div>
-          </aside>
-        )
-      }
+      <TableOfContents headings={headings} />
     </div>
   </article>
 
@@ -156,49 +140,6 @@ const toc = headings;
     flex-wrap: wrap;
     gap: 6px;
     margin-top: var(--space-4);
-  }
-  .toc {
-    width: 220px;
-    flex-shrink: 0;
-    position: sticky;
-    top: 88px;
-  }
-  .toc-inner {
-    border-left: 1px solid var(--color-border);
-    padding-left: var(--space-4);
-  }
-  .toc-label {
-    display: block;
-    font-size: var(--text-xs);
-    color: var(--color-text-tertiary);
-    text-transform: uppercase;
-    margin-bottom: var(--space-3);
-  }
-  .toc-link {
-    display: block;
-    font-size: var(--text-xs);
-    color: var(--color-text-tertiary);
-    line-height: 1.5;
-    padding: 4px 0;
-    transition: color var(--transition-fast);
-  }
-  .toc-link:hover {
-    color: var(--color-text);
-  }
-  .toc-link.depth-1 {
-    color: var(--color-text-secondary);
-    font-weight: 500;
-  }
-  .toc-link.depth-2 {
-    padding-left: var(--space-2);
-  }
-  .toc-link.depth-3 {
-    padding-left: var(--space-3);
-  }
-  @media (max-width: 1024px) {
-    .toc {
-      display: none;
-    }
   }
   @media (max-width: 640px) {
     .head h1 {

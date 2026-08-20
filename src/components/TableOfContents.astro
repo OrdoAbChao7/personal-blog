@@ -1,0 +1,85 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+---
+
+{
+  headings.length > 0 && (
+    <aside class="toc" aria-label="文章目录">
+      <div class="toc-inner">
+        <span class="toc-label mono">目录</span>
+        <nav>
+          {headings.map((heading) => (
+            <a href={`#${heading.slug}`} class:list={['toc-link', `depth-${heading.depth}`]}>
+              {heading.text}
+            </a>
+          ))}
+        </nav>
+      </div>
+    </aside>
+  )
+}
+
+<style>
+  .toc {
+    width: 220px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 88px;
+  }
+  .toc-inner {
+    border-left: 1px solid var(--color-border);
+    padding-left: var(--space-4);
+  }
+  .toc-label {
+    display: block;
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    margin-bottom: var(--space-3);
+  }
+  .toc-link {
+    display: block;
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    line-height: 1.5;
+    padding: 4px 0;
+    transition: color var(--transition-fast);
+  }
+  .toc-link:hover {
+    color: var(--color-text);
+  }
+  .toc-link.depth-1 {
+    color: var(--color-text-secondary);
+    font-weight: 500;
+  }
+  .toc-link.depth-2 {
+    padding-left: var(--space-2);
+  }
+  .toc-link.depth-3 {
+    padding-left: var(--space-3);
+  }
+  .toc-link.depth-4 {
+    padding-left: var(--space-4);
+  }
+  .toc-link.depth-5 {
+    padding-left: var(--space-5);
+  }
+  .toc-link.depth-6 {
+    padding-left: var(--space-6);
+  }
+  @media (max-width: 1024px) {
+    .toc {
+      display: none;
+    }
+  }
+</style>

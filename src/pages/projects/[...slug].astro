@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Tag from '../../components/Tag.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
 import StatusDot from '../../components/StatusDot.astro';
 import { url } from '../../lib/url';
 
@@ -14,7 +15,7 @@ export async function getStaticPaths() {
 }
 
 const { project } = Astro.props;
-const { Content } = await render(project);
+const { Content, headings } = await render(project);
 const {
   title,
   description,
@@ -35,7 +36,8 @@ const period = startDate
 
 <BaseLayout active="projects" title={`${title} · JJ Lab`} description={description}>
   <article class="project-detail">
-    <div class="container-narrow">
+    <div class="post-layout">
+      <div class="content">
       <a href={url('/projects')} class="back mono">← Projects</a>
       <header class="head">
         <div class="head-meta">
@@ -102,6 +104,8 @@ const period = startDate
           </div>
         )
       }
+      </div>
+      <TableOfContents headings={headings} />
     </div>
   </article>
 </BaseLayout>
@@ -109,6 +113,19 @@ const period = startDate
 <style>
   .project-detail {
     padding: var(--space-7) 0;
+  }
+  .post-layout {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+    display: flex;
+    gap: var(--space-8);
+    align-items: flex-start;
+  }
+  .content {
+    flex: 1;
+    min-width: 0;
+    max-width: 720px;
   }
   .back {
     display: inline-block;
