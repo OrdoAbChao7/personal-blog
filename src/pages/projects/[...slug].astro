@@ -26,6 +26,7 @@ const {
   startDate,
   endDate,
   date,
+  gallery,
 } = project.data;
 const period = startDate
   ? `${startDate}${endDate ? ` → ${endDate}` : ' → now'}`
@@ -87,6 +88,20 @@ const period = startDate
       <div class="prose">
         <Content />
       </div>
+      {
+        gallery && gallery.length > 0 && (
+          <div class="project-gallery">
+            <h2 class="gallery-title mono">Gallery</h2>
+            <div class="gallery-grid">
+              {gallery.map((img, index) => (
+                <a href={url(img)} target="_blank" rel="noopener noreferrer" class="gallery-item">
+                  <img src={url(img)} alt={`${title} gallery image ${index + 1}`} loading="lazy" />
+                </a>
+              ))}
+            </div>
+          </div>
+        )
+      }
     </div>
   </article>
 </BaseLayout>
@@ -174,7 +189,49 @@ const period = startDate
     flex-wrap: wrap;
     gap: 6px;
   }
+  .project-gallery {
+    margin-top: var(--space-8);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-border);
+  }
+  .gallery-title {
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    margin-bottom: var(--space-4);
+  }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--space-4);
+  }
+  .gallery-item {
+    display: block;
+    aspect-ratio: 4/3;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-bg-subtle);
+    transition: border-color var(--transition-fast);
+  }
+  .gallery-item:hover {
+    border-color: var(--color-accent);
+  }
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform var(--transition-normal);
+  }
+  .gallery-item:hover img {
+    transform: scale(1.02);
+  }
   @media (max-width: 640px) {
+    .gallery-grid {
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
     .head h1 {
       font-size: var(--text-2xl);
     }

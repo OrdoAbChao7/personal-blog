@@ -12,6 +12,7 @@ const projects = defineCollection({
     status: z.enum(['idea', 'building', 'shipped', 'archived']).default('building'),
     github: z.string().url().optional(),
     demo: z.string().url().optional(),
+    gallery: z.array(z.string()).optional(),
     cover: z.string().optional(),
     featured: z.boolean().default(false),
     startDate: z.string().optional(),
