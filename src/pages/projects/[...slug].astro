@@ -4,6 +4,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Tag from '../../components/Tag.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
 import ReadingProgress from '../../components/ReadingProgress.astro';
+import ReadingMeta from '../../components/ReadingMeta.astro';
+import MobileTableOfContents from '../../components/MobileTableOfContents.astro';
+import { getReadingStats } from '../../lib/reading';
 import StatusDot from '../../components/StatusDot.astro';
 import { url } from '../../lib/url';
 
@@ -33,6 +36,7 @@ const {
 const period = startDate
   ? `${startDate}${endDate ? ` → ${endDate}` : ' → now'}`
   : null;
+const reading = getReadingStats(project.body ?? '');
 ---
 
 <BaseLayout active="projects" title={`${title} · JJ Lab`} description={description}>
@@ -45,6 +49,7 @@ const period = startDate
         <div class="head-meta">
           <StatusDot status={status} />
           <span class="cat mono">{category}</span>
+          <ReadingMeta {...reading} />
         </div>
         <h1>{title}</h1>
         <p class="desc">{description}</p>
@@ -89,6 +94,7 @@ const period = startDate
           )
         }
       </header>
+      <MobileTableOfContents headings={headings} />
       <div class="prose">
         <Content />
       </div>

@@ -1,0 +1,118 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+---
+
+{
+  headings.length > 0 && (
+    <details class="toc-mobile">
+      <summary>
+        <span class="toc-mobile-label mono">目录</span>
+        <span class="toc-mobile-count mono">{headings.length} 节</span>
+      </summary>
+      <nav aria-label="文章目录">
+        {headings.map((heading) => (
+          <a href={`#${heading.slug}`} class:list={['toc-link', `depth-${heading.depth}`]}>
+            {heading.text}
+          </a>
+        ))}
+      </nav>
+    </details>
+  )
+}
+
+<script>
+  document.querySelectorAll('.toc-mobile a').forEach((link) => {
+    link.addEventListener('click', () => link.closest('details')?.removeAttribute('open'));
+  });
+</script>
+
+<style>
+  .toc-mobile {
+    display: none;
+  }
+  @media (max-width: 1024px) {
+    .toc-mobile {
+      display: block;
+      margin: 0 0 var(--space-5);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      background: var(--color-bg-subtle);
+    }
+    .toc-mobile summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+      padding: var(--space-3) var(--space-4);
+      cursor: pointer;
+      list-style: none;
+      user-select: none;
+    }
+    .toc-mobile summary::-webkit-details-marker {
+      display: none;
+    }
+    .toc-mobile summary::after {
+      content: '+';
+      color: var(--color-text-tertiary);
+      font-size: var(--text-lg);
+      line-height: 1;
+    }
+    .toc-mobile[open] summary {
+      border-bottom: 1px solid var(--color-border);
+    }
+    .toc-mobile[open] summary::after {
+      content: '−';
+    }
+    .toc-mobile-label {
+      font-size: var(--text-xs);
+      color: var(--color-text-secondary);
+      text-transform: uppercase;
+    }
+    .toc-mobile-count {
+      margin-left: auto;
+      color: var(--color-text-tertiary);
+      font-size: var(--text-xs);
+    }
+    .toc-mobile nav {
+      padding: var(--space-2) var(--space-4) var(--space-3);
+      max-height: min(48vh, 360px);
+      overflow-y: auto;
+    }
+    .toc-link {
+      display: block;
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+      padding: 6px 0;
+    }
+    .toc-link.depth-1 {
+      font-weight: 500;
+      color: var(--color-text);
+    }
+    .toc-link.depth-2 {
+      padding-left: var(--space-2);
+    }
+    .toc-link.depth-3 {
+      padding-left: var(--space-3);
+    }
+    .toc-link.depth-4 {
+      padding-left: var(--space-4);
+    }
+    .toc-link.depth-5 {
+      padding-left: var(--space-5);
+    }
+    .toc-link.depth-6 {
+      padding-left: var(--space-6);
+    }
+  }
+</style>

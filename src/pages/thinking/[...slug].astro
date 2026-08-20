@@ -4,6 +4,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Tag from '../../components/Tag.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
 import ReadingProgress from '../../components/ReadingProgress.astro';
+import ReadingMeta from '../../components/ReadingMeta.astro';
+import MobileTableOfContents from '../../components/MobileTableOfContents.astro';
+import { getReadingStats } from '../../lib/reading';
 import { formatDate } from '../../lib/content';
 import { url } from '../../lib/url';
 
@@ -18,6 +21,7 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content, headings } = await render(post);
 const { title, description, date, tags, category } = post.data;
+const reading = getReadingStats(post.body ?? '');
 
 const categoryLabel: Record<string, string> = {
   'ai-trend': 'AI Trend',
@@ -38,6 +42,7 @@ const categoryLabel: Record<string, string> = {
           <div class="head-meta">
             <span class="eyebrow mono">{categoryLabel[category]}</span>
             <span class="date mono">{formatDate(date)}</span>
+            <ReadingMeta {...reading} />
           </div>
           <h1>{title}</h1>
           {description && <p class="desc">{description}</p>}
@@ -51,6 +56,7 @@ const categoryLabel: Record<string, string> = {
             )
           }
         </header>
+        <MobileTableOfContents headings={headings} />
         <div class="prose">
           <Content />
         </div>

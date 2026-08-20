@@ -1,0 +1,20 @@
+---
+interface Props {
+  wordCount: number;
+  minutes: number;
+}
+
+const { wordCount, minutes } = Astro.props;
+---
+
+<span class="reading-meta mono" aria-label={`${wordCount} 字，预计 ${minutes} 分钟阅读`}>
+  {wordCount.toLocaleString()} 字 · 约 {minutes} 分钟阅读
+</span>
+
+<style>
+  .reading-meta {
+    color: var(--color-text-tertiary);
+    font-size: var(--text-xs);
+    white-space: nowrap;
+  }
+</style>
