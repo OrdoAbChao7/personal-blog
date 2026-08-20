@@ -24,7 +24,8 @@ const categoryLabel: Record<string, string> = {
   'tech-analysis': 'Tech Analysis',
 };
 
-const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+// 目录严格对应 Markdown 正文中的全部标题，不人为筛选层级。
+const toc = headings;
 ---
 
 <BaseLayout active="thinking" title={`${title} · JJ Lab`} description={description}>
@@ -183,6 +184,13 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
   }
   .toc-link:hover {
     color: var(--color-text);
+  }
+  .toc-link.depth-1 {
+    color: var(--color-text-secondary);
+    font-weight: 500;
+  }
+  .toc-link.depth-2 {
+    padding-left: var(--space-2);
   }
   .toc-link.depth-3 {
     padding-left: var(--space-3);
