@@ -1,5 +1,6 @@
 ---
 import { getProjects, getThinking, getEngineering } from '../lib/content';
+import { url } from '../lib/url';
 
 const year = new Date().getFullYear();
 
@@ -33,6 +34,12 @@ const startYear = allDates.length
       <span>since {startYear}</span>
     </div>
     <div class="footer-meta mono">
+      <a href={url('/about')}>About</a>
+      <span class="sep">·</span>
+      <a href={url('/now')}>Now</a>
+      <span class="sep">·</span>
+      <a href={url('/contact')}>Contact</a>
+      <span class="sep">·</span>
       <span>© {year} JJ</span>
     </div>
   </div>
@@ -60,6 +67,9 @@ const startYear = allDates.length
     display: flex;
     align-items: center;
     gap: var(--space-2);
+  }
+  .footer-meta a:hover {
+    color: var(--color-text);
   }
   .sep {
     color: var(--color-border-strong);

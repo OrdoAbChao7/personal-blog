@@ -1,0 +1,172 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProfileNav from '../components/ProfileNav.astro';
+import { url } from '../lib/url';
+
+const nowItems = [
+  {
+    title: 'CountyResearchAI',
+    status: 'Building',
+    description: '把县域产业研究拆解为研究规划、信息采集、数据处理、产业分析与报告生成的多 Agent 工作流。',
+    href: url('/projects/county-research-ai'),
+  },
+  {
+    title: 'MicroGlow Translate',
+    status: 'Experimenting',
+    description: '继续探索近红外感知、端侧推理与低功耗硬件之间的可行路径。',
+    href: url('/projects/microglow-translate'),
+  },
+  {
+    title: 'Learning system',
+    status: 'Refining',
+    description: '把输入、输出、反馈与项目实践连接成可持续积累能力的个人学习系统。',
+    href: url('/thinking/2026/learning-system'),
+  },
+  {
+    title: 'Research notes',
+    status: 'Reading',
+    description: '持续阅读并记录 AI Agent、产业研究、智能硬件与工具工作流的观察。',
+    href: url('/thinking'),
+  },
+];
+---
+
+<BaseLayout active="about" title="Now · JJ Lab" description="JJ 当前正在推进的项目、实验与学习方向。">
+  <main class="profile-page">
+    <div class="profile-shell">
+      <ProfileNav active="now" />
+
+      <header class="page-head">
+        <span class="eyebrow mono">/now</span>
+        <h1>正在构建、实验与积累的事。</h1>
+        <p>这是一个低频更新的公开工作记录。它不追求完整，只记录当下真正重要的方向。</p>
+      </header>
+
+      <section class="now-list" aria-label="当前进行中的工作">
+        {nowItems.map((item) => (
+          <a class="now-item" href={item.href}>
+            <div class="item-top">
+              <h2>{item.title}</h2>
+              <span class="status mono"><span class="dot"></span>{item.status}</span>
+            </div>
+            <p>{item.description}</p>
+            <span class="item-link mono">了解更多 →</span>
+          </a>
+        ))}
+      </section>
+
+      <section class="note">
+        <span class="note-label mono">更新时间</span>
+        <p>2026.08 · 内容会随着项目、实验和学习重点的变化而调整。</p>
+      </section>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .profile-page {
+    padding: var(--space-7) 0;
+  }
+  .profile-shell {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+  }
+  .page-head {
+    margin-bottom: var(--space-7);
+  }
+  .eyebrow {
+    display: block;
+    color: var(--color-accent);
+    font-size: var(--text-xs);
+    margin-bottom: var(--space-3);
+  }
+  h1 {
+    margin: 0 0 var(--space-4);
+    font-size: var(--text-3xl);
+    font-weight: 500;
+    line-height: var(--leading-tight);
+  }
+  .page-head p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+  }
+  .now-list {
+    display: grid;
+    border-top: 1px solid var(--color-border);
+  }
+  .now-item {
+    padding: var(--space-5) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .item-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+  h2 {
+    margin: 0;
+    font-size: var(--text-lg);
+    font-weight: 500;
+  }
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--color-text-tertiary);
+    font-size: var(--text-xs);
+    white-space: nowrap;
+  }
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-accent);
+  }
+  .now-item p {
+    margin: var(--space-3) 0;
+    color: var(--color-text-secondary);
+    line-height: var(--leading-relaxed);
+  }
+  .item-link {
+    color: var(--color-text-tertiary);
+    font-size: var(--text-xs);
+  }
+  .now-item:hover h2,
+  .now-item:hover .item-link {
+    color: var(--color-accent);
+  }
+  .note {
+    display: flex;
+    gap: var(--space-4);
+    padding-top: var(--space-6);
+  }
+  .note-label {
+    flex-shrink: 0;
+    color: var(--color-text-tertiary);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+  }
+  .note p {
+    margin: 0;
+    color: var(--color-text-tertiary);
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+  }
+  @media (max-width: 640px) {
+    .profile-shell {
+      padding: 0 var(--space-4);
+    }
+    h1 {
+      font-size: var(--text-2xl);
+    }
+    .item-top {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+  }
+</style>

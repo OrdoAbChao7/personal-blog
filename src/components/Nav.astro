@@ -13,6 +13,7 @@ const links = [
   { href: url('/projects'), label: '项目', key: 'projects' },
   { href: url('/engineering'), label: '工程', key: 'engineering' },
   { href: url('/thinking'), label: '思考', key: 'thinking' },
+  { href: url('/about'), label: '关于', key: 'about' },
 ];
 ---
 
@@ -112,6 +113,9 @@ const links = [
   @media (max-width: 640px) {
     .nav-links {
       gap: var(--space-4);
+    }
+    .nav-link[data-i18n='nav.home'] {
+      display: none;
     }
     .brand-name {
       display: none;

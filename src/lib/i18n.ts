@@ -7,6 +7,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     'nav.projects': '项目',
     'nav.engineering': '工程',
     'nav.thinking': '思考',
+    'nav.about': '关于',
 
     // 首页 · 自我介绍式
     'home.greeting': 'Hi, 我是 JJ。',
@@ -46,6 +47,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     'nav.projects': 'Projects',
     'nav.engineering': 'Engineering',
     'nav.thinking': 'Thinking',
+    'nav.about': 'About',
 
     // Home · self-intro style
     'home.greeting': 'Hi, I\'m JJ.',

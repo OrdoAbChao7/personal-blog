@@ -1,0 +1,45 @@
+---
+import { url } from '../lib/url';
+
+interface Props {
+  active: 'about' | 'now' | 'contact';
+}
+
+const { active } = Astro.props;
+
+const links = [
+  { key: 'about', label: 'About', href: url('/about') },
+  { key: 'now', label: 'Now', href: url('/now') },
+  { key: 'contact', label: 'Contact', href: url('/contact') },
+] as const;
+---
+
+<nav class="profile-nav" aria-label="个人页面导航">
+  {links.map((link) => (
+    <a href={link.href} class:list={['profile-link mono', { active: active === link.key }]}>
+      {link.label}
+    </a>
+  ))}
+</nav>
+
+<style>
+  .profile-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-7);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .profile-link {
+    color: var(--color-text-tertiary);
+    font-size: var(--text-xs);
+  }
+  .profile-link:hover,
+  .profile-link.active {
+    color: var(--color-text);
+  }
+  .profile-link.active {
+    font-weight: 500;
+  }
+</style>
