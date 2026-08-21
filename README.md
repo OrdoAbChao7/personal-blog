@@ -8,6 +8,20 @@
 
 ---
 
+
+
+<!-- portfolio-authenticity:start -->
+## Project status
+
+**Stage:** Personal technical notebook.
+
+**Why I built it:** I built this site to keep project notes, engineering decisions, and learning reflections in a format that is easier to revisit than scattered repository notes.
+
+**Boundary:** The blog is a static personal publication, not a continuously updated knowledge base. Articles can become stale, project descriptions are curated summaries, and external links or screenshots may change over time.
+
+See [PROJECT_STATUS.md](./PROJECT_STATUS.md) for the evidence still needed and the maintenance rule.
+<!-- portfolio-authenticity:end -->
+
 ## Overview
 
 JJ Lab is a content-driven personal website that combines a project portfolio, engineering notes, and a long-form writing archive. It documents work in AI engineering, intelligent hardware, optical sensing, and personal learning.
