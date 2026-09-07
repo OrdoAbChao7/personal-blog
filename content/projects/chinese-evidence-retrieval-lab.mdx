@@ -1,0 +1,52 @@
+---
+title: Chinese Evidence Retrieval Lab
+description: 中文两阶段检索的可复现实验实验室，为证据感知型研究助手验证排序策略。
+category: research
+techStack:
+  - Python
+  - PyTorch
+  - T2Ranking
+  - Cross-Encoder
+status: building
+github: https://github.com/OrdoAbChao7/chinese-evidence-retrieval-lab
+featured: false
+startDate: '2026-08'
+endDate: null
+date: '2026-08-19'
+---
+
+## 项目动机
+
+CountyResearchAI 的采集链路跑通后，瓶颈转移到了检索质量：证据检索的排序策略靠拍脑袋决定，没有任何公开数据上的实验支撑。
+
+于是把它拆出来：**先在公开中文基准上验证排序决策，再让它进入上游研究工作流**。这是个「实验先行」的自觉——不让研究系统变成不可解释的黑盒。
+
+## 实验阶梯
+
+| ID | 系统 | 训练 | 目的 |
+|---|---|---|---|
+| E0 | BM25 | 无 | 词法基线 |
+| E1 | 预训练中文双塔 | 无 | 语义基线 |
+| E2 | E1 + in-batch 对比学习 | 有 | 建立透明的 PyTorch 训练回路 |
+| E3 | E2 + 难负例训练 | 有 | 难负例是否真有提升 |
+| E4 | E3 Top-100 + Cross-Encoder 重排 | 可选 | 完整两阶段栈 |
+
+- **基准**：T2Ranking（清华 THUIR，Apache-2.0），官方 train/dev 切分原样保留
+- **指标**：nDCG@10 / MRR@10 / Recall@50,100 / Latency，多 seed 报均值±标准差
+- **防泄漏测试**：测试套件检查 query 重叠、正负例碰撞，训练数据永不进入评估集
+
+## 设计取舍
+
+README 里专门写了「边界声明」：在版本化 run 发布之前，**不声称任何 benchmark 提升**。排序相关性 ≠ 事实正确性，benchmark 结果也不能自动迁移到县域研究场景。
+
+`artifacts/metrics/` 目录在首次提交时刻意留空——指标只能由版本化 run 产生，不能手填。
+
+## 当前进度
+
+- ✅ E0–E2 实验脚手架 + 完整评估协议
+- ✅ 防泄漏测试套件
+- ⏳ E3 / E4 训练实验
+
+## 下一步
+
+跑完 E2–E4 的版本化实验，把第一份真实的 nDCG 数字写进 artifacts，再决定哪个策略进入 CountyResearchAI。

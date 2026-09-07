@@ -1,0 +1,50 @@
+---
+title: CourseLM
+description: 课程资料 → NotebookLM → Obsidian 复习文档的自动化流水线，一键把课件变成结构化复习笔记。
+category: software
+techStack:
+  - Python
+  - Playwright
+  - NotebookLM
+  - Obsidian
+status: shipped
+github: https://github.com/OrdoAbChao7/courselm
+featured: true
+startDate: '2026-08'
+endDate: '2026-08'
+date: '2026-08-25'
+---
+
+## 项目动机
+
+每学期复习周的流程都一样：翻课件、整理笔记、抄公式。课程资料明明是现成的，整理却全靠手工。
+
+CourseLM 的假设很简单：**资料整理这件事，应该让浏览器自动化 + LLM 来干**。把课程 PDF/PPT/DOCX 喂给 NotebookLM，产出可直接导入 Obsidian 的复习文档。
+
+## 工作流程
+
+```
+扫描课程资料 → 创建 NotebookLM Notebook → 上传资料
+→ 固定 Prompt（知识结构 / 题型总结 / 公式总结）
+→ 动态生成各题型详解 → 清洗 Markdown/LaTeX → 同步 Obsidian
+```
+
+- **CLI + GUI 双入口**：`courselm generate 电磁场` 一条命令，或桌面窗口里点生成
+- **Markdown Sanitizer**：解码 HTML Entity、清理 NotebookLM 输出残留、只在数学区域修复 LaTeX 转义，适配 Obsidian MathJax
+- **Portable 版**：GitHub Actions 构建 Windows 便携包，解压双击即用，无需装 Python
+
+## 设计取舍
+
+没有调 NotebookLM 的私有 API，而是走 Playwright 驱动真实浏览器。原因：私有 API 随时会被封，而浏览器自动化跟随官方 UI 演进，登录态也复用真实 Chrome 会话。
+
+输出侧坚持固定 Prompt + 动态生成两层结构：知识结构、公式总结是骨架，逐题型详解是血肉——生成的目录就是 Obsidian 里的复习目录。
+
+## 当前进度
+
+- ✅ 端到端流程跑通，已打 v0.1.0 标签
+- ✅ Portable Windows 构建分发
+- ✅ CI badge + MIT License
+
+## 下一步
+
+支持更多题型 Prompt 模板，并把「生成 → 同步」做成增量更新，避免复习周全量重跑。

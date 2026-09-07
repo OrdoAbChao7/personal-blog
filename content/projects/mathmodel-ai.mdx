@@ -1,0 +1,52 @@
+---
+title: MathModel AI
+description: 本地优先的数学建模 AI Agent 平台，把数模竞赛论文的生产过程变成可复现、可审计的流水线。
+category: software
+techStack:
+  - Python
+  - LLM Agent
+  - LaTeX
+  - GitHub Actions
+status: building
+github: https://github.com/OrdoAbChao7/mathmodel-ai
+featured: true
+startDate: '2026-08'
+endDate: null
+date: '2026-08-13'
+---
+
+## 项目动机
+
+数学建模竞赛的论文生产是个黑盒：模型求解、论文写作、格式审查全靠熬夜和运气，评委看到的只是一份无法追溯来源的 PDF。
+
+我想把它改造成**可复现、可审计的流水线**——每一句结论都有证据登记表支撑，每一步生成都有确定性检查兜底。
+
+## 系统架构
+
+```
+[init 建题] → [frame 构思] → [select 选题] → [run 求解] → [build 组稿] → [audit 审查] → [package 发布]
+     │                                                          │
+     └──────────────── 证据登记表（evidence registry）──────────┘
+```
+
+- **CLI 驱动**：`init / build / audit / run / package` 全流程命令化，支持 8 种题型 profile（forecasting / optimization / evaluation 等）
+- **证据登记表**：论文中的每个论断关联到可核验的数据与求解产物
+- **确定性检查**：LaTeX 页面平衡门控、合规审查、signoff 清单——「从不伪造签核」
+- **回归基准**：GitHub Actions 在每次 push 上跑隔离的端到端 fixture benchmark
+
+## 设计取舍
+
+没有做成「一个 LLM 直接吐论文」的 demo，而是把 Agent 能力和确定性检查分层：LLM 负责构思与写作，CLI 负责校验与门控。原因：竞赛论文的错误代价是整篇报废，**生成可以交给模型，信任必须来自流程**。
+
+这个项目是三个前身（paper-mvp、agentic-starter、paper-factory-skill）合并演进来的——先用 MVP 验证链路，再把 skill 沉淀成标准流程。
+
+## 当前进度
+
+- ✅ Competition OS 核心与确定性 benchmark 基建
+- ✅ 8 种题型 profile + 配置校验（不支持的类型直接 fail）
+- ✅ CI 回归套件 + 隔离 fixture benchmark
+- ⏳ 真实赛题的实证训练（当前主攻方向）
+
+## 下一步
+
+拿历年 CUMCM 真题做实证训练，验证「证据登记表 + 门控」在真实写作压力下是否守得住。
