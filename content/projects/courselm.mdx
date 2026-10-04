@@ -1,50 +1,54 @@
 ---
 title: CourseLM
-description: 课程资料 → NotebookLM → Obsidian 复习文档的自动化流水线，一键把课件变成结构化复习笔记。
+description: 从课程资料生成 Markdown / LaTeX 复习讲义，支持章节缓存、失败续跑与条件性 PDF 导出。
 category: software
-techStack:
-  - Python
-  - Playwright
-  - NotebookLM
-  - Obsidian
-status: shipped
+techStack: [Python, notebooklm-py, asyncio, Pydantic, Playwright, pytest]
+status: building
 github: https://github.com/OrdoAbChao7/courselm
 featured: true
 startDate: '2026-08'
-endDate: '2026-08'
-date: '2026-08-25'
+date: '2026-10-04'
 ---
 
-## 项目动机
+## 从整理课件开始
 
-每学期复习周的流程都一样：翻课件、整理笔记、抄公式。课程资料明明是现成的，整理却全靠手工。
+CourseLM 来自我复习课程时的资料整理需求：上传已有课件，按课程大纲生成绪论与章节，再组装成可以继续修改的讲义。我负责多阶段流程编排、缓存与导出处理。
 
-CourseLM 的假设很简单：**资料整理这件事，应该让浏览器自动化 + LLM 来干**。把课程 PDF/PPT/DOCX 喂给 NotebookLM，产出可直接导入 Obsidian 的复习文档。
+当前版本统一使用 Python CLI，通过 notebooklm-py 接入资料上传与问答。Playwright 用于登录相关流程；GUI 和 Windows Portable 已移除，Obsidian 同步为可选项。
 
 ## 工作流程
 
+```text
+扫描资料 → 上传 NotebookLM → 分析大纲 → 生成绪论与章节
+         → 检查与清洗 → Markdown / LaTeX → 可用时导出 PDF
 ```
-扫描课程资料 → 创建 NotebookLM Notebook → 上传资料
-→ 固定 Prompt（知识结构 / 题型总结 / 公式总结）
-→ 动态生成各题型详解 → 清洗 Markdown/LaTeX → 同步 Obsidian
+
+Pydantic 校验课程结构 JSON，章节按“标准例题、逐步讲解、方法归纳、自己练习”组织。输出处理检查标题、例题来源标记与顺序，清洗公式和 Markdown，题型索引直接从章节提取。
+
+## 缓存与失败续跑
+
+上传状态和章节缓存保存在本地。普通重跑跳过已完成的有效结果，补齐失败章节；调用异常可以重试，登录失效单独报错。已有 Markdown 可再次组装和导出，无需重新访问 NotebookLM。
+
+```bash
+courselm login
+courselm generate 电磁场
+courselm export-handout 电磁场
 ```
 
-- **CLI + GUI 双入口**：`courselm generate 电磁场` 一条命令，或桌面窗口里点生成
-- **Markdown Sanitizer**：解码 HTML Entity、清理 NotebookLM 输出残留、只在数学区域修复 LaTeX 转义，适配 Obsidian MathJax
-- **Portable 版**：GitHub Actions 构建 Windows 便携包，解压双击即用，无需装 Python
+PDF 导出依赖可用的 XeLaTeX 环境；没有编译环境时仍保留 Markdown 和 LaTeX 源码。生成内容仍需要结合课程原始资料检查。
 
-## 设计取舍
+## 工程验证
 
-没有调 NotebookLM 的私有 API，而是走 Playwright 驱动真实浏览器。原因：私有 API 随时会被封，而浏览器自动化跟随官方 UI 演进，登录态也复用真实 Chrome 会话。
+测试使用 FakeClient 覆盖适配器、缓存、内容处理与导出流程；GitHub Actions 配置 Windows / Python 3.11、3.12 测试。
 
-输出侧坚持固定 Prompt + 动态生成两层结构：知识结构、公式总结是骨架，逐题型详解是血肉——生成的目录就是 Obsidian 里的复习目录。
+2026-10-03 的本地核验记录为 **152 passed、2 failed**，两个失败场景涉及无效模板的提前拒绝，以及旧章节排除与同步。本页不将这份历史记录描述为当前版本全部通过。
 
-## 当前进度
+```bash
+python -B -m pytest tests -q -p no:cacheprovider
+```
 
-- ✅ 端到端流程跑通，已打 v0.1.0 标签
-- ✅ Portable Windows 构建分发
-- ✅ CI badge + MIT License
+后续重点是复查这两个失败场景，并继续验证真实课程资料的生成结果。
 
-## 下一步
+[仓库、安装与迁移说明](https://github.com/OrdoAbChao7/courselm)
 
-支持更多题型 Prompt 模板，并把「生成 → 同步」做成增量更新，避免复习周全量重跑。
+内容核对：2026-10-04；测试记录日期：2026-10-03。

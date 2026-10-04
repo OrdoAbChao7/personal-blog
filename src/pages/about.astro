@@ -13,14 +13,14 @@ import { url } from '../lib/url';
         <span class="eyebrow mono">/about</span>
         <h1>在系统的交叉地带构建与记录。</h1>
         <p>
-          我关注 AI Agent、智能硬件、光电感知与产业研究，尝试把不确定的问题拆成可验证、可迭代的系统。
+          我是陈俊杰，武汉理工大学光电信息科学与工程本科生（2024.09—2028.06）。目前专注 Python Agent、RAG 检索评测与端侧 AI。
         </p>
       </header>
 
       <section class="section">
-        <h2>研究兴趣</h2>
+        <h2>教育与创新经历</h2>
         <p>
-          我尤其关注端侧 AI、近红外光谱传感、多 Agent 工作流，以及 AI 如何帮助研究与决策。兴趣不止于模型本身，也包括数据、工具、状态管理与人如何参与系统闭环。
+          年级前 20%，通过 CET-6。担任省级大学生创新创业训练计划项目“微光译语”负责人，负责总体方案、嵌入式开发与端侧部署；同时通过个人项目和开源二次开发实践 Agent 工具调用、状态管理、失败降级与离线评测。
         </p>
       </section>
 
@@ -28,13 +28,13 @@ import { url } from '../lib/url';
         <h2>当前能力栈</h2>
         <div class="tag-grid mono" aria-label="技能关键词">
           <span>Python</span>
-          <span>LangGraph</span>
+          <span>Pydantic / pytest</span>
           <span>LLM Agents</span>
-          <span>ESP32-S3</span>
+          <span>ESP32</span>
           <span>TinyML</span>
           <span>NIR Sensing</span>
           <span>Playwright</span>
-          <span>Data Pipeline</span>
+          <span>ChromaDB / RRF</span>
         </div>
       </section>
 
@@ -44,14 +44,16 @@ import { url } from '../lib/url';
           <a href={url('/projects/county-research-ai')} class="project-item">
             <div>
               <span class="project-name">CountyResearchAI</span>
-              <p>基于多 Agent 架构的县域产业研究自动化系统。</p>
+              <p>自研 Agent Runtime，输出带来源链接的研究初稿，保留状态与执行 Trace。</p>
             </div>
             <span class="project-arrow mono">→</span>
           </a>
+          <a href={url('/projects/lingshan-rag')} class="project-item"><div><span class="project-name">灵小禅 · RAG</span><p>开源二次开发：混合检索、50 题事实评测与七组组件消融。</p></div><span class="project-arrow mono">→</span></a>
+          <a href={url('/projects/courselm')} class="project-item"><div><span class="project-name">CourseLM</span><p>课程资料到复习讲义的 CLI 工作流，支持章节缓存与失败续跑。</p></div><span class="project-arrow mono">→</span></a>
           <a href={url('/projects/microglow-translate')} class="project-item">
             <div>
               <span class="project-name">MicroGlow Translate</span>
-              <p>探索近红外传感、端侧推理与低功耗智能硬件的实验项目。</p>
+              <p>省级大创负责人：三路近红外采集、1D-CNN 与 ESP32 端侧推理原型。</p>
             </div>
             <span class="project-arrow mono">→</span>
           </a>

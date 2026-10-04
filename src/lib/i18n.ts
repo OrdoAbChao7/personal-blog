@@ -12,10 +12,10 @@ export const translations: Record<Lang, Record<string, string>> = {
     // 首页 · 自我介绍式
     'home.greeting': 'Hi, 我是 JJ。',
     'home.intro':
-      '光电信息科学与工程本科生。在端侧 AI、近红外光谱传感与产业研究的交叉地带造东西、写东西。',
+      '武汉理工大学光电信息科学与工程本科生，2028 届。专注 Python Agent、RAG 检索评测与端侧 AI，记录从工具调用、失败处理到原型验证的工程实践。',
     'home.stackLabel': '当前栈',
-    'home.currently': '正在构建',
-    'home.currentlySub': '（在做的几个原型，状态实时）',
+    'home.currently': '代表项目',
+    'home.currentlySub': '（更新于 2026.10.04）',
     'home.writing': '近期写作',
     'home.writingThinking': '思考',
     'home.writingEngineering': '工程',
@@ -52,10 +52,10 @@ export const translations: Record<Lang, Record<string, string>> = {
     // Home · self-intro style
     'home.greeting': 'Hi, I\'m JJ.',
     'home.intro':
-      'Undergrad in Optoelectronic Information Engineering. Building and writing at the intersection of edge AI, NIR spectroscopy sensing, and industry research.',
+      'Optoelectronic Information Engineering undergraduate at Wuhan University of Technology, class of 2028. Building Python agents, evaluating RAG systems, and prototyping edge AI.',
     'home.stackLabel': 'Stack',
-    'home.currently': 'Currently',
-    'home.currentlySub': '(in-progress prototypes, status live)',
+    'home.currently': 'Selected projects',
+    'home.currentlySub': '(updated 2026.10.04)',
     'home.writing': 'Recent writing',
     'home.writingThinking': 'Thinking',
     'home.writingEngineering': 'Engineering',
