@@ -1,0 +1,97 @@
+---
+title: 大模型网关与 Agent 系统的边界防御：长上下文 413、状态漂移与容错实录
+description: 从 Fastify 路由级报文流控、DeepTutor 间隔重复状态一致性，到 n8n 工作流容错，记录三个生产级 Bug 的定位与修复。
+software: Fastify + Python + TypeScript + Vitest + pytest
+difficulty: 4
+date: '2026-10-08'
+tags:
+  - llm-gateway
+  - agent-runtime
+  - fault-tolerance
+  - vitest
+---
+
+## 背景
+
+构建大模型 Agent 与网关链路时，绝大部分偶发性崩溃并不源于 Prompt 没写好，而是发生在**系统的边界**：HTTP 报文尺寸超限、多轮状态回放不一致，以及错误在分布式工作流中的丢失。
+
+这学期在为几个上游开源项目（AntigravityManager、DeepTutor、n8n）贡献代码时，碰到了三个极具代表性的工程 Bug。以下是排查与解决手记。
+
+---
+
+## 案例一：Fastify 网关的大报文穿透与路由隔离 (HTTP 413)
+
+### 现象
+在 AntigravityManager 代理长上下文请求（尤其是包含几十张多模态切片图片或百万级 Token 提问）时，客户端频繁收到 `HTTP 413 Payload Too Large`。
+
+### 根因与两难
+网关底层基于 Fastify 构建，默认 `bodyLimit` 为 1 MiB。若直接在全局配置中修改：
+```ts
+// 粗暴的全局修改：存在严重安全隐患
+const app = fastify({ bodyLimit: 64 * 1024 * 1024 });
+```
+这会导致网关的所有管理路由（包括登录、配置修改、密钥更新）都被迫接受 64 MiB 的巨大报文，极易遭受低成本的内存放大 DoS 攻击。
+
+### 优雅方案：路由级局部作用域配置
+Fastify 支持在 `register` 插件或者具体 route 层面覆写 `bodyLimit`。方案是将大报文支持严格限制在模型代理路由内部：
+
+```ts
+// 模型转发路由：放宽至 64 MiB
+fastify.post('/v1/chat/completions', {
+  config: { bodyLimit: 64 * 1024 * 1024 }
+}, proxyHandler);
+
+// 管理路由：保持 1 MiB 默认安全限制
+fastify.register(adminRoutes, { prefix: '/admin' });
+```
+
+### 验证
+编写 Vitest 回归测试：分别向 `/v1/chat/completions` 和 `/admin/settings` 发送 5 MiB 的测试 Payload。断言前者正常解析，后者在框架层即刻阻断并返回 413。
+
+---
+
+## 案例二：DeepTutor 多轮对话中的记忆状态漂移
+
+### 现象
+在基于 AI 的苏格拉底式教学辅导系统 DeepTutor 中，当学生在同一个错题上被 AI 连续引导 3 次才改对时，系统后台的 SRS（Spaced Repetition System，间隔重复算法）记忆难度计算失真，错误地将同一个知识点降级了 3 次（按遗忘 3 次处理）。
+
+### 根因分析
+辅导流程为多轮 Agent 对话。原实现将“每一轮用户输入且判断为未达标”无条件触发一次 SRS 惩罚。然而在多轮引导机制下，同一问题的多轮追问属于同一次学习会话的**局部纠偏**，而非独立的多次记忆遗忘。
+
+```text
+原逻辑：
+问题 A 错 → 扣分 1
+引导 1 答错 → 扣分 2 (误累加)
+引导 2 订正成功 → 加分 1
+结果：学生订正了题目，该知识点记忆系数却严重恶化。
+```
+
+### 修复方案
+引入会话级订正幂等锁与事务性状态回放：
+1. 在同一题目（Question State）的生命周期内，标记 `first_attempt_evaluated`；
+2. 仅在首次作答时结算 SRS 基础惩罚；后续的引导性交互归入 `repair_turn`，仅更新对话历史，不重复触发记忆模型惩罚；
+3. 补充 pytest 单元测试，模拟多轮订正场景，断言 SRS 核心系数在整个交互前后符合预期。
+
+---
+
+## 案例三：n8n 工作流 Continue On Fail 的异常截断
+
+### 现象
+在自动化工作流引擎 n8n 的 Splunk 节点中，用户勾选了 `Continue On Fail`（单项异常跳过并继续），当某批次中的某一项因为上报格式错误失败时，工作流没有中断，但下游节点读取 `$json.error` 时拿到的却是空值或不完整字符串，且无法定位是第几项（`pairedItem`）出错。
+
+### 根因分析
+JavaScript 中抛出的异常可能是 `Error` 实例、包含额外属性的对象，甚至是原生字符串。节点在捕获后序列化错误时，使用了只读取 `message` 的简单包装，导致结构体中的 HTTP 状态码、详细响应报文丢失；同时错误处理逻辑没有正确绑定当前迭代的输入项索引。
+
+### 修复方案
+1. 规范化异常提取器：识别 `NodeApiError`、原生 `Error` 与普通对象，保留底层 HTTP 响应正文与堆栈；
+2. 显式保留 `pairedItem: { item: itemIndex }` 映射关系，确保下游不仅知道“发生了什么错”，还知道“是哪条输入项触发的”；
+3. 补充 40 项节点级集成与边界测试，验证在混合成功/失败输入下的字段完备性。
+
+---
+
+## 总结
+
+可靠性不是模型参数给的，是工程约束给的：
+1. **网关层**：大报文必须与管理控制平面权限严格隔离；
+2. **状态层**：多轮 Agent 必须具备幂等性与状态回放验证，不能把每次交互当独立黑盒；
+3. **流程层**：异常处理不能简单 `catch(e) { continue }`，必须把诊断上下文与原始数据上下文完整透传。

@@ -18,9 +18,9 @@ import { url } from '../lib/url';
       </header>
 
       <section class="section">
-        <h2>教育与创新经历</h2>
+        <h2>教育与开源经历</h2>
         <p>
-          年级前 20%，通过 CET-6。担任省级大学生创新创业训练计划项目“微光译语”负责人，负责总体方案、嵌入式开发与端侧部署；同时通过个人项目和开源二次开发实践 Agent 工具调用、状态管理、失败降级与离线评测。
+          武汉理工大学光电信息科学与工程本科生（CET-6，省级大创项目负责人）。聚焦 Agent / RAG 应用开发与系统可靠性，向 n8n、DeepTutor、PixelRAG、AntigravityManager 等外部活跃开源项目贡献 7 个已合并至官方主分支的 PR，具备真实的开源协作与自动化测试经验。
         </p>
       </section>
 
@@ -28,32 +28,51 @@ import { url } from '../lib/url';
         <h2>当前能力栈</h2>
         <div class="tag-grid mono" aria-label="技能关键词">
           <span>Python</span>
-          <span>Pydantic / pytest</span>
-          <span>LLM Agents</span>
-          <span>ESP32</span>
-          <span>TinyML</span>
-          <span>NIR Sensing</span>
-          <span>Playwright</span>
-          <span>ChromaDB / RRF</span>
+          <span>TypeScript / Node.js</span>
+          <span>LLM Agents / Multi-Agent</span>
+          <span>Pydantic / pytest / Vitest</span>
+          <span>ChromaDB / RRF 混合检索</span>
+          <span>Fastify / REST API</span>
+          <span>Git / PR 开源协作</span>
+          <span>ESP32 / TinyML</span>
         </div>
       </section>
 
       <section class="section">
-        <h2>代表项目</h2>
+        <h2>代表项目与贡献</h2>
         <div class="project-list">
-          <a href={url('/projects/county-research-ai')} class="project-item">
+          <a href={url('/projects/open-source-contributions')} class="project-item">
             <div>
-              <span class="project-name">CountyResearchAI</span>
-              <p>自研 Agent Runtime，输出带来源链接的研究初稿，保留状态与执行 Trace。</p>
+              <span class="project-name">开源生态贡献 (Open Source)</span>
+              <p>向 n8n、DeepTutor、PixelRAG 等贡献 7 个已合并 PR，涉及工作流容错、API 边界与多模态处理。</p>
             </div>
             <span class="project-arrow mono">→</span>
           </a>
-          <a href={url('/projects/lingshan-rag')} class="project-item"><div><span class="project-name">灵小禅 · RAG</span><p>开源二次开发：混合检索、50 题事实评测与七组组件消融。</p></div><span class="project-arrow mono">→</span></a>
-          <a href={url('/projects/courselm')} class="project-item"><div><span class="project-name">CourseLM</span><p>课程资料到复习讲义的 CLI 工作流，支持章节缓存与失败续跑。</p></div><span class="project-arrow mono">→</span></a>
+          <a href={url('/projects/county-research-ai')} class="project-item">
+            <div>
+              <span class="project-name">CountyResearchAI</span>
+              <p>Plan-and-Execute 多 Agent 系统：动态问题树、Critic 反思补检与 299 项 pytest 覆盖。</p>
+            </div>
+            <span class="project-arrow mono">→</span>
+          </a>
+          <a href={url('/projects/lingshan-rag')} class="project-item">
+            <div>
+              <span class="project-name">灵小禅 · 可信文旅决策智能体</span>
+              <p>双引擎解耦：三路混合检索（RRF）事实问答，与时空规划器 60 项零违规路线决策。</p>
+            </div>
+            <span class="project-arrow mono">→</span>
+          </a>
+          <a href={url('/projects/courselm')} class="project-item">
+            <div>
+              <span class="project-name">CourseLM</span>
+              <p>课程资料到复习讲义的 CLI 工作流，支持章节缓存与失败续跑。</p>
+            </div>
+            <span class="project-arrow mono">→</span>
+          </a>
           <a href={url('/projects/microglow-translate')} class="project-item">
             <div>
               <span class="project-name">MicroGlow Translate</span>
-              <p>省级大创负责人：三路近红外采集、1D-CNN 与 ESP32 端侧推理原型。</p>
+              <p>省级大创负责人：三路近红外采集、1D-CNN 与 ESP32 端侧低功耗推理原型。</p>
             </div>
             <span class="project-arrow mono">→</span>
           </a>

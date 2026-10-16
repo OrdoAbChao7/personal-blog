@@ -5,28 +5,34 @@ import { url } from '../lib/url';
 
 const nowItems = [
   {
+    title: '开源生态协作 (Open Source)',
+    status: 'Merged 7 PRs',
+    description: '向 n8n、DeepTutor、PixelRAG、AntigravityManager 合并 7 个 PR，聚焦大模型网关流控、Agent 状态一致性与容错。',
+    href: url('/projects/open-source-contributions'),
+  },
+  {
     title: 'CountyResearchAI',
     status: 'Building',
-    description: '完善自研 Agent Runtime 的状态管理、工具执行与 Trace，补充真实研究任务的质量验证。',
+    description: '演进至 Plan-and-Execute 多 Agent 架构，引入动态问题树、Critic 反思补检与 299 项自动化测试。',
     href: url('/projects/county-research-ai'),
+  },
+  {
+    title: '灵小禅 · 可信文旅决策智能体',
+    status: 'Open Source',
+    description: '开源独立评测消融库，落地确定性路线规划与 60 项形式化校验，三路混合检索事实契约通过率 98%。',
+    href: url('/projects/lingshan-rag'),
   },
   {
     title: 'MicroGlow Translate',
     status: 'Experimenting',
-    description: '继续探索近红外感知、端侧推理与低功耗硬件之间的可行路径。',
+    description: '省级大创近红外无声语音交互原型，端侧 1D-CNN 与 ESP32 低功耗推理验证。',
     href: url('/projects/microglow-translate'),
   },
   {
-    title: '灵小禅 · RAG',
-    status: 'Refining',
-    description: '复查混合检索与事实评测，区分历史受控结果、当前版本和服务故障诊断。',
-    href: url('/projects/lingshan-rag'),
-  },
-  {
-    title: 'CourseLM',
-    status: 'Building',
-    description: '完善课程讲义生成、章节缓存和导出流程，复查模板校验与旧章节排除场景。',
-    href: url('/projects/courselm'),
+    title: '桌面与端侧工具实验',
+    status: 'Iterating',
+    description: '发布课件批量转换工具 v1.1.0；展开 ESP32 ScreenPilot 与安路 FPGA 图像处理实验。',
+    href: 'https://github.com/OrdoAbChao7',
   },
 ];
 ---
@@ -57,7 +63,7 @@ const nowItems = [
 
       <section class="note">
         <span class="note-label mono">更新时间</span>
-        <p>2026.10.04 · 内容会随着项目、实验和学习重点的变化而调整。</p>
+        <p>2026.10.16 · 内容会随着项目、开源贡献与工程实验的重点变化而调整。</p>
       </section>
     </div>
   </main>

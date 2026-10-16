@@ -14,9 +14,12 @@ I built this site to keep project notes, engineering decisions, and learning ref
 
 The blog is a static personal publication, not a continuously updated knowledge base. Articles can become stale, project descriptions are curated summaries, and external links or screenshots may change over time.
 
-## Next evidence to collect
+## Verified evidence (2026.10.16)
 
-Add source dates to research-facing posts and link each project page to its repository, verification command, and current limitation.
+- **Open source contributions**: 7 merged upstream PRs across `n8n-io/n8n`, `Draculabo/AntigravityManager`, `HKUDS/DeepTutor`, and `StarTrail-org/PixelRAG`, with linkable CI logs and test coverage.
+- **CountyResearchAI**: Upgraded to Plan-and-Execute multi-agent architecture with dynamic question trees, Critic loop, and 299 pytest tests passing locally and in CI.
+- **Lingshan AI Guide**: Spatiotemporal tourism agent with dual-engine separation (LLM + deterministic route planner), formal route validation, and reproducible RAG ablation report.
+- **Engineering logs**: Documented real-world debugging workflows on Fastify 413 route scoping, SRS state idempotency, and multimodal visual RAG preprocessing.
 
 ## Maintenance rule
 

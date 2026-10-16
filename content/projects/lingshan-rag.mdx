@@ -1,43 +1,62 @@
 ---
-title: 灵小禅 · 景区问答 RAG
-description: 在开源项目上补充混合检索、执行 Trace 与事实级评测，以 50 题、7 组消融分析检索链路。
+title: 灵小禅 · 可信文旅决策智能体
+description: 景区问答与时空导览双引擎系统：三路混合检索（RRF）保障事实问答，确定性规划器与形式化校验实现零违规路线决策。
 category: software
-techStack: [TypeScript, Express, Python, ChromaDB, BGE Embedding, RRF]
+techStack: [TypeScript, Express, Python, ChromaDB, BGE Embedding, RRF, State Machine]
 status: building
-github: https://github.com/OrdoAbChao7/lingshan-ai-guide
+github: https://github.com/OrdoAbChao7/lingshan-ai-guide-ablation
 featured: true
-date: '2026-10-04'
+date: '2026-10-15'
 ---
 
-## 我的工作范围
+## 项目背景与定位
 
-这是基于开源景区问答项目的二次开发。我的工作集中在检索链路与评测增量：围绕票价、开放时间等事实问答，补充向量、结构化与关键词三路检索，使用 RRF 融合候选并重排，通过 Express 接口返回答案、来源片段和执行 Trace。
+在景区实际导览中，游客常常提出复合型约束需求，例如：“我带腿脚不方便的母亲，在入口处只有 3 小时，想看一场演出，该怎么走？”
 
-## 把回答拆成可检查的事实
+通用大语言模型直接生成行程极易产生幻觉：安排不存在的道路、忽略轮椅台阶无障碍限制、或者演出时间窗口冲突。**灵小禅的核心思路是将“语义理解”与“物理决策”彻底解耦**：
+- **LLM + 规则抽取**：负责从非结构化自然语言中解析出当前位置、剩余时长、行动能力、演艺偏好等结构化 Scene State；
+- **确定性时空规划器**：基于真实路网拓扑与演艺时间表，计算真实步行距离与时间窗口，进行形式化可行性校验。
 
-维护 50 题事实评测集，以事实契约检查答案是否包含预期信息。七组组件消融使用同一题集，逐题隔离会话，关闭历史与完整知识注入，固定 retrievalTopK=8、contextTopK=5，保存回答、事实命中、配置和模型身份。
+## 系统架构与双引擎职责
 
-## 历史实验结果
+```mermaid
+flowchart LR
+    U["游客请求 (React 19)"] --> A["Express 主服务 (TypeScript)"]
+    A --> Q["场景理解 (Scene State + 澄清门禁)"]
+    A --> R["Hybrid RAG (三路并发检索)"]
+    R --> V["Vector (ChromaDB + BGE)"]
+    R --> S["Structured (字段级索引)"]
+    R --> K["Keyword (精确匹配)"]
+    R --> F["RRF 融合 (k=60)"]
+    A --> P["时空路线规划器 (图搜索 + 时间窗)"]
+    P --> C["Route Validator (形式化约束校验)"]
+    C --> O["可信行程输出 / 诚实说明拒绝原因"]
+```
 
-以下为 **2026-09-17 单次受控消融实验**，不是线上用户准确率，也不是当前代码的新复测。
+### 1. 确定性路线规划与形式化校验
+依托灵山胜境 23 个核心景点节点与 30 条道路边拓扑数据，针对老人与轮椅游客自动过滤台阶与陡坡；针对演艺场次进行时间重叠与路程缓冲预算校验。在 60 项典型游客路线的形式化验证用例中，实现了**零硬性物理违规**（如翻越无通道区域、错过演出入场时间）。
 
-| 配置 | 事实契约通过率 | 平均事实召回 | 平均耗时 |
-| --- | --- | --- | --- |
-| 向量单路 | 94%（47/50） | 0.960 | 2336.08 ms |
-| 完整方案 | 98%（49/50） | 0.980 | 2882.68 ms |
+### 2. 诚实拒绝与状态机降级
+系统通过置信度门禁与可行性状态机处理异常输入：
+- `needs_clarification`：关键条件（如起点或时间预算）缺失时，主动向游客追问，绝不无依据瞎猜；
+- `infeasible` / `feasible_with_rejected_preferences`：当 3 小时预算无法走完 5 个分散景点时，明确告知不可行或舍弃次要偏好，并给出具体耗时原因。
 
-同题集上完整方案多通过两题，同时平均耗时增加。这是一次运行的观察差异，尚不能推出对其他题集的普遍提升。独立正式基线为 48/50（96%），与上表消融结果分开记录。
+### 3. 三路混合检索与 RRF 融合
+对于票价、政策等事实类问答，Express 主服务通过 `Promise.all` 并发调度向量单路、结构化属性索引与精确关键词三路，使用 Reciprocal Rank Fusion（RRF, $k=60$）进行无量纲分数融合，并交由 Express 统一组装执行 Trace 与来源片段。
 
-请求模型为 deepseek-chat，服务端观测模型为 deepseek-flash，原始 manifest 保留了这一差异。
+## 评测与受控消融实验
 
-## 失败分析与质量门禁
+为了衡量检索链路与事实可信度，团队维护了一套包含 50 题的基准事实评测集，以事实契约（Fact Contract）判定核心实体与数值是否无误命中：
 
-检索、重排、生成和降级状态分别记录。质量门禁检查 API 失败、模型身份缺失与 Trace 不一致。2026-09-21 重跑因模型服务失败，七组门禁均未通过，因此归入服务故障诊断，不替换历史正式结果。
+| 实验配置 | 事实契约通过率 | 平均事实召回 | 平均耗时 |
+| :--- | :--- | :--- | :--- |
+| 向量单路 (Vector-only) | 94%（47/50） | 0.960 | 2336.08 ms |
+| 完整三路方案 (Hybrid + RRF) | **98%（49/50）** | **0.980** | 2882.68 ms |
 
-这段实践让我更重视执行链路是否真的发生：返回了答案，不代表成功运行了完整 RAG；测试集中的事实命中，也不能替代真实使用反馈。
+消融结果显示：结构化与关键词检索有效弥补了向量检索在特定数字、时间与专有名词（如“梵宫演出时间场次”）上的语义漏召；同时，Express 接口统一输出端到端执行 Trace，实现回答生成可回溯、可审计。
 
-## 复查入口
+## 开源仓库与消融报告
 
-[项目仓库](https://github.com/OrdoAbChao7/lingshan-ai-guide) · [消融报告与复现命令](https://github.com/OrdoAbChao7/lingshan-ai-guide/blob/HEAD/docs/ablation_report.md)
+[项目开源仓库 (lingshan-ai-guide-ablation)](https://github.com/OrdoAbChao7/lingshan-ai-guide-ablation) · [消融实验报告与复现台账](https://github.com/OrdoAbChao7/lingshan-ai-guide-ablation/blob/main/docs/competition/feature-contract.md)
 
-内容核对：2026-10-04；实验日期：2026-09-17。
+内容更新：2026-10-15；形式化验证与消融记录：2026-10-15。

@@ -1,0 +1,83 @@
+---
+title: 多模态视觉 RAG 的预处理暗坑：PDF 切片索引漂移与 EXIF 旋转纠偏
+description: 记录在多模态文档解析框架 PixelRAG 中修复的两个底层数据清洗 Bug：PDF 局部切片索引对齐与手机照片 EXIF 旋转还原。
+software: Python + Pillow + PyMuPDF + pytest
+difficulty: 3
+date: '2026-10-11'
+tags:
+  - multimodal-rag
+  - image-processing
+  - pillow
+  - bugfix
+---
+
+## 背景
+
+在多模态视觉 RAG（Visual RAG）架构中，文档通常直接被渲染成高分辨率图像，再通过滑动窗口或版面切片（Tile Slicing）输入 Vision-Language Model 进行特征提取。
+
+很多人把精力放在 VLM 提示词或向量检索策略上，但若预处理阶段送进去的图像尺寸、角度或坐标映射失真，下游的所有算法都会南辕北辙。在参与开源项目 PixelRAG 时，我定位并修复了两个低级却破坏性极大的预处理隐患。
+
+---
+
+## 问题一：PDF 局部子集切片索引漂移 ([PR #171](https://github.com/StarTrail-org/PixelRAG/pull/171))
+
+### 现象
+当用户只选取 PDF 的部分页面（例如只分析第 5 到第 10 页）进行局部切片索引时，系统渲染出来的 Tile 切片在向量库中检索命中后，点击跳回原文档定位时总是跳到前几页的错误位置。
+
+### 根因分析
+在对完整 PDF 渲染切片时，Tile 对象的命名和内部元数据依赖自增的页码与 Tile 索引：
+```python
+# 原实现：简单从 0 遍历子集列表
+for idx, page in enumerate(subset_pages):
+    tiles = slice_page(page, page_id=idx) # 错误：把第 5 页标记成了 page_id=0
+```
+这导致如果用户传入的是子集 `[4, 5, 6]`（0-indexed），系统内部记录的 `page_id` 却被重置为了 `[0, 1, 2]`。当向量检索找到第 0 号 Tile 时，高亮直接落到了第 1 页，引起索引严重错位。
+
+### 修复
+必须显式保留文档的物理全局页码引用：
+```python
+for global_page_id, page in subset_pages_with_ids:
+    tiles = slice_page(page, page_id=global_page_id)
+```
+并补充单元测试，对只加载单页或非连续页面子集时的 `tile.page_id` 进行确定性断言。
+
+---
+
+## 问题二：EXIF Orientation 未应用导致的图像旋转 ([PR #173](https://github.com/StarTrail-org/PixelRAG/pull/173))
+
+### 现象
+用户用手机拍摄合同、报表或纸质图表上传后，VLM 频繁给出“文字模糊”、“无法识别该表格”的错误回答，但在普通看图软件中打开该图片却是正常的。
+
+### 根因分析
+现代手机（尤其是 iPhone 与 Android 旗舰机）在拍摄时，并不会真正物理翻转像素矩阵，而是直接存储传感器原始像素，并在 JPEG/TIFF 元数据中写入 `EXIF:Orientation` 标签（例如值为 6 表示顺时针旋转 90 度）。
+
+操作系统的图片查看器会自动读取 EXIF 并旋转呈现，但如果直接使用 Pillow 的 `Image.open()`：
+```python
+from PIL import Image
+
+# 错误用法：Image.open 仅读取原始像素矩阵，完全忽略 EXIF 标签！
+image = Image.open("camera_photo.jpg")
+# 此时传递给 VLM 的实际是一张横置或颠倒的图像
+```
+视觉模型看到的是头朝下或旋转 90° 的文字，OCR 与版面分析准确率直接雪崩。
+
+### 修复方案
+在图像输入预处理管道的最前端，强制应用 EXIF 旋转变换：
+```python
+from PIL import Image, ImageOps
+
+def load_and_normalize_image(image_path: str) -> Image.Image:
+    with Image.open(image_path) as img:
+        # 正确用法：根据 EXIF Orientation 将像素矩阵物理转正并剥离标签
+        transposed_img = ImageOps.exif_transpose(img)
+        return transposed_img.copy()
+```
+
+### 验证
+使用带有不同 Orientation（1 到 8）标记的测试样本图片构建 pytest 测试用例，验证变换后的长宽比与像素方向均已纠正为正立姿态。
+
+---
+
+## 结语
+
+多模态系统的大部分坑都藏在“视觉信号如何变成数据”的转换边界上。保证输入矩阵与坐标系的物理一致性，是所有高级检索与推理的前提。

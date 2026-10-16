@@ -12,10 +12,10 @@ export const translations: Record<Lang, Record<string, string>> = {
     // 首页 · 自我介绍式
     'home.greeting': 'Hi, 我是 JJ。',
     'home.intro':
-      '武汉理工大学光电信息科学与工程本科生，2028 届。专注 Python Agent、RAG 检索评测与端侧 AI，记录从工具调用、失败处理到原型验证的工程实践。',
+      '武汉理工大学光电信息科学与工程本科生，2028 届。聚焦 Agent/RAG 开发与系统可靠性，向 n8n、DeepTutor 等开源项目贡献 7 个合并 PR，记录从真实工程协作到系统评测的实践。',
     'home.stackLabel': '当前栈',
-    'home.currently': '代表项目',
-    'home.currentlySub': '（更新于 2026.10.04）',
+    'home.currently': '代表项目与贡献',
+    'home.currentlySub': '（更新于 2026.10.16）',
     'home.writing': '近期写作',
     'home.writingThinking': '思考',
     'home.writingEngineering': '工程',
@@ -52,10 +52,10 @@ export const translations: Record<Lang, Record<string, string>> = {
     // Home · self-intro style
     'home.greeting': 'Hi, I\'m JJ.',
     'home.intro':
-      'Optoelectronic Information Engineering undergraduate at Wuhan University of Technology, class of 2028. Building Python agents, evaluating RAG systems, and prototyping edge AI.',
+      'Optoelectronic Information Engineering undergraduate at Wuhan University of Technology, class of 2028. Focusing on Agent/RAG runtime reliability with 7 merged PRs to n8n, DeepTutor, and more.',
     'home.stackLabel': 'Stack',
-    'home.currently': 'Selected projects',
-    'home.currentlySub': '(updated 2026.10.04)',
+    'home.currently': 'Selected projects & contributions',
+    'home.currentlySub': '(updated 2026.10.16)',
     'home.writing': 'Recent writing',
     'home.writingThinking': 'Thinking',
     'home.writingEngineering': 'Engineering',

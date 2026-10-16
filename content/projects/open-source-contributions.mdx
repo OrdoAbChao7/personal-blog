@@ -1,0 +1,60 @@
+---
+title: 开源生态贡献 · Agent 与系统可靠性
+description: 聚焦 Agent/RAG 框架与网关可靠性，向上游主分支合并 7 个 PR，覆盖 n8n、DeepTutor、PixelRAG 与 AntigravityManager。
+category: software
+techStack: [TypeScript, Python, Vitest, Fastify, NestJS, Pillow, GitHub Actions]
+status: shipped
+github: https://github.com/OrdoAbChao7
+featured: true
+startDate: '2026-09'
+date: '2026-10-16'
+---
+
+## 贡献概述
+
+这学期我聚焦于真实场景下大模型应用与 Agent 编排框架的**工程边界防御、状态一致性与容错能力**，深入上游活跃开源社区定位偶发隐蔽 Bug、编写最小化复现用例并提交修复方案。
+
+截至 2026 年 10 月，已有 **7 个 PR 成功合并至上游项目官方主分支**：
+
+| 项目与仓库 | 技术栈 | 核心修复方向 | 合并状态 |
+| :--- | :--- | :--- | :--- |
+| **n8n-io / n8n** | TypeScript · Vitest | 工作流 Continue On Fail 异常多态性处理与上下文保留 | [PR #40368](https://github.com/n8n-io/n8n/pull/40368) (已合并) |
+| **Draculabo / AntigravityManager** | NestJS · Fastify | 模型接口 64 MiB 路由级流控扩容与管理平面安全隔离 | [PR #335](https://github.com/Draculabo/AntigravityManager/pull/335) (已合并) |
+| **HKUDS / DeepTutor** | Python · pytest | 多轮引导订正防遗忘算法重复累加；长思考探活预算与 Windows 探测 | [PR #1794](https://github.com/HKUDS/DeepTutor/pull/1794), [#1694](https://github.com/HKUDS/DeepTutor/pull/1694), [#1690](https://github.com/HKUDS/DeepTutor/pull/1690) (均已合并) |
+| **StarTrail-org / PixelRAG** | Python · Pillow | 多模态文档 PDF 局部子集切片索引对齐；EXIF Orientation 旋转修复 | [PR #171](https://github.com/StarTrail-org/PixelRAG/pull/171), [#173](https://github.com/StarTrail-org/PixelRAG/pull/173) (均已合并) |
+
+---
+
+## 关键工程问题与修复方案
+
+### 1. n8n：工作流引擎 Continue On Fail 异常透传与项关联
+
+- **问题现象**：在 Splunk 节点中开启 `Continue On Fail`（单项失败继续执行后续节点）时，若单条数据上报失败，下游节点拿到的错误对象结构丢失，且无法将错误精准映射回原始输入项（`pairedItem`）。
+- **根因分析**：底层捕获错误时未兼容异常对象的多态性（字符串、原生 `Error` 实例与自定义嵌套响应结构），且深拷贝错误数据时意外切断了节点项引用。
+- **修复方案**：统一构造规范化错误上下文结构并保留输入项原始索引，确保批处理中部分失败既不阻断工作流，下游又能可靠拿到失败项做报警路由；补充 HTTP 边界与回归测试，40 项节点自动化测试全部通过。
+
+### 2. AntigravityManager：大模型长上下文与多模态网关 HTTP 413 防御
+
+- **问题现象**：网关在代理长思考链（如 DeepSeek-R1 / o1）以及高分辨率多图上下文时，频繁被底层 HTTP 框架拦截并报出 `HTTP 413 Payload Too Large`。
+- **根因分析**：底层 Fastify 默认配置了全局 1 MiB 的 JSON Body Limit。若直接全局调大到 64 MiB，会使鉴权、系统配置等内部轻量管理路由暴露于大报文 DoS 攻击风险之下。
+- **修复方案**：通过 Fastify 路由级局部钩子，仅对 `/v1/chat/completions` 等模型透传端点放宽至 64 MiB，管理平面严格保留 1 MiB 默认上限；增加大尺寸 payload 边界与 Vitest 回归测试用例。
+
+### 3. DeepTutor：辅导 Agent 状态一致性与模型探活
+
+- **多轮交互防状态漂移 ([PR #1794](https://github.com/HKUDS/DeepTutor/pull/1794))**：辅导助手在同一知识点引导学生多次订正时，底层的 SRS（间隔重复）算法会把多次引导错误重复累加为多次独立遗忘，导致记忆难度指数级失真。修复引入单轮订正幂等锁，保障回放状态一致。
+- **长思考模型探活预算 ([PR #1694](https://github.com/HKUDS/DeepTutor/pull/1694))**：针对推理模型（Reasoning Models）在诊断探活中因默认小 token 预算被截断导致误判失联的问题，支持动态配置 probe token 预算。
+- **Windows 跨平台进程探测 ([PR #1690](https://github.com/HKUDS/DeepTutor/pull/1690))**：修复 Windows 环境下进程探活管道解码失败导致触发误重试的问题。
+
+### 4. PixelRAG：多模态视觉 RAG 图像切片与坐标对齐
+
+- **PDF 切片索引错位 ([PR #171](https://github.com/StarTrail-org/PixelRAG/pull/171))**：在对 PDF 进行分批渲染子集页面切片时，生成的 tile 索引从 0 重新编号，导致后续召回时切片坐标无法映射回全局文档页码。通过保留原文档全局 page ID 与 tile ID 映射解决。
+- **EXIF 旋转方向未应用 ([PR #173](https://github.com/StarTrail-org/PixelRAG/pull/173))**：手机直接拍摄的文档图片往往带有 EXIF Orientation 元数据。如果加载时不显式转正，VLM 获取到的是物理旋转 90°/270° 的倒置图像，严重损害 OCR 与问答质量。通过 `ImageOps.exif_transpose` 预处理解决，并加入断言旋转状态的单元测试。
+
+---
+
+## 个人体会
+
+给大型外部开源项目提 PR 的核心不在于“写了多少行代码”，而在于：
+1. **最小复现用例 (Minimal Reproducible Example)**：能否用最少代码和隔离的测试稳定触发问题；
+2. **遵守上游代码规范与向下兼容**：绝不随意修改公共接口签名或破坏既有契约；
+3. **完备的自动化回归测试**：用测试证明“修了该修的，没碰不该碰的”。
