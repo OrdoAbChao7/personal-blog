@@ -1,0 +1,214 @@
+---
+import { url } from '../lib/url';
+
+export interface PhotoData {
+  src: string;
+  alt: string;
+  label: string;
+  sub: string;
+  side: 'left' | 'right';
+  rotate?: string;
+  top?: string;
+}
+
+interface Props {
+  leftPhoto?: Partial<PhotoData>;
+  rightPhoto?: Partial<PhotoData>;
+}
+
+const { leftPhoto, rightPhoto } = Astro.props;
+
+const defaultLeft: PhotoData = {
+  src: url('/images/common/side-photo-left.png'),
+  alt: 'Hardware prototype and optical sensing lab',
+  label: 'Hardware Lab',
+  sub: 'ESP32 & NIR Sensing',
+  side: 'left',
+  rotate: '-2.5deg',
+  top: '32px',
+};
+
+const defaultRight: PhotoData = {
+  src: url('/images/common/side-photo-right.png'),
+  alt: 'Agent runtime and verified pipeline',
+  label: 'Agent Runtime',
+  sub: 'Tree & RAG Trace',
+  side: 'right',
+  rotate: '2deg',
+  top: '120px',
+};
+
+const left = { ...defaultLeft, ...leftPhoto };
+const right = { ...defaultRight, ...rightPhoto };
+---
+
+<div class="side-photos-container" aria-hidden="false">
+  <!-- 左侧照片 -->
+  <aside
+    class="side-photo-card side-left"
+    style={`--rotate-deg: ${left.rotate}; --top-offset: ${left.top};`}
+  >
+    <div class="tape-strip" aria-hidden="true"></div>
+    <a href={left.src} target="_blank" rel="noopener noreferrer" class="photo-link" title="点击查看大图">
+      <div class="photo-frame">
+        <img src={left.src} alt={left.alt} loading="lazy" />
+      </div>
+      <div class="photo-caption">
+        <span class="caption-label">{left.label}</span>
+        <span class="caption-sub mono">{left.sub}</span>
+      </div>
+    </a>
+  </aside>
+
+  <!-- 右侧照片 -->
+  <aside
+    class="side-photo-card side-right"
+    style={`--rotate-deg: ${right.rotate}; --top-offset: ${right.top};`}
+  >
+    <div class="tape-strip" aria-hidden="true"></div>
+    <a href={right.src} target="_blank" rel="noopener noreferrer" class="photo-link" title="点击查看大图">
+      <div class="photo-frame">
+        <img src={right.src} alt={right.alt} loading="lazy" />
+      </div>
+      <div class="photo-caption">
+        <span class="caption-label">{right.label}</span>
+        <span class="caption-sub mono">{right.sub}</span>
+      </div>
+    </a>
+  </aside>
+</div>
+
+<style>
+  .side-photos-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .side-photo-card {
+    position: absolute;
+    width: 190px;
+    padding: 10px 10px 14px;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.08), 0 4px 10px -2px rgba(0, 0, 0, 0.04);
+    transform: rotate(var(--rotate-deg));
+    transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-fast);
+    pointer-events: auto;
+    user-select: none;
+  }
+
+  .side-photo-card:hover {
+    transform: rotate(0deg) translateY(-4px) scale(1.02);
+    box-shadow: 0 18px 36px -10px rgba(0, 0, 0, 0.12), 0 8px 16px -4px rgba(0, 0, 0, 0.06);
+    border-color: var(--color-border-strong);
+  }
+
+  /* 顶部贴纸（半透明磨砂胶带效果） */
+  .tape-strip {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 54px;
+    height: 18px;
+    background: rgba(220, 220, 220, 0.45);
+    border-left: 1px dashed rgba(180, 180, 180, 0.5);
+    border-right: 1px dashed rgba(180, 180, 180, 0.5);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(2px);
+    z-index: 2;
+  }
+
+  [data-theme='dark'] .tape-strip {
+    background: rgba(255, 255, 255, 0.08);
+    border-left: 1px dashed rgba(255, 255, 255, 0.15);
+    border-right: 1px dashed rgba(255, 255, 255, 0.15);
+  }
+
+  /* 左侧位置：紧贴 960px 容器左侧外缘 */
+  .side-left {
+    right: calc(100% + 36px);
+    top: var(--top-offset);
+  }
+
+  /* 右侧位置：紧贴 960px 容器右侧外缘，纵向错落 */
+  .side-right {
+    left: calc(100% + 36px);
+    top: var(--top-offset);
+  }
+
+  .photo-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .photo-frame {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--color-bg-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: 2px;
+  }
+
+  .photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform var(--transition-base);
+  }
+
+  .side-photo-card:hover .photo-frame img {
+    transform: scale(1.03);
+  }
+
+  .photo-caption {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .caption-label {
+    font-size: var(--text-xs);
+    font-weight: 500;
+    color: var(--color-text);
+    line-height: 1.3;
+  }
+
+  .caption-sub {
+    font-size: 11px;
+    color: var(--color-text-tertiary);
+    line-height: 1.2;
+    letter-spacing: var(--tracking-normal);
+  }
+
+  /* 屏幕宽度在 1360px ~ 1480px 时适当紧凑 */
+  @media (max-width: 1480px) {
+    .side-photo-card {
+      width: 155px;
+      padding: 8px 8px 12px;
+    }
+    .side-left {
+      right: calc(100% + 18px);
+    }
+    .side-right {
+      left: calc(100% + 18px);
+    }
+  }
+
+  /* 视口小于 1340px 时隐藏两侧照片，保证 960px 主内容不受任何遮挡与横向滚动 */
+  @media (max-width: 1340px) {
+    .side-photos-container {
+      display: none;
+    }
+  }
+</style>
