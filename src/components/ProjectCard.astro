@@ -32,12 +32,12 @@ const href = url(`/projects/${project.id}`);
     border-radius: var(--radius-md);
     background: var(--color-bg-elevated);
     margin: 4px 0;
-    transition: border-color var(--transition-fast),
-      background var(--transition-fast);
+    transition: border-color var(--transition-base),
+      background var(--transition-base);
     text-decoration: none;
   }
   .project-item:hover {
-    border-color: var(--color-border-strong);
+    border-color: var(--color-accent);
     background: var(--color-bg-hover);
   }
   /* StatusDot 占第一列，但要对齐到 title 的 baseline */

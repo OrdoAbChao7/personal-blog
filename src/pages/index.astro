@@ -4,6 +4,7 @@ import ProjectCard from '../components/ProjectCard.astro';
 import PostCard from '../components/PostCard.astro';
 import SidePhotos from '../components/SidePhotos.astro';
 import UsageSummary from '../components/UsageSummary.astro';
+import SignalSketch from '../components/SignalSketch.astro';
 import { getProjects, getThinking, getEngineering } from '../lib/content';
 import { url } from '../lib/url';
 
@@ -18,7 +19,10 @@ const latestEngineering = (await getEngineering()).slice(0, 3);
     <article class="home container">
     <!-- 1. 自我介绍 -->
     <section class="intro">
-      <h1 class="greeting" data-i18n="home.greeting">Hi, I'm JJ.</h1>
+      <div class="intro-heading">
+        <h1 class="greeting" data-i18n="home.greeting">Hi, I'm JJ.</h1>
+        <div class="intro-sketch"><SignalSketch /></div>
+      </div>
       <p class="intro-text" data-i18n="home.education">武汉理工大学光电信息科学与工程专业，2028 届本科生。</p>
       <p class="intro-text"><span data-i18n="home.focusBefore">聚焦 </span><strong data-i18n="home.focus">AI Agent、RAG 与系统可靠性</strong><span data-i18n="home.contributionsBefore">，已向 </span><strong data-i18n="home.projects">n8n、DeepTutor</strong><span data-i18n="home.contributionsMiddle"> 等开源项目贡献 </span><strong data-i18n="home.contributions">7 个已合并 PR</strong><span data-i18n="home.focusAfter">，持续探索 AI 系统的工程实践与可靠性评测。</span></p>
       <p class="intro-text"><span data-i18n="home.blogBefore">这个博客是我的</span><strong data-i18n="home.blogPurpose">个人成长与思考记录</strong><span data-i18n="home.blogAfter">，在这里分享技术探索、项目实践、学习心得，以及对科技、商业与个人发展的思考。</span></p>
@@ -35,6 +39,7 @@ const latestEngineering = (await getEngineering()).slice(0, 3);
     <!-- 2. 正在构建 -->
     <section class="block">
       <header class="block-head">
+        <span class="section-number mono" aria-hidden="true">01 /</span>
         <h2 class="block-title" data-i18n="home.currently">代表项目与贡献</h2>
         <span class="block-sub mono" data-i18n="home.currentlySub">（更新于 2026.10.16）</span>
       </header>
@@ -54,6 +59,7 @@ const latestEngineering = (await getEngineering()).slice(0, 3);
     <!-- 3. 近期写作 -->
     <section class="block">
       <header class="block-head">
+        <span class="section-number mono" aria-hidden="true">02 /</span>
         <h2 class="block-title" data-i18n="home.writing">近期写作</h2>
       </header>
 
@@ -125,8 +131,10 @@ const latestEngineering = (await getEngineering()).slice(0, 3);
     font-size: var(--text-3xl);
     font-weight: 500;
     line-height: var(--leading-tight);
-    margin-bottom: var(--space-4);
+    margin-bottom: 0;
   }
+  .intro-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+  .intro-sketch { width: 210px; flex-shrink: 0; }
   .intro-text {
     font-size: var(--text-base);
     color: var(--color-text-secondary);
@@ -181,6 +189,7 @@ const latestEngineering = (await getEngineering()).slice(0, 3);
     text-transform: uppercase;
     letter-spacing: var(--tracking-wide);
   }
+  .section-number { font-size: var(--text-xs); color: var(--color-text-tertiary); letter-spacing: .06em; }
   .block-sub {
     font-size: var(--text-xs);
     color: var(--color-text-tertiary);
@@ -220,6 +229,8 @@ const latestEngineering = (await getEngineering()).slice(0, 3);
       padding-bottom: var(--space-6);
     }
     .intro { padding: var(--space-5); }
+    .intro-heading { gap: 8px; }
+    .intro-sketch { width: 90px; }
     .greeting {
       font-size: var(--text-xl);
     }
