@@ -145,7 +145,15 @@ if (import.meta.env.DEV) {
 }
 ```
 
-## 常用命令
+## AI 用量展示（2026-10-29 用户确认）
+
+- `/usage/` 与首页摘要读取 `public/data/usage.json`，不直接连接本机数据库。
+- 采集、统计口径、每日同步和运维命令见 [docs/usage-sync.md](docs/usage-sync.md)。
+- 原始 CC Switch 数据库只读，禁止把数据库、会话正文、认证或供应商配置提交到仓库。
+- 修改导出/同步逻辑先运行 `python -m unittest discover -s scripts -p 'test_*.py'`，页面修改运行 `npm run build`。
+- 每日任务仅更新远端汇总 JSON；开发前 fetch 以免遗漏自动同步产生的提交。
+
+## 常用开发命令
 
 ```bash
 npm run dev        # 开发服务器 http://localhost:4321/

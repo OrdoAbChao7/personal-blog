@@ -28,5 +28,11 @@ pnpm-debug.log*
 *.swp
 *.swo
 
+# local verification artifacts
+__pycache__/
+.playwright-cli/
+output/playwright/
+*.json.tmp
+
 # OS
 Thumbs.db

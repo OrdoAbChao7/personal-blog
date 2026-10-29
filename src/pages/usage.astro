@@ -1,0 +1,118 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import UsageSummary from '../components/UsageSummary.astro';
+import { usage, compact, integer, cost, updatedAt, heatmapDays } from '../lib/usage';
+const days = heatmapDays();
+const last30 = Array.from({ length: 30 }, (_, i) => {
+  const date = new Date(`${usage.generatedAt.slice(0,10)}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() - 29 + i);
+  const key = date.toISOString().slice(0,10);
+  return { date: key, tokens: usage.daily.find(d => d.date === key)?.totalTokens ?? 0 };
+});
+const max30 = Math.max(1, ...last30.map(d => d.tokens));
+const months = days.filter((day, i) => i % 7 === 0).map((day, week) => ({ ...day, week,
+  label: week === 0 || day.date.slice(0,7) !== days[(week - 1)*7].date.slice(0,7) ? day.date.slice(5,7) : '' }));
+---
+<BaseLayout active="usage" title="AI Usage · JJ Lab" description="我的 AI 工程用量记录：Token、请求与每日活动。">
+  <article class="usage-page container">
+    <header class="page-head">
+      <span class="eyebrow mono">/usage</span>
+      <h1 data-i18n="usage.title">AI 用量</h1>
+      <p data-i18n="usage.subtitle">把日常构建，留成一份可见的记录。</p>
+      <p class="timestamp"><span class="sync-dot" aria-hidden="true"></span><span data-i18n="usage.updated">数据更新于</span> <time datetime={usage.generatedAt}>{updatedAt}</time> · UTC+8</p>
+    </header>
+    <UsageSummary />
+    <section class="panel">
+      <div class="section-head"><h2 data-i18n="usage.heatmap">用量热力图</h2><span class="muted" data-i18n="usage.weeks">最近 53 周 · 每日 Token</span></div>
+      <div class="heatmap-scroll" tabindex="0" aria-label="Daily token heatmap, scroll horizontally on small screens">
+        <div class="heatmap-content">
+          <div class="month-row">{months.map(month => <span>{month.label}</span>)}</div>
+          <div class="heatmap-grid" role="group" aria-label="Daily usage; use arrow keys to move between dates">
+            {days.map(day => <button disabled={day.future} tabindex={day.date === usage.generatedAt.slice(0,10) ? 0 : -1}
+              class:list={['day', `level-${day.level}`, { future: day.future }]}
+              aria-label={`${day.date}: ${integer(day.value)} Tokens · ${integer(day.requests)} requests`}
+              title={`${day.date}: ${integer(day.value)} Tokens · ${integer(day.requests)} requests`}
+              data-day={`${day.date} · ${integer(day.value)} Tokens · ${integer(day.requests)} requests`}></button>)}
+          </div>
+        </div>
+      </div>
+      <div class="heatmap-footer"><p data-day-detail aria-live="polite"><span data-i18n="usage.explore">悬停或使用方向键查看每日用量</span></p><div class="legend" aria-hidden="true"><span data-i18n="usage.less">少</span>{[0,1,2,3,4].map(level => <span class={`swatch level-${level}`}></span>)}<span data-i18n="usage.more">多</span></div></div>
+    </section>
+    <section class="panel">
+      <div class="section-head"><h2 data-i18n="usage.trend">近 30 天</h2><span class="muted">{compact(last30.reduce((sum,d) => sum + d.tokens, 0))} Tokens</span></div>
+      <div class="trend" role="img" aria-label="Token usage over the last 30 days; exact values in the daily table below">
+        {last30.map(day => <div class="bar-track" title={`${day.date}: ${integer(day.tokens)} Tokens`}><span class="bar" style={`height:${day.tokens / max30 * 100}%`}></span></div>)}
+      </div>
+      <div class="chart-labels"><span>{last30[0].date}</span><span>{last30[29].date}</span></div>
+    </section>
+    <section class="panel">
+      <div class="section-head"><h2 data-i18n="usage.models">模型分布</h2><span class="muted" data-i18n="usage.allTime">全部历史</span></div>
+      {usage.models.length === 0 ? <p data-i18n="usage.empty">暂无用量记录</p> : <div class="table-scroll"><table><thead><tr><th data-i18n="usage.model">模型</th><th>Tokens</th><th data-i18n="usage.requests">累计请求</th><th data-i18n="usage.cost">估算 API 成本</th></tr></thead><tbody>{usage.models.map(model => <tr><th scope="row">{model.model}</th><td>{compact(model.totalTokens)}</td><td>{integer(model.requests)}</td><td>{cost(model.estimatedCostUsd)}</td></tr>)}</tbody></table></div>}
+    </section>
+    <details class="panel daily-table"><summary data-i18n="usage.daily">查看每日明细</summary><div class="table-scroll"><table><thead><tr><th data-i18n="usage.date">日期</th><th>Tokens</th><th data-i18n="usage.requests">累计请求</th></tr></thead><tbody>{[...usage.daily].reverse().map(day => <tr><th scope="row">{day.date}</th><td>{integer(day.totalTokens)}</td><td>{integer(day.requests)}</td></tr>)}</tbody></table></div></details>
+    <p class="method" data-i18n="usage.method">来源：CC Switch 本地统计，每日同步。Token 包含新增输入、输出、缓存写入与缓存命中；成本按已配置模型价格估算，并非实际账单，未定价模型可能未计入成本。电脑离线时保留上次快照。</p>
+  </article>
+</BaseLayout>
+<script>
+  const scroller = document.querySelector<HTMLElement>('.heatmap-scroll');
+  if (scroller) scroller.scrollLeft = scroller.scrollWidth;
+  const grid = document.querySelector<HTMLElement>('.heatmap-grid');
+  const cells = Array.from(grid?.querySelectorAll<HTMLButtonElement>('button') ?? []);
+  const detail = document.querySelector('[data-day-detail]');
+  function describe(cell: HTMLButtonElement) { if (detail) detail.textContent = cell.dataset.day ?? ''; }
+  cells.forEach(cell => {
+    cell.addEventListener('mouseenter', () => describe(cell));
+    cell.addEventListener('focus', () => {
+      cells.forEach(other => { other.tabIndex = other === cell ? 0 : -1; });
+      describe(cell);
+    });
+    cell.addEventListener('click', () => describe(cell));
+  });
+  grid?.addEventListener('keydown', (event: KeyboardEvent) => {
+    const delta = ({ArrowLeft: -7, ArrowRight: 7, ArrowUp: -1, ArrowDown: 1} as Record<string, number>)[event.key];
+    if (delta === undefined) return;
+    const index = cells.indexOf(document.activeElement as HTMLButtonElement);
+    const next = cells[index + delta];
+    if (next && !next.disabled) { event.preventDefault(); cells[index].tabIndex = -1; next.tabIndex = 0; next.focus(); }
+  });
+</script>
+<style>
+  .usage-page { padding-top: 48px; padding-bottom: 64px; }
+  .page-head { margin-bottom: 28px; }
+  .eyebrow, .timestamp, .muted, .chart-labels, .heatmap-footer, .method { color: var(--color-text-tertiary); font-size: var(--text-xs); }
+  h1 { font-size: var(--text-3xl); font-weight: 500; margin: 8px 0 12px; }
+  .page-head > p { color: var(--color-text-secondary); }
+  .page-head .timestamp { margin-top: 16px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: var(--text-xs); }
+  .sync-dot { width: 6px; height: 6px; background: var(--color-text-tertiary); border-radius: 50%; }
+  .panel { margin-top: 24px; padding: 24px; background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: var(--radius-lg); min-width: 0; }
+  .section-head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+  h2 { font-size: var(--text-base); font-weight: 500; }
+  .heatmap-scroll, .table-scroll { overflow-x: auto; }
+  .heatmap-content { width: max-content; padding: 4px; }
+  .month-row { display: grid; grid-template-columns: repeat(53, 12px); gap: 4px; margin-bottom: 8px; color: var(--color-text-tertiary); font-size: 10px; }
+  .heatmap-grid { display: grid; grid-template-rows: repeat(7, 12px); grid-auto-flow: column; grid-auto-columns: 12px; gap: 4px; }
+  .day, .swatch { width: 12px; height: 12px; border-radius: 3px; background: var(--cell-color); }
+  .day { padding: 0; transition: outline var(--transition-fast); }
+  .day:hover { outline: 1px solid var(--color-text-secondary); outline-offset: 2px; }
+  .level-0 { --cell-color: var(--color-bg-hover); }
+  .level-1 { --cell-color: var(--color-usage-1); }
+  .level-2 { --cell-color: var(--color-usage-2); }
+  .level-3 { --cell-color: var(--color-usage-3); }
+  .level-4 { --cell-color: var(--color-usage-4); }
+  .future { visibility: hidden; }
+  .heatmap-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 16px; min-height: 20px; }
+  .legend { display: flex; gap: 4px; align-items: center; }
+  .trend { display: flex; align-items: end; gap: 5px; height: 120px; border-bottom: 1px solid var(--color-border); }
+  .bar-track { height: 100%; flex: 1; display: flex; align-items: end; min-width: 0; }
+  .bar { width: 100%; background: var(--color-accent); opacity: .65; border-radius: 3px 3px 0 0; }
+  .chart-labels { display: flex; justify-content: space-between; margin-top: 8px; }
+  table { border-collapse: collapse; width: 100%; font-size: var(--text-sm); font-variant-numeric: tabular-nums; }
+  th, td { text-align: right; padding: 12px 8px; border-bottom: 1px solid var(--color-border); white-space: nowrap; font-weight: 400; }
+  th:first-child { text-align: left; max-width: 300px; overflow-wrap: anywhere; white-space: normal; }
+  thead th { color: var(--color-text-tertiary); font-size: var(--text-xs); }
+  tbody tr:last-child > * { border-bottom: 0; }
+  summary { cursor: pointer; font-size: var(--text-sm); }
+  .daily-table[open] summary { margin-bottom: 16px; }
+  .method { margin-top: 24px; line-height: 1.8; }
+  @media (max-width: 640px) { .usage-page { padding-top: 32px; } .panel { padding: 16px; } .heatmap-footer { font-size: 11px; } }
+</style>

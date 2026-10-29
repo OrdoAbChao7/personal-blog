@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import PostCard from '../components/PostCard.astro';
 import SidePhotos from '../components/SidePhotos.astro';
+import UsageSummary from '../components/UsageSummary.astro';
 import { getProjects, getThinking, getEngineering } from '../lib/content';
 import { url } from '../lib/url';
 
@@ -26,6 +27,8 @@ const latestEngineering = (await getEngineering()).slice(0, 3);
         <span class="stack-value mono">Python · Multi-Agent · RAG · TypeScript · Vitest · ESP32</span>
       </p>
     </section>
+
+    <UsageSummary compactView />
 
     <!-- 2. 正在构建 -->
     <section class="block">

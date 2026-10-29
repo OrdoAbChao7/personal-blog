@@ -14,6 +14,10 @@
   --color-accent: #4059dc;
   --color-accent-hover: #3048c6;
   --color-accent-muted: rgba(77, 107, 254, .08);
+  --color-usage-1: #c0cafa;
+  --color-usage-2: #95a6fa;
+  --color-usage-3: #6d87f5;
+  --color-usage-4: #4d6bfe;
 
   /* 状态色：仅用于色点，不用于文字 */
   --color-building: #CA8A04;
@@ -88,6 +92,10 @@
   --color-accent: #91a4ff;
   --color-accent-hover: #b2bfff;
   --color-accent-muted: rgba(77, 107, 254, .15);
+  --color-usage-1: #303c68;
+  --color-usage-2: #465b9e;
+  --color-usage-3: #6d87d9;
+  --color-usage-4: #91a4ff;
 
   --color-building: #EAB308;
   --color-shipped: #22C55E;
