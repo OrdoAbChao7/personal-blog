@@ -16,7 +16,7 @@ const links = [
 
 <nav class="profile-nav" aria-label="个人页面导航">
   {links.map((link) => (
-    <a href={link.href} class:list={['profile-link mono', { active: active === link.key }]}>
+    <a href={link.href} aria-current={active === link.key ? 'page' : undefined} class:list={['profile-link mono', { active: active === link.key }]}>
       {link.label}
     </a>
   ))}
@@ -32,6 +32,9 @@ const links = [
     border-bottom: 1px solid var(--color-border);
   }
   .profile-link {
+    padding: 7px 12px;
+    border-radius: var(--radius-full);
+    transition: background var(--transition-fast), color var(--transition-fast);
     color: var(--color-text-tertiary);
     font-size: var(--text-xs);
   }
@@ -41,5 +44,8 @@ const links = [
   }
   .profile-link.active {
     font-weight: 500;
+    color: var(--color-accent);
+    background: var(--color-accent-muted);
   }
+  .profile-link:hover { background: var(--color-bg-hover); }
 </style>

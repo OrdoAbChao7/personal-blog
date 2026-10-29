@@ -32,7 +32,7 @@ const count = projects.length;
 
 <style>
   .page-header {
-    padding: var(--space-7) 0 var(--space-5);
+    padding: var(--space-7) var(--space-6) var(--space-5);
     border-bottom: 1px solid var(--color-border);
   }
   .eyebrow {
@@ -55,18 +55,13 @@ const count = projects.length;
     color: var(--color-text-tertiary);
   }
   .page-body {
-    padding: var(--space-5) 0 var(--space-7);
+    padding: var(--space-5) var(--space-6) var(--space-7);
   }
   .list {
     display: flex;
     flex-direction: column;
   }
-  .list > :global(*) {
-    border-bottom: 1px solid var(--color-border);
-  }
-  .list > :global(*:last-child) {
-    border-bottom: none;
-  }
+
   .empty {
     color: var(--color-text-tertiary);
     font-size: var(--text-sm);

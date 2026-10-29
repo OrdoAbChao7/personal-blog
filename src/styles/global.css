@@ -71,7 +71,7 @@ button {
   background: var(--color-text-tertiary);
 }
 
-/* 代码 · 去卡片感（仅左侧色条 + 极淡背景，无边框无圆角） */
+/* 代码与正文 */
 code,
 pre {
   font-family: var(--font-mono);
@@ -80,8 +80,8 @@ pre {
 
 pre {
   background: var(--color-bg-subtle);
-  border-left: 2px solid var(--color-border-strong);
-  border-radius: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   padding: var(--space-4) var(--space-5);
   overflow-x: auto;
   line-height: var(--leading-relaxed);
@@ -231,4 +231,40 @@ p {
 }
 .prose pre {
   margin: var(--space-4) 0;
+}
+
+/* 所有交互元素共用清晰焦点，不依赖颜色区分键盘位置。 */
+:where(a, button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+button:disabled,
+[aria-disabled='true'] {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.prose {
+  overflow-wrap: anywhere;
+}
+
+.prose blockquote {
+  background: var(--color-bg-subtle);
+  padding: var(--space-4) var(--space-5);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+@media (max-width: 640px) {
+  .container, .container-narrow { padding-left: 20px; padding-right: 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

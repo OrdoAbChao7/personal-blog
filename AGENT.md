@@ -39,18 +39,16 @@ JJ Lab 是 **Astro 5 驱动的内容型个人网站**（非博客模板、非 We
 - 组件样式用 `<style>` 局部作用域（Astro 默认 scoped）
 - 改样式优先改 token，而非逐处硬编码
 
-#### 设计语言约束（V1 改版后必须遵守）
+#### 设计语言约束（2026-10-29 用户确认的 DS-Bot 风格适配）
 
-- **浅色优先**：默认 `data-theme='light'`，防闪烁脚本默认值也是 `light`。深色作为切换态保留，不是默认
-- **锌黑系强调**：主强调色 `--color-accent: #18181B`（黑色，不是色相），hover → `#000000`
-- **状态色仅用于色点**：`--color-building`/`--color-shipped`/`--color-archived`/`--color-idea` 只用于 `.dot-*`，不用于文字或大色块
-- **禁止**：蓝色、紫色、渐变、玻璃拟态（backdrop-filter）、卡片背景框/阴影、大字重标题（>500）、装饰性 mono
-- **去卡片化**：列表用分隔线（`border-bottom`），不用 `background`/`border`/`border-radius`/`box-shadow` 包裹项。hover 反馈用左侧 2px 色条（`border-left: 2px solid var(--color-accent)`），不变色
-- **960px 容器**：`--container-max: 960px`，列表页与首页共用
-- **字重层级**：标题 400-500 字重 + 字号差异，不用 600/700；正文 400；行高 1.7
-- **圆角 3-4px**：`--radius-sm: 3px` / `--radius-md: 4px`，不要用 `--radius-lg` 或 `--radius-full`（已废弃）
-- **Nav static**：不吸顶、无 backdrop-filter、无 `position: sticky`
-- **切换按钮文字链接式**：ThemeToggle 显示 `Light`/`Dark` 文字，LangToggle 显示 `EN`/`中` 文字，均无按钮边框/背景
+- 浅色优先，保留深色主题与中英文切换。
+- 采用低对比灰阶背景、弱边框和轻微明度分层，避免重阴影与玻璃拟态。
+- 蓝色仅用于操作、链接、焦点和选中态；状态色仍仅用于状态点。
+- 小控件圆角 8px，列表卡片 12px，容器 16px，导航和标签使用胶囊形。
+- 960px 主容器、16px 正文、1.7 行高，保持阅读用途，不改为聊天界面。
+- 导航保持 static；手机导航分两行，语言和主题按钮保持可见。
+- 120–180ms 轻量过渡，支持 prefers-reduced-motion 和可见的 focus-visible。
+- 本节替代 V1 的锌黑强调、去卡片化、3–4px 圆角和文字链接式切换要求。
 
 ### 5. 组件栈锁定
 

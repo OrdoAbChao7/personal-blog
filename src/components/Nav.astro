@@ -24,11 +24,12 @@ const links = [
       <span class="brand-name">Lab</span>
     </a>
     <div class="nav-right">
-      <nav class="nav-links">
+      <nav class="nav-links" aria-label="主导航">
         {
           links.map((link) => (
             <a
               href={link.href}
+              aria-current={active === link.key ? 'page' : undefined}
               class:list={['nav-link', { active: active === link.key }]}
               data-i18n={`nav.${link.key}`}
             >
@@ -47,12 +48,12 @@ const links = [
 <style>
   .nav {
     border-bottom: 1px solid var(--color-border);
-    background: var(--color-bg);
+    background: var(--color-bg-subtle);
   }
   .nav-inner {
     max-width: var(--container-max);
     margin: 0 auto;
-    padding: var(--space-5) var(--space-6);
+    padding: var(--space-4) var(--space-6);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -60,12 +61,19 @@ const links = [
   }
   .brand {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: var(--space-2);
     font-weight: 500;
     letter-spacing: var(--tracking-tight);
   }
   .brand-mark {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-bg-elevated);
     font-size: var(--text-sm);
     color: var(--color-text);
     font-weight: 500;
@@ -81,38 +89,32 @@ const links = [
   }
   .nav-links {
     display: flex;
-    gap: var(--space-5);
+    gap: var(--space-1);
   }
   .nav-link {
     font-size: var(--text-sm);
     color: var(--color-text-secondary);
-    transition: color var(--transition-fast);
-    padding: 0;
+    transition: color var(--transition-fast), background var(--transition-fast);
+    padding: 7px 12px;
+    border-radius: var(--radius-full);
     position: relative;
   }
   .nav-link:hover {
     color: var(--color-text);
+    background: var(--color-bg-hover);
   }
   .nav-link.active {
-    color: var(--color-text);
-  }
-  .nav-link.active::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -6px;
-    height: 1px;
-    background: var(--color-text);
+    color: var(--color-accent);
+    background: var(--color-accent-muted);
   }
   .nav-sep {
     color: var(--color-border-strong);
     font-size: var(--text-sm);
     user-select: none;
   }
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
     .nav-links {
-      gap: var(--space-4);
+      gap: 2px;
     }
     .nav-link[data-i18n='nav.home'] {
       display: none;
@@ -120,8 +122,20 @@ const links = [
     .brand-name {
       display: none;
     }
-    .nav-right {
-      gap: var(--space-3);
+    .nav-right { display: contents; }
+    .nav-inner {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      padding: 12px 16px;
+      gap: 8px;
     }
+    .nav-links {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .nav-link { padding: 8px; font-size: 13px; }
+    .nav-sep { display: none; }
   }
 </style>
