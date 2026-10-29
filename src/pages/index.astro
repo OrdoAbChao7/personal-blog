@@ -18,14 +18,16 @@ const latestEngineering = (await getEngineering()).slice(0, 3);
     <article class="home container">
     <!-- 1. 自我介绍 -->
     <section class="intro">
-      <h1 class="greeting" data-i18n="home.greeting">Hi, 我是 JJ。</h1>
-      <p class="intro-text" data-i18n="home.intro">
-        武汉理工大学光电信息科学与工程本科生，2028 届。聚焦 Agent/RAG 开发与系统可靠性，向 n8n、DeepTutor 等开源项目贡献 7 个合并 PR，记录从真实工程协作到系统评测的实践。
-      </p>
-      <p class="stack-line">
-        <span class="stack-label mono" data-i18n="home.stackLabel">当前栈</span>
-        <span class="stack-value mono">Python · Multi-Agent · RAG · TypeScript · Vitest · ESP32</span>
-      </p>
+      <h1 class="greeting" data-i18n="home.greeting">Hi, I'm JJ.</h1>
+      <p class="intro-text" data-i18n="home.education">武汉理工大学光电信息科学与工程专业，2028 届本科生。</p>
+      <p class="intro-text"><span data-i18n="home.focusBefore">聚焦 </span><strong data-i18n="home.focus">AI Agent、RAG 与系统可靠性</strong><span data-i18n="home.contributionsBefore">，已向 </span><strong data-i18n="home.projects">n8n、DeepTutor</strong><span data-i18n="home.contributionsMiddle"> 等开源项目贡献 </span><strong data-i18n="home.contributions">7 个已合并 PR</strong><span data-i18n="home.focusAfter">，持续探索 AI 系统的工程实践与可靠性评测。</span></p>
+      <p class="intro-text"><span data-i18n="home.blogBefore">这个博客是我的</span><strong data-i18n="home.blogPurpose">个人成长与思考记录</strong><span data-i18n="home.blogAfter">，在这里分享技术探索、项目实践、学习心得，以及对科技、商业与个人发展的思考。</span></p>
+      <div class="stack-line">
+        <span class="stack-label" data-i18n="home.stackLabel">Tech Stack</span>
+        <div class="stack-value">
+          {['Python', 'TypeScript', 'AI Agent', 'RAG', 'Vitest', 'FPGA', 'ESP32'].map((tech, index) => <><span aria-hidden="true" class:list={['stack-separator', { first: index === 0 }]}>·</span><code>{tech}</code></>)}
+        </div>
+      </div>
     </section>
 
     <UsageSummary compactView />
@@ -134,21 +136,28 @@ const latestEngineering = (await getEngineering()).slice(0, 3);
   }
   .stack-line {
     display: flex;
-    align-items: baseline;
+    flex-direction: column;
     gap: var(--space-3);
     flex-wrap: wrap;
     font-size: var(--text-sm);
   }
   .stack-label {
-    color: var(--color-text-tertiary);
-    font-size: var(--text-xs);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wide);
+    color: var(--color-text);
+    font-size: var(--text-sm);
+    font-weight: 600;
   }
   .stack-value {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
     color: var(--color-text-secondary);
     font-size: var(--text-xs);
   }
+  .stack-value code { background: var(--color-bg-elevated); border: 1px solid var(--color-border); font-size: var(--text-xs); }
+  .stack-separator { color: var(--color-text-tertiary); }
+  .stack-separator.first { display: none; }
+  .intro-text strong { color: var(--color-text); font-weight: 600; }
 
   /* 2/3. 区块 */
   .block {

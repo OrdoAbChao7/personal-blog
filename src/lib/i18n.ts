@@ -3,6 +3,7 @@ export type Lang = 'zh' | 'en';
 /** UI 外壳文案字典（MDX 内容不翻译，保持中文） */
 export const translations: Record<Lang, Record<string, string>> = {
   zh: {
+    'home.projects': 'n8n、DeepTutor',
     'usage.source': '数据来源于本机 CC Switch',
     'nav.usage': 'Token 用量',
     'usage.title': "Token 用量",
@@ -34,10 +35,18 @@ export const translations: Record<Lang, Record<string, string>> = {
     'nav.about': '关于',
 
     // 首页 · 自我介绍式
-    'home.greeting': 'Hi, 我是 JJ。',
-    'home.intro':
-      '武汉理工大学光电信息科学与工程本科生，2028 届。聚焦 Agent/RAG 开发与系统可靠性，向 n8n、DeepTutor 等开源项目贡献 7 个合并 PR，记录从真实工程协作到系统评测的实践。',
-    'home.stackLabel': '当前栈',
+    'home.greeting': "Hi, I'm JJ.",
+    'home.education': "武汉理工大学光电信息科学与工程专业，2028 届本科生。",
+    'home.focusBefore': "聚焦 ",
+    'home.focus': "AI Agent、RAG 与系统可靠性",
+    'home.contributionsBefore': "，已向 ",
+    'home.contributionsMiddle': " 等开源项目贡献 ",
+    'home.contributions': "7 个已合并 PR",
+    'home.focusAfter': "，持续探索 AI 系统的工程实践与可靠性评测。",
+    'home.blogBefore': "这个博客是我的",
+    'home.blogPurpose': "个人成长与思考记录",
+    'home.blogAfter': "，在这里分享技术探索、项目实践、学习心得，以及对科技、商业与个人发展的思考。",
+    'home.stackLabel': "Tech Stack",
     'home.currently': '代表项目与贡献',
     'home.currentlySub': '（更新于 2026.10.16）',
     'home.writing': '近期写作',
@@ -67,6 +76,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     'footer.built': 'Built with Astro',
   },
   en: {
+    'home.projects': 'n8n, DeepTutor',
     'usage.source': 'Data from CC Switch on my computer',
     'nav.usage': 'Token usage',
     'usage.title': "Token usage",
@@ -98,10 +108,18 @@ export const translations: Record<Lang, Record<string, string>> = {
     'nav.about': 'About',
 
     // Home · self-intro style
-    'home.greeting': 'Hi, I\'m JJ.',
-    'home.intro':
-      'Optoelectronic Information Engineering undergraduate at Wuhan University of Technology, class of 2028. Focusing on Agent/RAG runtime reliability with 7 merged PRs to n8n, DeepTutor, and more.',
-    'home.stackLabel': 'Stack',
+    'home.greeting': "Hi, I'm JJ.",
+    'home.education': "Optoelectronic Information Science and Engineering undergraduate at Wuhan University of Technology, class of 2028.",
+    'home.focusBefore': "Focused on ",
+    'home.focus': "AI Agents, RAG, and system reliability",
+    'home.contributionsBefore': ", with contributions to ",
+    'home.contributionsMiddle': " and other open-source projects, including ",
+    'home.contributions': "7 merged PRs",
+    'home.focusAfter': ". I continue to explore AI systems engineering and reliability evaluation.",
+    'home.blogBefore': "This blog is my ",
+    'home.blogPurpose': "record of personal growth and reflection",
+    'home.blogAfter': ", where I share technical explorations, project work, learning experiences, and thoughts on technology, business, and personal development.",
+    'home.stackLabel': "Tech Stack",
     'home.currently': 'Selected projects & contributions',
     'home.currentlySub': '(updated 2026.10.16)',
     'home.writing': 'Recent writing',
