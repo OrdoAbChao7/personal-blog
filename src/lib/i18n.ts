@@ -3,8 +3,9 @@ export type Lang = 'zh' | 'en';
 /** UI 外壳文案字典（MDX 内容不翻译，保持中文） */
 export const translations: Record<Lang, Record<string, string>> = {
   zh: {
-    'nav.usage': '用量',
-    'usage.title': "AI 用量",
+    'usage.source': '数据来源于本机 CC Switch',
+    'nav.usage': 'Token 用量',
+    'usage.title': "Token 用量",
     'usage.subtitle': "把日常构建，留成一份可见的记录。",
     'usage.view': "查看统计 ↗",
     'usage.tokens': "累计 Token",
@@ -66,8 +67,9 @@ export const translations: Record<Lang, Record<string, string>> = {
     'footer.built': 'Built with Astro',
   },
   en: {
-    'nav.usage': 'Usage',
-    'usage.title': "AI usage",
+    'usage.source': 'Data from CC Switch on my computer',
+    'nav.usage': 'Token usage',
+    'usage.title': "Token usage",
     'usage.subtitle': "A visible record of everyday building.",
     'usage.view': "View usage ↗",
     'usage.tokens': "Total tokens",

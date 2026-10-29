@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import UsageSummary from '../components/UsageSummary.astro';
-import { usage, compact, integer, cost, updatedAt, heatmapDays } from '../lib/usage';
+import { usage, compact, integer, updatedAt, heatmapDays } from '../lib/usage';
 const days = heatmapDays();
 const last30 = Array.from({ length: 30 }, (_, i) => {
   const date = new Date(`${usage.generatedAt.slice(0,10)}T00:00:00Z`);
@@ -13,11 +13,11 @@ const max30 = Math.max(1, ...last30.map(d => d.tokens));
 const months = days.filter((day, i) => i % 7 === 0).map((day, week) => ({ ...day, week,
   label: week === 0 || day.date.slice(0,7) !== days[(week - 1)*7].date.slice(0,7) ? day.date.slice(5,7) : '' }));
 ---
-<BaseLayout active="usage" title="AI Usage · JJ Lab" description="我的 AI 工程用量记录：Token、请求与每日活动。">
+<BaseLayout active="usage" title="Token Usage · JJ Lab" description="我的 AI 工程用量记录：Token、请求与每日活动。">
   <article class="usage-page container">
     <header class="page-head">
       <span class="eyebrow mono">/usage</span>
-      <h1 data-i18n="usage.title">AI 用量</h1>
+      <h1 data-i18n="usage.title">Token 用量</h1>
       <p data-i18n="usage.subtitle">把日常构建，留成一份可见的记录。</p>
       <p class="timestamp"><span class="sync-dot" aria-hidden="true"></span><span data-i18n="usage.updated">数据更新于</span> <time datetime={usage.generatedAt}>{updatedAt}</time> · UTC+8</p>
     </header>
@@ -44,10 +44,6 @@ const months = days.filter((day, i) => i % 7 === 0).map((day, week) => ({ ...day
         {last30.map(day => <div class="bar-track" title={`${day.date}: ${integer(day.tokens)} Tokens`}><span class="bar" style={`height:${day.tokens / max30 * 100}%`}></span></div>)}
       </div>
       <div class="chart-labels"><span>{last30[0].date}</span><span>{last30[29].date}</span></div>
-    </section>
-    <section class="panel">
-      <div class="section-head"><h2 data-i18n="usage.models">模型分布</h2><span class="muted" data-i18n="usage.allTime">全部历史</span></div>
-      {usage.models.length === 0 ? <p data-i18n="usage.empty">暂无用量记录</p> : <div class="table-scroll"><table><thead><tr><th data-i18n="usage.model">模型</th><th>Tokens</th><th data-i18n="usage.requests">累计请求</th><th data-i18n="usage.cost">估算 API 成本</th></tr></thead><tbody>{usage.models.map(model => <tr><th scope="row">{model.model}</th><td>{compact(model.totalTokens)}</td><td>{integer(model.requests)}</td><td>{cost(model.estimatedCostUsd)}</td></tr>)}</tbody></table></div>}
     </section>
     <details class="panel daily-table"><summary data-i18n="usage.daily">查看每日明细</summary><div class="table-scroll"><table><thead><tr><th data-i18n="usage.date">日期</th><th>Tokens</th><th data-i18n="usage.requests">累计请求</th></tr></thead><tbody>{[...usage.daily].reverse().map(day => <tr><th scope="row">{day.date}</th><td>{integer(day.totalTokens)}</td><td>{integer(day.requests)}</td></tr>)}</tbody></table></div></details>
     <p class="method" data-i18n="usage.method">来源：CC Switch 本地统计，每日同步。Token 包含新增输入、输出、缓存写入与缓存命中；成本按已配置模型价格估算，并非实际账单，未定价模型可能未计入成本。电脑离线时保留上次快照。</p>

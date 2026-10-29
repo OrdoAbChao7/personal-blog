@@ -1,20 +1,21 @@
 ---
-import { usage, compact, integer, cost, updatedAt } from '../lib/usage';
+import { usage, integer, cost, updatedAt } from '../lib/usage';
 import { url } from '../lib/url';
 interface Props { compactView?: boolean }
 const { compactView = false } = Astro.props;
 const stats = [
-  { key: 'tokens', label: '累计 Token', value: compact(usage.summary.totalTokens), exact: integer(usage.summary.totalTokens) },
+  { key: 'tokens', label: '累计 Token', value: `${(usage.summary.totalTokens / 100_000_000).toFixed(2)} 亿`, exact: integer(usage.summary.totalTokens) },
   { key: 'requests', label: '累计请求', value: integer(usage.summary.requests) },
   { key: 'cache', label: '缓存命中率', value: `${(usage.summary.cacheHitRate * 100).toFixed(1)}%` },
   { key: 'cost', label: '估算 API 成本', value: cost(usage.summary.estimatedCostUsd) },
 ];
 ---
-<section class:list={['usage-summary', { compact: compactView }]} aria-label="AI usage">
-  {compactView && <header><h2 data-i18n="usage.title">AI 用量</h2><a href={url('/usage/')} data-i18n="usage.view">查看统计 ↗</a></header>}
+<section class:list={['usage-summary', { compact: compactView }]} aria-label="Token usage">
+  {compactView && <header><h2 data-i18n="usage.title">Token 用量</h2><a href={url('/usage/')} data-i18n="usage.view">查看统计 ↗</a></header>}
   <dl class="metrics">
     {stats.map(stat => <div class="metric"><dt data-i18n={`usage.${stat.key}`}>{stat.label}</dt><dd title={stat.exact}>{stat.value}</dd></div>)}
   </dl>
+  <p class="updated" data-i18n="usage.source">数据来源于本机 CC Switch</p>
   {compactView && <p class="updated"><span data-i18n="usage.updated">数据更新于</span> <time datetime={usage.generatedAt}>{updatedAt}</time> · UTC+8</p>}
 </section>
 <style>
