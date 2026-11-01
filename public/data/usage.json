@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-31T20:00:02+08:00",
+  "generatedAt": "2026-11-01T20:00:01+08:00",
   "timezone": "Asia/Shanghai",
   "source": "CC Switch",
   "summary": {
-    "requests": 147173,
-    "inputTokens": 670299602,
-    "outputTokens": 82252395,
-    "cacheReadTokens": 15543387912,
+    "requests": 148863,
+    "inputTokens": 677604038,
+    "outputTokens": 83349669,
+    "cacheReadTokens": 15770429064,
     "cacheWriteTokens": 0,
-    "estimatedCostUsd": "2051.006681",
-    "totalTokens": 16295939909,
-    "cacheHitRate": 0.958658411208356
+    "estimatedCostUsd": "2073.539769",
+    "totalTokens": 16531382771,
+    "cacheHitRate": 0.958803339353834
   },
   "daily": [
     {
@@ -985,13 +985,13 @@
     {
       "date": "2026-10-29",
       "requests": 2633,
-      "inputTokens": 15983709,
-      "outputTokens": 1598635,
-      "cacheReadTokens": 358774317,
+      "inputTokens": 16043205,
+      "outputTokens": 1624531,
+      "cacheReadTokens": 358927025,
       "cacheWriteTokens": 0,
-      "estimatedCostUsd": "68.013385",
-      "totalTokens": 376356661,
-      "cacheHitRate": 0.9573492550096846
+      "estimatedCostUsd": "68.183750",
+      "totalTokens": 376594761,
+      "cacheHitRate": 0.9572147234195099
     },
     {
       "date": "2026-10-30",
@@ -1006,14 +1006,25 @@
     },
     {
       "date": "2026-10-31",
-      "requests": 1798,
-      "inputTokens": 9911315,
-      "outputTokens": 1353356,
-      "cacheReadTokens": 219257484,
+      "requests": 1910,
+      "inputTokens": 10751941,
+      "outputTokens": 1398580,
+      "cacheReadTokens": 229639929,
       "cacheWriteTokens": 0,
-      "estimatedCostUsd": "40.111691",
-      "totalTokens": 230522155,
-      "cacheHitRate": 0.9567510278744359
+      "estimatedCostUsd": "41.297695",
+      "totalTokens": 241790450,
+      "cacheHitRate": 0.9552732752567714
+    },
+    {
+      "date": "2026-11-01",
+      "requests": 1578,
+      "inputTokens": 6404314,
+      "outputTokens": 1026154,
+      "cacheReadTokens": 216505999,
+      "cacheWriteTokens": 0,
+      "estimatedCostUsd": "21.176720",
+      "totalTokens": 223936467,
+      "cacheHitRate": 0.9712695482151156
     }
   ],
   "models": [
@@ -1041,25 +1052,25 @@
     },
     {
       "model": "deepseek-v4.1-flash",
-      "requests": 4722,
-      "inputTokens": 18962487,
-      "outputTokens": 4311268,
-      "cacheReadTokens": 1455941376,
+      "requests": 5657,
+      "inputTokens": 22285975,
+      "outputTokens": 4952851,
+      "cacheReadTokens": 1601476608,
       "cacheWriteTokens": 0,
-      "estimatedCostUsd": "19.595884",
-      "totalTokens": 1479215131,
-      "cacheHitRate": 0.9871432386369714
+      "estimatedCostUsd": "22.236041",
+      "totalTokens": 1628715434,
+      "cacheHitRate": 0.98627510250986
     },
     {
       "model": "gemini-3.8-flash-high",
-      "requests": 12746,
-      "inputTokens": 80065274,
-      "outputTokens": 8773904,
-      "cacheReadTokens": 1377716942,
+      "requests": 13500,
+      "inputTokens": 83919227,
+      "outputTokens": 9229552,
+      "cacheReadTokens": 1459215566,
       "cacheWriteTokens": 0,
-      "estimatedCostUsd": "351.273022",
-      "totalTokens": 1466556120,
-      "cacheHitRate": 0.9450773420602628
+      "estimatedCostUsd": "371.153159",
+      "totalTokens": 1552364345,
+      "cacheHitRate": 0.9456176949799355
     },
     {
       "model": "codex-auto-review",
@@ -1074,14 +1085,14 @@
     },
     {
       "model": "gpt-6-luna",
-      "requests": 8730,
-      "inputTokens": 47617886,
-      "outputTokens": 10041719,
-      "cacheReadTokens": 1111254784,
+      "requests": 8731,
+      "inputTokens": 47744881,
+      "outputTokens": 10041762,
+      "cacheReadTokens": 1111262080,
       "cacheWriteTokens": 0,
-      "estimatedCostUsd": "20.487559",
-      "totalTokens": 1168914389,
-      "cacheHitRate": 0.9589101656871415
+      "estimatedCostUsd": "20.500353",
+      "totalTokens": 1169048723,
+      "cacheHitRate": 0.9588053544054599
     },
     {
       "model": "gpt-6.1-sol",
