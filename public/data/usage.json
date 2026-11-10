@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-09T20:00:02+08:00",
+  "generatedAt": "2026-11-10T20:00:02+08:00",
   "timezone": "Asia/Shanghai",
   "source": "CC Switch",
   "summary": {
-    "requests": 171953,
-    "inputTokens": 820373623,
-    "outputTokens": 101574960,
-    "cacheReadTokens": 21678645203,
+    "requests": 175050,
+    "inputTokens": 877116744,
+    "outputTokens": 103989634,
+    "cacheReadTokens": 22565550601,
     "cacheWriteTokens": 0,
-    "estimatedCostUsd": "2389.448988",
-    "totalTokens": 22600593786,
-    "cacheHitRate": 0.9635373600358087
+    "estimatedCostUsd": "2443.027501",
+    "totalTokens": 23546656979,
+    "cacheHitRate": 0.9625846013556526
   },
   "daily": [
     {
@@ -1105,27 +1105,38 @@
     },
     {
       "date": "2026-11-09",
-      "requests": 3301,
-      "inputTokens": 25429114,
-      "outputTokens": 2549595,
-      "cacheReadTokens": 1444851271,
+      "requests": 3621,
+      "inputTokens": 40964903,
+      "outputTokens": 2847649,
+      "cacheReadTokens": 1573955936,
       "cacheWriteTokens": 0,
-      "estimatedCostUsd": "30.710445",
-      "totalTokens": 1472829980,
-      "cacheHitRate": 0.9827045818883042
+      "estimatedCostUsd": "36.766836",
+      "totalTokens": 1617768488,
+      "cacheHitRate": 0.9746334916172321
+    },
+    {
+      "date": "2026-11-10",
+      "requests": 2777,
+      "inputTokens": 41207332,
+      "outputTokens": 2116620,
+      "cacheReadTokens": 757800733,
+      "cacheWriteTokens": 0,
+      "estimatedCostUsd": "47.522122",
+      "totalTokens": 801124685,
+      "cacheHitRate": 0.9484268885320951
     }
   ],
   "models": [
     {
       "model": "deepseek-v4.1-flash",
-      "requests": 16907,
-      "inputTokens": 100568728,
-      "outputTokens": 15400407,
-      "cacheReadTokens": 6358751602,
+      "requests": 18271,
+      "inputTokens": 150909157,
+      "outputTokens": 16841536,
+      "cacheReadTokens": 7069623538,
       "cacheWriteTokens": 0,
-      "estimatedCostUsd": "86.801584",
-      "totalTokens": 6474720737,
-      "cacheHitRate": 0.9844304473439855
+      "estimatedCostUsd": "107.898299",
+      "totalTokens": 7237374231,
+      "cacheHitRate": 0.9790999967212253
     },
     {
       "model": "gpt-5.6-luna",
@@ -1151,14 +1162,14 @@
     },
     {
       "model": "gemini-3.8-flash-high",
-      "requests": 14594,
-      "inputTokens": 89802698,
-      "outputTokens": 10321777,
+      "requests": 14595,
+      "inputTokens": 89860971,
+      "outputTokens": 10323898,
       "cacheReadTokens": 1581465609,
       "cacheWriteTokens": 0,
-      "estimatedCostUsd": "402.583489",
-      "totalTokens": 1681590084,
-      "cacheHitRate": 0.9462667378877065
+      "estimatedCostUsd": "402.635147",
+      "totalTokens": 1681650478,
+      "cacheHitRate": 0.9462337450529866
     },
     {
       "model": "codex-auto-review",
@@ -1173,14 +1184,14 @@
     },
     {
       "model": "gpt-6-luna",
-      "requests": 8743,
-      "inputTokens": 49656000,
-      "outputTokens": 10042319,
+      "requests": 8744,
+      "inputTokens": 49858897,
+      "outputTokens": 10042377,
       "cacheReadTokens": 1111468672,
       "cacheWriteTokens": 0,
-      "estimatedCostUsd": "20.693809",
-      "totalTokens": 1171166991,
-      "cacheHitRate": 0.9572345664531706
+      "estimatedCostUsd": "20.714128",
+      "totalTokens": 1171369946,
+      "cacheHitRate": 0.9570673267983014
     },
     {
       "model": "gpt-6.1-sol",
@@ -1206,25 +1217,36 @@
     },
     {
       "model": "deepseek-flash",
-      "requests": 1933,
-      "inputTokens": 8972424,
-      "outputTokens": 1612005,
-      "cacheReadTokens": 638508544,
+      "requests": 1945,
+      "inputTokens": 9036406,
+      "outputTokens": 1622189,
+      "cacheReadTokens": 639091328,
       "cacheWriteTokens": 0,
-      "estimatedCostUsd": "6.488706",
-      "totalTokens": 649092973,
-      "cacheHitRate": 0.9861425672051568
+      "estimatedCostUsd": "6.523618",
+      "totalTokens": 649749923,
+      "cacheHitRate": 0.9860576773281545
     },
     {
       "model": "gpt-6.1-terra",
-      "requests": 2741,
-      "inputTokens": 11075337,
-      "outputTokens": 716598,
-      "cacheReadTokens": 467400192,
+      "requests": 2996,
+      "inputTokens": 11693569,
+      "outputTokens": 800489,
+      "cacheReadTokens": 509567744,
       "cacheWriteTokens": 0,
       "estimatedCostUsd": "0.000000",
-      "totalTokens": 479192127,
-      "cacheHitRate": 0.976852866387656
+      "totalTokens": 522061802,
+      "cacheHitRate": 0.9775667813659519
+    },
+    {
+      "model": "gemini-3.8-flash-tiered",
+      "requests": 5690,
+      "inputTokens": 23582701,
+      "outputTokens": 4043197,
+      "cacheReadTokens": 436565997,
+      "cacheWriteTokens": 0,
+      "estimatedCostUsd": "114.705139",
+      "totalTokens": 464191895,
+      "cacheHitRate": 0.9487498256487514
     },
     {
       "model": "gemini-3.8-flash",
@@ -1236,17 +1258,6 @@
       "estimatedCostUsd": "88.822294",
       "totalTokens": 340460361,
       "cacheHitRate": 0.924397718228024
-    },
-    {
-      "model": "gemini-3.8-flash-tiered",
-      "requests": 4436,
-      "inputTokens": 18492333,
-      "outputTokens": 3220736,
-      "cacheReadTokens": 305987396,
-      "cacheWriteTokens": 0,
-      "estimatedCostUsd": "83.319646",
-      "totalTokens": 327700465,
-      "cacheHitRate": 0.9430092811745414
     },
     {
       "model": "gpt-5.6-sol",
@@ -1272,14 +1283,14 @@
     },
     {
       "model": "gemini-3.8-flash-medium",
-      "requests": 2742,
-      "inputTokens": 16928725,
-      "outputTokens": 2156882,
-      "cacheReadTokens": 252892898,
+      "requests": 2818,
+      "inputTokens": 17297665,
+      "outputTokens": 2211712,
+      "cacheReadTokens": 255597423,
       "cacheWriteTokens": 0,
-      "estimatedCostUsd": "68.202270",
-      "totalTokens": 271978505,
-      "cacheHitRate": 0.9372595687040248
+      "estimatedCostUsd": "69.191686",
+      "totalTokens": 275106800,
+      "cacheHitRate": 0.9366142310337224
     },
     {
       "model": "deepseek-v4.1-flash-free",
@@ -1492,7 +1503,7 @@
     },
     {
       "model": "claude-fable-5",
-      "requests": 591,
+      "requests": 725,
       "inputTokens": 0,
       "outputTokens": 0,
       "cacheReadTokens": 0,
