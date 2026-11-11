@@ -23,10 +23,14 @@ export async function getThinking(opts: { featured?: boolean; category?: string 
   return items;
 }
 
-/** 获取工程日志 */
+/** 获取工程日志（同一天内按系列阶段倒序，最新阶段在前） */
 export async function getEngineering() {
   const all = await getCollection('engineering', ({ data }) => !data.draft);
-  return sortByDate(all);
+  return [...all].sort((a, b) => {
+    const byDate = b.data.date.localeCompare(a.data.date);
+    if (byDate !== 0) return byDate;
+    return (b.data.seriesOrder ?? 0) - (a.data.seriesOrder ?? 0);
+  });
 }
 
 /** 格式化日期：2026-08-05 → 2026.08.05 */

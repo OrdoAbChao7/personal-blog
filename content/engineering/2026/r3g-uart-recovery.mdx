@@ -1,10 +1,11 @@
 ---
 title: 只刷了 kernel1：小米 R3G 变砖与 UART 救回
-description: 上篇：备份做了，mtd verify 也成功了，路由器却进入 1 秒复位循环。一次从半套固件、假阳性诊断到 UART 只读定位的完整复盘。
+description: 阶段 1/4 · 救砖｜备份做了，mtd verify 也成功了，路由器却进入 1 秒复位循环。一次从半套固件、假阳性诊断到 UART 只读定位的完整复盘。
 hardware: Xiaomi R3G v1 + CH340 USB-TTL
 software: OpenWrt 25.12.6 + UART Recovery Toolkit
 difficulty: 5
 date: '2026-11-08'
+seriesOrder: 1
 tags:
   - openwrt
   - uart
@@ -13,7 +14,10 @@ tags:
   - postmortem
 ---
 
-> 这是两篇中的上篇。下篇写路由器救回之后，怎么把它变成宿舍的 DNS 与远程开机中枢：[从能开机到能生活](/personal-blog/engineering/2026/r3g-dorm-hub)。
+> **R3G 宿舍网络系列 · 阶段 1/4：救砖**
+> **阶段 1 救砖（本篇）** · [阶段 2 中枢](/personal-blog/engineering/2026/r3g-dorm-hub) · [阶段 3 复盘](/personal-blog/engineering/2026/r3g-retrospective) · [阶段 4 运维](/personal-blog/engineering/2026/r3g-operations)
+>
+> 本篇写设备怎么从半套固件和 1 秒复位里被 UART 救回来；阶段 2 才写救回之后怎么把它变成宿舍中枢。
 
 ## 三个“正常”
 
@@ -299,7 +303,7 @@ Wi-Fi 2.4/5、WAN DHCP、root 密码、软重启都在同一天完成。5G 第�
 
 这次能救回来，靠的不是某个神秘命令，而是三件事：**备份在手、只读证据、以及在没把握的时候停手。**
 
-下一篇写救回之后的事：ESP32 接管 DNS、mihomo 的 fake-IP、PSRAM 的 7 字节 stub，以及一次 43 秒的全屋断网演练。[从能开机到能生活](/personal-blog/engineering/2026/r3g-dorm-hub)。再往后是把 DNS 链路收敛到 mihomo、全局代理和稳定性加固的完整复盘：[从救砖到托管](/personal-blog/engineering/2026/r3g-retrospective)。
+下一篇写救回之后的事：ESP32 接管 DNS、mihomo 的 fake-IP、PSRAM 的 7 字节 stub，以及一次 43 秒的全屋断网演练。[从能开机到能生活](/personal-blog/engineering/2026/r3g-dorm-hub)。再往后是把 DNS 链路收敛到 mihomo、全局代理和稳定性加固的完整复盘：[从救砖到托管](/personal-blog/engineering/2026/r3g-retrospective)。最后是日常运维阶段的 DNS 泄露、门户会话与稳定代理入口：[从托管到日常](/personal-blog/engineering/2026/r3g-operations)。
 
 ---
 

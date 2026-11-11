@@ -33,6 +33,7 @@ const engineering = defineCollection({
     difficulty: z.number().min(1).max(5).default(3),
     date: z.string(),
     tags: z.array(z.string()).default([]),
+    seriesOrder: z.number().optional(),
     draft: z.boolean().default(false),
   }),
 });
