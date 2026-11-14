@@ -46,7 +46,7 @@ const months = days.filter((day, i) => i % 7 === 0).map((day, week) => ({ ...day
       <div class="chart-labels"><span>{last30[0].date}</span><span>{last30[29].date}</span></div>
     </section>
     <details class="panel daily-table"><summary data-i18n="usage.daily">查看每日明细</summary><div class="table-scroll"><table><thead><tr><th data-i18n="usage.date">日期</th><th>Tokens</th><th data-i18n="usage.requests">累计请求</th></tr></thead><tbody>{[...usage.daily].reverse().map(day => <tr><th scope="row">{day.date}</th><td>{integer(day.totalTokens)}</td><td>{integer(day.requests)}</td></tr>)}</tbody></table></div></details>
-    <p class="method" data-i18n="usage.method">来源：CC Switch 本地统计，每日同步。Token 包含新增输入、输出、缓存写入与缓存命中；成本按已配置模型价格估算，并非实际账单，未定价模型可能未计入成本。电脑离线时保留上次快照。</p>
+    <p class="method" data-i18n="usage.method">来源：本机 magpie 逐次调用统计，每日同步；2026-11-10 及更早来自 CC Switch 历史快照。Token 包含新增输入、输出、缓存写入与缓存命中；成本按 magpie 记录的模型价格估算，并非实际账单，未定价模型可能未计入成本。电脑离线时保留上次快照。</p>
   </article>
 </BaseLayout>
 <script>

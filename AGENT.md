@@ -149,7 +149,7 @@ if (import.meta.env.DEV) {
 
 - `/usage/` 与首页摘要读取 `public/data/usage.json`，不直接连接本机数据库。
 - 采集、统计口径、每日同步和运维命令见 [docs/usage-sync.md](docs/usage-sync.md)。
-- 原始 CC Switch 数据库只读，禁止把数据库、会话正文、认证或供应商配置提交到仓库。
+- 用量来自 `magpie usage --csv`（只读），2026-11-11 起归 magpie，2026-11-10 及更早作为冻结的 `history` 块保留；禁止把台账、会话正文、认证或供应商配置提交到仓库。
 - 修改导出/同步逻辑先运行 `python -m unittest discover -s scripts -p 'test_*.py'`，页面修改运行 `npm run build`。
 - 每日任务仅更新远端汇总 JSON；开发前 fetch 以免遗漏自动同步产生的提交。
 

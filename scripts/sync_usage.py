@@ -8,7 +8,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from export_usage import DEFAULT_DB, read_usage, unchanged
+from export_usage import export_usage, magpie_executable, read_ledger, unchanged
 
 ENDPOINT = 'repos/OrdoAbChao7/personal-blog/contents/public/data/usage.json'
 
@@ -25,9 +25,16 @@ def gh_api(method, path, payload=None, executable='gh'):
     return json.loads(result.stdout)
 
 
-def publish_snapshot(data, api=gh_api, dry_run=False):
+def publish_snapshot(rows, api=gh_api, dry_run=False):
+    """Read the published snapshot, merge this machine's ledger into it, and publish.
+
+    The remote snapshot is the history the numbers are built on, so a machine
+    that has not published for a while still keeps every earlier day and the
+    frozen pre-migration block.
+    """
     remote = api('GET', ENDPOINT + '?ref=main')
     previous = json.loads(base64.b64decode(remote['content']).decode('utf-8'))
+    data = export_usage(rows, previous)
     if unchanged(previous, data):
         return 'unchanged'
     if dry_run:
@@ -40,7 +47,7 @@ def publish_snapshot(data, api=gh_api, dry_run=False):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--db', type=Path, default=DEFAULT_DB)
+    parser.add_argument('--magpie', help='magpie executable (default: MAGPIE_BIN, PATH, then the known install)')
     parser.add_argument('--dry-run', action='store_true')
     parser.add_argument('--gh', default='gh', help='Absolute gh executable path for scheduled runs')
     args = parser.parse_args()
@@ -48,7 +55,8 @@ def main():
     log_dir.mkdir(parents=True, exist_ok=True)
     try:
         api = lambda method, path, payload=None: gh_api(method, path, payload, executable=args.gh)
-        status = publish_snapshot(read_usage(args.db), api=api, dry_run=args.dry_run)
+        rows = read_ledger(magpie_executable(args.magpie))
+        status = publish_snapshot(rows, api=api, dry_run=args.dry_run)
         message = f'{datetime.now().isoformat(timespec="seconds")} {status}'
         code = 0
     except Exception as error:
