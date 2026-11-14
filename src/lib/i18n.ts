@@ -4,7 +4,7 @@ export type Lang = 'zh' | 'en';
 export const translations: Record<Lang, Record<string, string>> = {
   zh: {
     'home.projects': 'n8n、DeepTutor',
-    'usage.source': '数据来源于本机 magpie',
+    'usage.source': '数据来源于本机 magpie，含 CC Switch 历史',
     'nav.usage': 'Token 用量',
     'usage.title': "Token 用量",
     'usage.subtitle': "把日常构建，留成一份可见的记录。",
@@ -15,6 +15,10 @@ export const translations: Record<Lang, Record<string, string>> = {
     'usage.cost': "估算 API 成本",
     'usage.updated': "数据更新于",
     'usage.heatmap': "用量热力图",
+    'usage.sources': "数据来源",
+    'usage.sourcesNote': "一条时间线，两段来源",
+    'usage.share': "占比",
+    'usage.sourceColumn': "来源",
     'usage.weeks': "最近 53 周 · 每日 Token",
     'usage.explore': "悬停或使用方向键查看每日用量",
     'usage.less': "少",
@@ -26,7 +30,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     'usage.empty': "暂无用量记录",
     'usage.daily': "查看每日明细",
     'usage.date': "日期",
-    'usage.method': "来源：本机 magpie 逐次调用统计，每日同步；2026-11-10 及更早来自 CC Switch 历史快照。Token 包含新增输入、输出、缓存写入与缓存命中；成本按 magpie 记录的模型价格估算，并非实际账单，未定价模型可能未计入成本。电脑离线时保留上次快照。",
+    'usage.method': "来源：2026-11-11 起为本机 magpie 逐次调用统计，之前为 CC Switch 历史快照；两段按日拼接成一条时间线。Token 包含新增输入、输出、缓存写入与缓存命中；成本按各自记录的模型价格估算，并非实际账单，未定价模型可能未计入成本。电脑离线时保留上次快照。",
 
     'nav.home': '首页',
     'nav.projects': '项目',
@@ -77,7 +81,7 @@ export const translations: Record<Lang, Record<string, string>> = {
   },
   en: {
     'home.projects': 'n8n, DeepTutor',
-    'usage.source': 'Data from magpie on my computer',
+    'usage.source': 'Data from magpie on my computer, with CC Switch history',
     'nav.usage': 'Token usage',
     'usage.title': "Token usage",
     'usage.subtitle': "A visible record of everyday building.",
@@ -88,6 +92,10 @@ export const translations: Record<Lang, Record<string, string>> = {
     'usage.cost': "Estimated API cost",
     'usage.updated': "Data updated",
     'usage.heatmap': "Activity heatmap",
+    'usage.sources': "Sources",
+    'usage.sourcesNote': "One timeline, two sources",
+    'usage.share': "Share",
+    'usage.sourceColumn': "Source",
     'usage.weeks': "Last 53 weeks · Daily tokens",
     'usage.explore': "Hover or use arrow keys to explore daily usage",
     'usage.less': "Less",
@@ -99,7 +107,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     'usage.empty': "No usage recorded yet",
     'usage.daily': "View daily records",
     'usage.date': "Date",
-    'usage.method': "Source: magpie's per-call ledger on my computer, synced daily; 2026-11-10 and earlier come from the frozen CC Switch history snapshot. Tokens include fresh input, output, cache writes and cache reads. Cost is estimated from the model prices magpie recorded, not actual billing; unpriced models may not contribute to cost. The last snapshot stays available while my computer is offline.",
+    'usage.method': "Source: my computer's magpie ledger from 2026-11-11, and the frozen CC Switch snapshot before that; the two are joined day by day into one timeline. Tokens include fresh input, output, cache writes and cache reads. Cost is estimated from the model prices each source recorded, not actual billing; unpriced models may not contribute to cost. The last snapshot stays available while my computer is offline.",
 
     'nav.home': 'Home',
     'nav.projects': 'Projects',

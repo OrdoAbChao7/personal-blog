@@ -10,7 +10,9 @@ route finished: it is billed, but it is not a request.
 
 The blog published CC Switch's numbers until the migration on 2026-11-10. A
 snapshot therefore keeps that period as a frozen `history` block and lets
-magpie own every day from MAGPIE_SINCE on, so no day is counted twice.
+magpie own every day from MAGPIE_SINCE on, so no day is counted twice. Each
+day in `daily` carries the source that produced it, so the two eras stay one
+timeline on the page and can still be told apart.
 """
 import argparse
 import csv
@@ -31,7 +33,8 @@ DEFAULT_MAGPIE = Path('E:/edge download/magpie-windows-amd64.exe')
 # The old snapshot's last day is 2026-11-10, the day magpie took over; magpie
 # owns the day after, so the two sources never share a day.
 MAGPIE_SINCE = '2026-11-11'
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
+MAGPIE_SOURCE = 'magpie'
 TOKEN_FIELDS = ('inputTokens', 'outputTokens', 'cacheReadTokens', 'cacheWriteTokens')
 REQUIRED_COLUMNS = {'time', 'requested_model', 'model', 'input_tokens', 'output_tokens',
                     'cache_write_tokens', 'cache_read_tokens', 'cost_usd', 'rejected', 'handed_on'}
@@ -142,14 +145,16 @@ def export_usage(rows, history=None, since=MAGPIE_SINCE):
         for bucket in (daily[when.date().isoformat()], models.setdefault(name, empty_bucket()), total):
             add_row(bucket, row)
 
-    merged = [dict(date=day, **finish(bucket)) for day, bucket in sorted(daily.items())]
-    merged += [day for day in carried.values() if day['date'] not in daily]
+    merged = [dict(date=day, source=MAGPIE_SOURCE, **finish(bucket))
+              for day, bucket in sorted(daily.items())]
+    merged += [dict(day, source=legacy['source']) for day in carried.values()
+               if day['date'] not in daily]
     merged.sort(key=lambda day: day['date'])
     return {
         'schemaVersion': SCHEMA_VERSION,
         'generatedAt': datetime.now(SHANGHAI).isoformat(timespec='seconds'),
         'timezone': 'Asia/Shanghai',
-        'source': 'magpie',
+        'source': MAGPIE_SOURCE,
         'history': legacy,
         'summary': finish(total),
         'daily': merged,

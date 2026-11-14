@@ -40,6 +40,7 @@ class UsageExportTests(unittest.TestCase):
         self.assertEqual(summary['estimatedCostUsd'], '0.100001')
         self.assertAlmostEqual(summary['cacheHitRate'], 50 / 155)
         self.assertEqual(result['daily'][0]['date'], '2026-11-12')
+        self.assertEqual(result['daily'][0]['source'], 'magpie')
         self.assertEqual(result['models'][0]['model'], 'test-model')
 
     def test_handed_on_try_is_billed_but_is_not_a_request(self):
@@ -75,6 +76,7 @@ class UsageExportTests(unittest.TestCase):
         self.assertEqual(result['history']['source'], 'CC Switch')
         self.assertEqual(result['history']['until'], '2026-11-10')
         self.assertEqual([day['date'] for day in result['daily']], ['2026-11-10', '2026-11-12'])
+        self.assertEqual([day['source'] for day in result['daily']], ['CC Switch', 'magpie'])
         self.assertEqual(result['summary']['requests'], 4)
         self.assertEqual(result['summary']['totalTokens'], usage.finish(legacy_bucket())['totalTokens'] + 165)
         models = {model['model']: model for model in result['models']}

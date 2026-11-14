@@ -15,7 +15,7 @@ const stats = [
   <dl class="metrics">
     {stats.map(stat => <div class="metric"><dt data-i18n={`usage.${stat.key}`}>{stat.label}</dt><dd title={stat.exact}>{stat.value}</dd></div>)}
   </dl>
-  <p class="updated" data-i18n="usage.source">数据来源于本机 magpie</p>
+  <p class="updated" data-i18n="usage.source">数据来源于本机 magpie，含 CC Switch 历史</p>
   {compactView && <p class="updated"><span data-i18n="usage.updated">数据更新于</span> <time datetime={usage.generatedAt}>{updatedAt}</time> · UTC+8</p>}
 </section>
 <style>
