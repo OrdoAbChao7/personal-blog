@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "generatedAt": "2026-11-16T20:00:11+08:00",
+  "generatedAt": "2026-11-17T20:00:07+08:00",
   "timezone": "Asia/Shanghai",
   "source": "magpie",
   "history": {
@@ -449,14 +449,14 @@
     ]
   },
   "summary": {
-    "requests": 198450,
-    "inputTokens": 1011370891,
-    "outputTokens": 118974708,
-    "cacheReadTokens": 24837697659,
+    "requests": 198759,
+    "inputTokens": 1013913437,
+    "outputTokens": 119192202,
+    "cacheReadTokens": 24867568379,
     "cacheWriteTokens": 0,
-    "estimatedCostUsd": "2832.057382",
-    "totalTokens": 25968043258,
-    "cacheHitRate": 0.9608739909121407
+    "estimatedCostUsd": "2833.677692",
+    "totalTokens": 26000674018,
+    "cacheHitRate": 0.9608247532267185
   },
   "daily": [
     {
@@ -1742,19 +1742,31 @@
       "estimatedCostUsd": "33.705369",
       "totalTokens": 274193011,
       "cacheHitRate": 0.966648633223186
+    },
+    {
+      "date": "2026-11-17",
+      "source": "magpie",
+      "requests": 309,
+      "inputTokens": 2542546,
+      "outputTokens": 217494,
+      "cacheReadTokens": 29870720,
+      "cacheWriteTokens": 0,
+      "estimatedCostUsd": "1.620310",
+      "totalTokens": 32630760,
+      "cacheHitRate": 0.9215584754711235
     }
   ],
   "models": [
     {
       "model": "deepseek-v4.1-flash",
-      "requests": 23571,
-      "inputTokens": 163144492,
-      "outputTokens": 20969045,
-      "cacheReadTokens": 7801381618,
+      "requests": 23734,
+      "inputTokens": 163767916,
+      "outputTokens": 21137633,
+      "cacheReadTokens": 7823139954,
       "cacheWriteTokens": 0,
-      "estimatedCostUsd": "118.504309",
-      "totalTokens": 7985495155,
-      "cacheHitRate": 0.9795161080839246
+      "estimatedCostUsd": "118.959837",
+      "totalTokens": 8008045503,
+      "cacheHitRate": 0.9794954544780544
     },
     {
       "model": "gpt-5.6-luna",
@@ -1813,14 +1825,14 @@
     },
     {
       "model": "gpt-6-luna",
-      "requests": 8765,
-      "inputTokens": 51595132,
-      "outputTokens": 10051821,
-      "cacheReadTokens": 1113910400,
+      "requests": 8790,
+      "inputTokens": 53081723,
+      "outputTokens": 10068049,
+      "cacheReadTokens": 1114506624,
       "cacheWriteTokens": 0,
-      "estimatedCostUsd": "20.916891",
-      "totalTokens": 1175557353,
-      "cacheHitRate": 0.9557315425938279
+      "estimatedCostUsd": "21.109942",
+      "totalTokens": 1177656396,
+      "cacheHitRate": 0.9545372963541576
     },
     {
       "model": "gpt-6.1-sol",
@@ -1857,14 +1869,14 @@
     },
     {
       "model": "gpt-6.1-terra",
-      "requests": 3579,
-      "inputTokens": 13566916,
-      "outputTokens": 967717,
-      "cacheReadTokens": 615873664,
+      "requests": 3700,
+      "inputTokens": 13999447,
+      "outputTokens": 1000395,
+      "cacheReadTokens": 623389824,
       "cacheWriteTokens": 0,
-      "estimatedCostUsd": "0.119597",
-      "totalTokens": 630408297,
-      "cacheHitRate": 0.9784460734959287
+      "estimatedCostUsd": "1.091328",
+      "totalTokens": 638389666,
+      "cacheHitRate": 0.9780362682006927
     },
     {
       "model": "gemini-3.8-flash-medium",
