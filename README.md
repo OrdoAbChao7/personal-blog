@@ -178,6 +178,6 @@ Astro 5 + MDX 内容集合（Zod 构建时校验）+ 原生 CSS 设计令牌 + T
 1. 在 `content/thinking/YYYY/`（或 `engineering/`、`projects/`）新建 `.mdx` 文件，frontmatter 构建时自动校验
 2. 用 `##` / `###` 组织章节，目录自动生成
 3. 图片放 `public/images/`，用 `BlogImage` 组件内嵌
-4. `npm run build` 验证后推送到 `main` 即自动部署
+4. `npm run build` 验证后提交 pull request，合并到 `main` 后自动部署
 
 完整 frontmatter 字段与示例见上方英文部分。
