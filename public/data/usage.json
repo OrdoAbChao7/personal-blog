@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "generatedAt": "2026-11-21T20:00:10+08:00",
+  "generatedAt": "2026-11-22T20:00:16+08:00",
   "timezone": "Asia/Shanghai",
   "source": "magpie",
   "history": {
@@ -449,14 +449,14 @@
     ]
   },
   "summary": {
-    "requests": 204469,
-    "inputTokens": 1033519163,
-    "outputTokens": 123500417,
-    "cacheReadTokens": 25646773883,
+    "requests": 205110,
+    "inputTokens": 1038597539,
+    "outputTokens": 124156784,
+    "cacheReadTokens": 25735505659,
     "cacheWriteTokens": 0,
-    "estimatedCostUsd": "2875.349456",
-    "totalTokens": 26803793463,
-    "cacheHitRate": 0.9612628256661915
+    "estimatedCostUsd": "2897.700485",
+    "totalTokens": 26898259982,
+    "cacheHitRate": 0.9612088766776106
   },
   "daily": [
     {
@@ -1794,14 +1794,26 @@
     {
       "date": "2026-11-21",
       "source": "magpie",
-      "requests": 456,
-      "inputTokens": 4753912,
-      "outputTokens": 436441,
-      "cacheReadTokens": 57618432,
+      "requests": 513,
+      "inputTokens": 4951146,
+      "outputTokens": 502038,
+      "cacheReadTokens": 66387200,
       "cacheWriteTokens": 0,
-      "estimatedCostUsd": "13.931449",
-      "totalTokens": 62808785,
-      "cacheHitRate": 0.923781732493491
+      "estimatedCostUsd": "15.858763",
+      "totalTokens": 71840384,
+      "cacheHitRate": 0.9305962882851251
+    },
+    {
+      "date": "2026-11-22",
+      "source": "magpie",
+      "requests": 584,
+      "inputTokens": 4881142,
+      "outputTokens": 590770,
+      "cacheReadTokens": 79963008,
+      "cacheWriteTokens": 0,
+      "estimatedCostUsd": "20.423715",
+      "totalTokens": 85434920,
+      "cacheHitRate": 0.9424693157984375
     }
   ],
   "models": [
@@ -1873,14 +1885,14 @@
     },
     {
       "model": "gpt-6-luna",
-      "requests": 8874,
-      "inputTokens": 55558184,
-      "outputTokens": 10101385,
-      "cacheReadTokens": 1119730944,
+      "requests": 8886,
+      "inputTokens": 56060456,
+      "outputTokens": 10110115,
+      "cacheReadTokens": 1120184192,
       "cacheWriteTokens": 0,
-      "estimatedCostUsd": "21.463637",
-      "totalTokens": 1185390513,
-      "cacheHitRate": 0.952728071181477
+      "estimatedCostUsd": "21.522763",
+      "totalTokens": 1186354763,
+      "cacheHitRate": 0.9523394592312738
     },
     {
       "model": "deepseek-flash",
@@ -1917,14 +1929,14 @@
     },
     {
       "model": "gpt-6.1-terra",
-      "requests": 4732,
-      "inputTokens": 15991604,
-      "outputTokens": 1309939,
-      "cacheReadTokens": 768371840,
+      "requests": 4739,
+      "inputTokens": 16064883,
+      "outputTokens": 1312428,
+      "cacheReadTokens": 768761984,
       "cacheWriteTokens": 0,
-      "estimatedCostUsd": "11.880299",
-      "totalTokens": 785673383,
-      "cacheHitRate": 0.9796119973179168
+      "estimatedCostUsd": "11.985531",
+      "totalTokens": 786139295,
+      "cacheHitRate": 0.9795306663475882
     },
     {
       "model": "gemini-3.8-flash-medium",
@@ -2004,6 +2016,17 @@
       "cacheHitRate": 0.9162633418130041
     },
     {
+      "model": "gpt-6.2-sol",
+      "requests": 1075,
+      "inputTokens": 9282662,
+      "outputTokens": 1243636,
+      "cacheReadTokens": 148991232,
+      "cacheWriteTokens": 0,
+      "estimatedCostUsd": "45.900817",
+      "totalTokens": 159517530,
+      "cacheHitRate": 0.9413506437138648
+    },
+    {
       "model": "gpt-5.6-terra",
       "requests": 2696,
       "inputTokens": 4641687,
@@ -2013,17 +2036,6 @@
       "estimatedCostUsd": "40.391321",
       "totalTokens": 119674737,
       "cacheHitRate": 0.9609903531344789
-    },
-    {
-      "model": "gpt-6.2-sol",
-      "requests": 537,
-      "inputTokens": 4985201,
-      "outputTokens": 629844,
-      "cacheReadTokens": 74452992,
-      "cacheWriteTokens": 0,
-      "estimatedCostUsd": "23.714146",
-      "totalTokens": 80068037,
-      "cacheHitRate": 0.9372442799649282
     },
     {
       "model": "gpt-reserve",
@@ -2060,14 +2072,14 @@
     },
     {
       "model": "hy4-flash-free",
-      "requests": 135,
-      "inputTokens": 185335,
-      "outputTokens": 44594,
-      "cacheReadTokens": 11571712,
+      "requests": 219,
+      "inputTokens": 390699,
+      "outputTokens": 75950,
+      "cacheReadTokens": 24921856,
       "cacheWriteTokens": 0,
       "estimatedCostUsd": "0.000000",
-      "totalTokens": 11801641,
-      "cacheHitRate": 0.9842362627282174
+      "totalTokens": 25388505,
+      "cacheHitRate": 0.984565011315531
     },
     {
       "model": "claude-opus-4-6",
