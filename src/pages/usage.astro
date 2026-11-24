@@ -12,9 +12,8 @@ const last30 = Array.from({ length: 30 }, (_, i) => {
 const max30 = Math.max(1, ...last30.map(d => d.tokens));
 const months = days.filter((day, i) => i % 7 === 0).map((day, week) => ({ ...day, week,
   label: week === 0 || day.date.slice(0,7) !== days[(week - 1)*7].date.slice(0,7) ? day.date.slice(5,7) : '' }));
-const sourceLabel = (day: { source?: string }) => day.source ?? usage.source;
 const sources = [...usage.daily.reduce((groups, day) => {
-  const name = sourceLabel(day);
+  const name = usage.source;
   const group = groups.get(name) ?? { name, from: day.date, until: day.date, requests: 0, tokens: 0 };
   group.from = day.date < group.from ? day.date : group.from;
   group.until = day.date > group.until ? day.date : group.until;
@@ -35,7 +34,7 @@ const sources = [...usage.daily.reduce((groups, day) => {
     </header>
     <UsageSummary />
     <section class="panel sources">
-      <div class="section-head"><h2 data-i18n="usage.sources">数据来源</h2><span class="muted" data-i18n="usage.sourcesNote">一条时间线，两段来源</span></div>
+      <div class="section-head"><h2 data-i18n="usage.sources">数据来源</h2><span class="muted" data-i18n="usage.sourcesNote">逐条记录，统一口径</span></div>
       <ul class="source-list">
         {sources.map(source => (
           <li class="source-row">
@@ -76,8 +75,8 @@ const sources = [...usage.daily.reduce((groups, day) => {
       </div>
       <div class="chart-labels"><span>{last30[0].date}</span><span>{last30[29].date}</span></div>
     </section>
-    <details class="panel daily-table"><summary data-i18n="usage.daily">查看每日明细</summary><div class="table-scroll"><table><thead><tr><th data-i18n="usage.date">日期</th><th>Tokens</th><th data-i18n="usage.requests">累计请求</th><th data-i18n="usage.sourceColumn">来源</th></tr></thead><tbody>{[...usage.daily].reverse().map(day => <tr><th scope="row">{day.date}</th><td>{integer(day.totalTokens)}</td><td>{integer(day.requests)}</td><td><span class="tag">{sourceLabel(day)}</span></td></tr>)}</tbody></table></div></details>
-    <p class="method" data-i18n="usage.method">来源：2026-11-11 起为本机 magpie 逐次调用统计，之前为 CC Switch 历史快照；两段按日拼接成一条时间线。Token 包含新增输入、输出、缓存写入与缓存命中；成本按各自记录的模型价格估算，并非实际账单，未定价模型可能未计入成本。电脑离线时保留上次快照。</p>
+    <details class="panel daily-table"><summary data-i18n="usage.daily">查看每日明细</summary><div class="table-scroll"><table><thead><tr><th data-i18n="usage.date">日期</th><th>Tokens</th><th data-i18n="usage.cacheMiss">缓存未命中</th><th data-i18n="usage.cacheHit">缓存命中</th><th data-i18n="usage.cacheWrite">缓存写入</th><th data-i18n="usage.output">输出</th><th data-i18n="usage.requests">累计请求</th></tr></thead><tbody>{[...usage.daily].reverse().map(day => <tr><th scope="row">{day.date}</th><td>{integer(day.totalTokens)}</td><td>{integer(day.cacheMissTokens ?? day.inputTokens ?? 0)}</td><td>{integer(day.cacheReadTokens)}</td><td>{integer(day.cacheWriteTokens)}</td><td>{integer(day.outputTokens)}</td><td>{integer(day.requests)}</td></tr>)}</tbody></table></div></details>
+    <p class="method" data-i18n="usage.method">来源：本机逐条调用记录（含网关请求与各 Agent 会话上报），按 Asia/Shanghai 分日。缓存未命中、命中、写入与输出全部计入总量；成本取记录中已有的估算值，未定价调用可能为空，并非实际账单。电脑离线时保留上次快照。</p>
   </article>
 </BaseLayout>
 <script>
