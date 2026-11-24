@@ -1,129 +1,101 @@
+"""Tests for the local-ledger usage exporter."""
 import importlib.util
+import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import patch
 
 spec = importlib.util.spec_from_file_location('export_usage', Path(__file__).with_name('export_usage.py'))
 usage = importlib.util.module_from_spec(spec)
-if spec.loader and Path(spec.origin).exists():
-    spec.loader.exec_module(usage)
+spec.loader.exec_module(usage)
 
 
-def row(time='2026-11-12T10:00:00+08:00', model='test-model', inp=100, out=10, read=50,
-        write=5, cost='0.100001', rejected='false', handed_on='false', requested=''):
-    return {'time': time, 'requested_model': requested, 'model': model, 'input_tokens': str(inp),
-            'output_tokens': str(out), 'cache_read_tokens': str(read), 'cache_write_tokens': str(write),
-            'cost_usd': cost, 'rejected': rejected, 'handed_on': handed_on}
-
-
-def snapshot(bucket, day='2026-11-10', model='legacy-model'):
-    return {'schemaVersion': 1, 'generatedAt': f'{day}T20:00:02+08:00', 'timezone': 'Asia/Shanghai',
-            'source': 'CC Switch', 'summary': usage.finish(bucket),
-            'daily': [dict(date=day, **usage.finish(bucket))],
-            'models': [dict(model=model, **usage.finish(bucket))]}
-
-
-def legacy_bucket():
-    return dict(requests=3, inputTokens=1000, outputTokens=100, cacheReadTokens=500,
-                cacheWriteTokens=0, estimatedCostUsd=usage.Decimal('1.250000'))
+def ledger_row(t='2026-11-12T16:30:00+08:00', agent='pi', model='m', req='', inp=100,
+               out=10, read=50, write=5, cost='0.25', rid='r1', route_id=None, **extra):
+    row = dict(t=t, agent=agent, model=model, req=req, **{'in': inp}, out=out,
+               cache_read=read, cache_write=write, status=200)
+    if cost is not None:
+        row['cost'] = cost
+    if rid is not None:
+        row['rid'] = rid
+    if route_id is not None:
+        row['route_id'] = route_id
+    row.update(extra)
+    return row
 
 
 class UsageExportTests(unittest.TestCase):
-    def test_cache_columns_stay_apart_from_fresh_input(self):
-        result = usage.export_usage([row()])
+    def test_summary_counts_cache_miss_and_other_categories(self):
+        result = usage.export_usage([ledger_row()])
         summary = result['summary']
-        self.assertEqual(summary['requests'], 1)
         self.assertEqual(summary['inputTokens'], 100)
+        self.assertEqual(summary['cacheMissTokens'], 100)
+        self.assertEqual(summary['outputTokens'], 10)
         self.assertEqual(summary['cacheReadTokens'], 50)
         self.assertEqual(summary['cacheWriteTokens'], 5)
         self.assertEqual(summary['totalTokens'], 165)
-        self.assertEqual(summary['estimatedCostUsd'], '0.100001')
         self.assertAlmostEqual(summary['cacheHitRate'], 50 / 155)
+        self.assertEqual(summary['estimatedCostUsd'], '0.250000')
+
+    def test_daily_and_model_buckets(self):
+        result = usage.export_usage([ledger_row()])
         self.assertEqual(result['daily'][0]['date'], '2026-11-12')
-        self.assertEqual(result['daily'][0]['source'], 'magpie')
-        self.assertEqual(result['models'][0]['model'], 'test-model')
+        self.assertEqual(result['daily'][0]['totalTokens'], 165)
+        self.assertEqual(result['models'][0]['model'], 'm')
+        self.assertEqual(result['models'][0]['totalTokens'], 165)
 
-    def test_handed_on_try_is_billed_but_is_not_a_request(self):
-        result = usage.export_usage([row(cost='0.5'), row(handed_on='true', inp=7, out=1, read=0,
-                                                           write=0, cost='0.25')])
+    def test_single_source_schema(self):
+        result = usage.export_usage([ledger_row()])
+        self.assertEqual(result['schemaVersion'], 4)
+        self.assertNotIn('history', result)
+        self.assertNotIn('source', result['daily'][0])
+
+    def test_gateway_row_without_rid_or_cost_counts_tokens(self):
+        rows = [ledger_row(rid=None, route_id=7, cost=None, source='gateway') for _ in range(2)]
+        result = usage.export_usage(rows)
         self.assertEqual(result['summary']['requests'], 1)
-        self.assertEqual(result['summary']['totalTokens'], 165 + 8)
-        self.assertEqual(result['summary']['estimatedCostUsd'], '0.750000')
-
-    def test_rejected_call_is_left_out_of_every_total(self):
-        result = usage.export_usage([row(), row(rejected='true', inp=999, cost='9')])
-        self.assertEqual(result['summary']['requests'], 1)
-        self.assertEqual(result['summary']['inputTokens'], 100)
-        self.assertEqual(result['summary']['estimatedCostUsd'], '0.100001')
-
-    def test_unpriced_call_adds_tokens_but_no_cost(self):
-        result = usage.export_usage([row(cost='')])
         self.assertEqual(result['summary']['totalTokens'], 165)
         self.assertEqual(result['summary']['estimatedCostUsd'], '0.000000')
 
-    def test_days_are_bucketed_in_shanghai_time(self):
-        result = usage.export_usage([row(time='2026-11-12T16:30:00Z')])
-        self.assertEqual(result['daily'][0]['date'], '2026-11-13')
+    def test_rejected_row_is_ignored(self):
+        rows = [ledger_row(), ledger_row(rid='r2', inp=999, cost='9', rejected=True)]
+        result = usage.export_usage(rows)
+        self.assertEqual(result['summary']['totalTokens'], 165)
+        self.assertEqual(result['summary']['estimatedCostUsd'], '0.250000')
 
-    def test_model_falls_back_to_requested_model_or_unknown(self):
-        result = usage.export_usage([row(model='', requested='vendor/model'), row(model='')])
-        self.assertEqual([m['model'] for m in result['models']], ['unknown', 'vendor/model'])
+    def test_shanghai_day_boundary(self):
+        result = usage.export_usage([ledger_row(t='2026-11-11T23:30:00-05:00')])
+        self.assertEqual(result['daily'][0]['date'], '2026-11-12')
 
-    def test_pre_migration_history_is_frozen_and_merged_once(self):
-        history = snapshot(legacy_bucket())
-        rows = [row(), row(time='2026-11-10T23:59:00+08:00', inp=999)]
-        result = usage.export_usage(rows, history)
-        self.assertEqual(result['history']['source'], 'CC Switch')
-        self.assertEqual(result['history']['until'], '2026-11-10')
-        self.assertEqual([day['date'] for day in result['daily']], ['2026-11-10', '2026-11-12'])
-        self.assertEqual([day['source'] for day in result['daily']], ['CC Switch', 'magpie'])
-        self.assertEqual(result['summary']['requests'], 4)
-        self.assertEqual(result['summary']['totalTokens'], usage.finish(legacy_bucket())['totalTokens'] + 165)
-        models = {model['model']: model for model in result['models']}
-        self.assertEqual(models['legacy-model']['requests'], 3)
-        self.assertEqual(models['test-model']['requests'], 1)
+    def test_duplicate_rid_counts_once(self):
+        result = usage.export_usage([ledger_row(), ledger_row()])
+        self.assertEqual(result['summary']['requests'], 1)
+        self.assertEqual(result['summary']['totalTokens'], 165)
 
-    def test_second_run_against_its_own_snapshot_does_not_double_count(self):
-        history = snapshot(legacy_bucket())
-        rows = [row(), row(time='2026-11-13T09:00:00+08:00', inp=1, out=1, read=0, write=0)]
-        first = usage.export_usage(rows, history)
-        second = usage.export_usage(rows, first)
-        self.assertTrue(usage.unchanged(first, second))
-        self.assertEqual(second['summary']['requests'], first['summary']['requests'])
-        self.assertEqual(second['summary']['totalTokens'], first['summary']['totalTokens'])
-        self.assertEqual(sum(model['totalTokens'] for model in second['models']),
-                         second['summary']['totalTokens'])
+    def test_missing_model_uses_requested_model(self):
+        result = usage.export_usage([ledger_row(model='', req='vendor/model')])
+        self.assertEqual(result['models'][0]['model'], 'vendor/model')
 
-    def test_snapshot_already_holding_magpie_days_without_history_block_is_refused(self):
-        broken = {'source': 'magpie', 'summary': usage.finish(legacy_bucket()),
-                  'daily': [{'date': '2026-11-12'}], 'models': []}
-        with self.assertRaises(RuntimeError):
-            usage.export_usage([], broken)
-
-    def test_empty_ledger_is_zero_and_export_has_only_whitelisted_fields(self):
+    def test_empty_ledger(self):
         result = usage.export_usage([])
-        self.assertEqual(result['summary']['cacheHitRate'], 0)
+        self.assertEqual(result['summary']['totalTokens'], 0)
         self.assertEqual(result['daily'], [])
         self.assertEqual(result['models'], [])
-        self.assertIsNone(result['history'])
-        self.assertEqual(set(result), {'schemaVersion', 'generatedAt', 'timezone', 'source',
-                                       'history', 'summary', 'daily', 'models'})
-        self.assertEqual(set(result['summary']), {'requests', 'inputTokens', 'outputTokens',
-                                                  'cacheReadTokens', 'cacheWriteTokens',
-                                                  'totalTokens', 'estimatedCostUsd', 'cacheHitRate'})
 
-    def test_unknown_ledger_columns_fail_instead_of_publishing_zero(self):
-        bad = 'time,agent,input_tokens\n2026-11-12T10:00:00+08:00,claude,1\n'
-        with patch.object(usage.subprocess, 'run', return_value=type('R', (), {
-                'returncode': 0, 'stdout': bad, 'stderr': ''})()):
-            with self.assertRaises(RuntimeError):
-                usage.read_ledger('magpie')
+    def test_unchanged_ignores_generated_at(self):
+        first = usage.export_usage([ledger_row()])
+        second = dict(first, generatedAt='2000-01-01T00:00:00+08:00')
+        self.assertTrue(usage.unchanged(first, second))
 
-    def test_failed_magpie_call_raises(self):
-        with patch.object(usage.subprocess, 'run', return_value=type('R', (), {
-                'returncode': 1, 'stdout': '', 'stderr': 'boom'})()):
+    def test_read_ledger_rejects_missing_columns(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'usage.jsonl'
+            path.write_text('{"t":"2026-11-12T10:00:00+08:00","agent":"pi","in":1,"out":1,"cache_write":0,"status":200}\n', encoding='utf-8')
             with self.assertRaises(RuntimeError):
-                usage.read_ledger('magpie')
+                usage.read_ledger(path)
+
+    def test_ledger_path_missing_raises(self):
+        with self.assertRaises(RuntimeError):
+            usage.ledger_path('does-not-exist.jsonl')
 
 
 if __name__ == '__main__':
