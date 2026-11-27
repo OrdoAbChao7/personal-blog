@@ -1,18 +1,18 @@
 {
   "schemaVersion": 4,
-  "generatedAt": "2026-11-26T20:00:06+08:00",
+  "generatedAt": "2026-11-27T20:00:07+08:00",
   "timezone": "Asia/Shanghai",
   "source": "本机逐条调用记录（网关 + 会话上报）",
   "summary": {
-    "requests": 116177,
-    "cacheMissTokens": 1070345765,
-    "inputTokens": 1070345765,
-    "outputTokens": 127950205,
-    "cacheReadTokens": 26328338568,
+    "requests": 116501,
+    "cacheMissTokens": 1071468728,
+    "inputTokens": 1071468728,
+    "outputTokens": 128178461,
+    "cacheReadTokens": 26365998216,
     "cacheWriteTokens": 1833341,
     "estimatedCostUsd": "2843.767153",
-    "totalTokens": 27528467879,
-    "cacheHitRate": 0.9608701149826313
+    "totalTokens": 27567478746,
+    "cacheHitRate": 0.960884495674012
   },
   "daily": [
     {
@@ -1409,29 +1409,41 @@
     },
     {
       "date": "2026-11-26",
-      "requests": 145,
-      "cacheMissTokens": 1648412,
-      "inputTokens": 1648412,
-      "outputTokens": 106919,
-      "cacheReadTokens": 14268416,
+      "requests": 193,
+      "cacheMissTokens": 1862101,
+      "inputTokens": 1862101,
+      "outputTokens": 137862,
+      "cacheReadTokens": 19582080,
       "cacheWriteTokens": 0,
       "estimatedCostUsd": "0.000000",
-      "totalTokens": 16023747,
-      "cacheHitRate": 0.8964358979062914
+      "totalTokens": 21582043,
+      "cacheHitRate": 0.913165207848227
+    },
+    {
+      "date": "2026-11-27",
+      "requests": 276,
+      "cacheMissTokens": 909274,
+      "inputTokens": 909274,
+      "outputTokens": 197313,
+      "cacheReadTokens": 32345984,
+      "cacheWriteTokens": 0,
+      "estimatedCostUsd": "0.000000",
+      "totalTokens": 33452571,
+      "cacheHitRate": 0.972657737311796
     }
   ],
   "models": [
     {
       "model": "deepseek-v4.1-flash",
-      "requests": 28556,
-      "cacheMissTokens": 187133703,
-      "inputTokens": 187133703,
-      "outputTokens": 25043051,
-      "cacheReadTokens": 8379866354,
+      "requests": 28862,
+      "cacheMissTokens": 188081814,
+      "inputTokens": 188081814,
+      "outputTokens": 25269688,
+      "cacheReadTokens": 8417020274,
       "cacheWriteTokens": 0,
       "estimatedCostUsd": "112.503247",
-      "totalTokens": 8592043108,
-      "cacheHitRate": 0.9781564489605559
+      "totalTokens": 8630371776,
+      "cacheHitRate": 0.9781429886506188
     },
     {
       "model": "gpt-5.6-luna",
@@ -1495,15 +1507,15 @@
     },
     {
       "model": "gpt-6-luna",
-      "requests": 8061,
-      "cacheMissTokens": 57343931,
-      "inputTokens": 57343931,
-      "outputTokens": 10128924,
-      "cacheReadTokens": 1121466240,
+      "requests": 8072,
+      "cacheMissTokens": 57517103,
+      "inputTokens": 57517103,
+      "outputTokens": 10130083,
+      "cacheReadTokens": 1121971968,
       "cacheWriteTokens": 0,
       "estimatedCostUsd": "20.916514",
-      "totalTokens": 1188939095,
-      "cacheHitRate": 0.9513543975012072
+      "totalTokens": 1189619154,
+      "cacheHitRate": 0.9512355778326665
     },
     {
       "model": "deepseek-flash",
@@ -1843,14 +1855,14 @@
     },
     {
       "model": "kimi-k3",
-      "requests": 42,
-      "cacheMissTokens": 158084,
-      "inputTokens": 158084,
-      "outputTokens": 1590,
+      "requests": 45,
+      "cacheMissTokens": 159764,
+      "inputTokens": 159764,
+      "outputTokens": 2050,
       "cacheReadTokens": 0,
       "cacheWriteTokens": 0,
       "estimatedCostUsd": "0.000000",
-      "totalTokens": 159674,
+      "totalTokens": 161814,
       "cacheHitRate": 0.0
     },
     {
@@ -2203,7 +2215,7 @@
     },
     {
       "model": "unknown",
-      "requests": 138,
+      "requests": 142,
       "cacheMissTokens": 0,
       "inputTokens": 0,
       "outputTokens": 0,
