@@ -20,7 +20,7 @@ import { url } from '../lib/url';
       <section class="section">
         <h2>教育与开源经历</h2>
         <p>
-          武汉理工大学光电信息科学与工程本科生（CET-6，省级大创项目负责人）。聚焦 Agent / RAG 应用开发与系统可靠性，向 n8n、DeepTutor、PixelRAG、AntigravityManager 等外部活跃开源项目贡献 7 个已合并至官方主分支的 PR，具备真实的开源协作与自动化测试经验。
+          武汉理工大学光电信息科学与工程本科生（CET-6，省级大创项目负责人）。聚焦 Agent / RAG 应用开发与系统可靠性，现担任 <strong>HKUDS / DeepTutor</strong> 核心维护者（Core Maintainer），并向 n8n、DeepTutor、rea、PixelRAG、AntigravityManager 等 7 个外部活跃开源项目合并 10 个 PR，具备真实的开源协作、代码审查与自动化测试经验。
         </p>
       </section>
 
@@ -43,8 +43,8 @@ import { url } from '../lib/url';
         <div class="project-list">
           <a href={url('/projects/open-source-contributions')} class="project-item">
             <div>
-              <span class="project-name">开源生态贡献 (Open Source)</span>
-              <p>向 n8n、DeepTutor、PixelRAG 等贡献 7 个已合并 PR，涉及工作流容错、API 边界与多模态处理。</p>
+              <span class="project-name">开源生态贡献 (DeepTutor Core Maintainer)</span>
+              <p>担任 HKUDS / DeepTutor 核心维护者，并向 n8n、rea、PixelRAG 等 7 个仓库合并 10 个 PR，涉及状态一致性、错误分类与网关流控。</p>
             </div>
             <span class="project-arrow mono">→</span>
           </a>
@@ -143,8 +143,9 @@ import { url } from '../lib/url';
     gap: 8px;
   }
   .tag-grid span {
-    padding: 6px 9px;
+    padding: 6px 12px;
     border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
     color: var(--color-text-secondary);
     font-size: var(--text-xs);
   }
@@ -152,6 +153,8 @@ import { url } from '../lib/url';
     display: grid;
     gap: 1px;
     border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
     background: var(--color-border);
   }
   .project-item {

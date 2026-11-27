@@ -11,99 +11,262 @@ import { url } from '../lib/url';
 const buildingProjects = (await getProjects({ featured: true })).slice(0, 4);
 const latestThinking = (await getThinking()).slice(0, 3);
 const latestEngineering = (await getEngineering()).slice(0, 3);
+
+const ossHighlights = [
+  {
+    repo: 'HKUDS / DeepTutor',
+    repoUrl: 'https://github.com/HKUDS/DeepTutor',
+    badge: 'Core Maintainer',
+    badgeI18n: 'home.ossDeepTutorRole',
+    badgeAccent: true,
+    desc: '主导或修复多轮订正防遗忘幂等锁、推理模型探活 token 预算及 Windows 跨平台进程探测。',
+    descI18n: 'home.ossDeepTutorDesc',
+    prs: [
+      { label: '#1794', href: 'https://github.com/HKUDS/DeepTutor/pull/1794' },
+      { label: '#1694', href: 'https://github.com/HKUDS/DeepTutor/pull/1694' },
+      { label: '#1690', href: 'https://github.com/HKUDS/DeepTutor/pull/1690' },
+    ],
+  },
+  {
+    repo: 'n8n-io / n8n',
+    repoUrl: 'https://github.com/n8n-io/n8n',
+    badge: 'Workflow Platform',
+    badgeI18n: 'home.ossN8nRole',
+    badgeAccent: false,
+    desc: '修复 Splunk 节点在 Continue On Fail 模式下的错误对象丢失与 pairedItem 关联异常，补充 HTTP 回归测试。',
+    descI18n: 'home.ossN8nDesc',
+    prs: [{ label: '#40368', href: 'https://github.com/n8n-io/n8n/pull/40368' }],
+  },
+  {
+    repo: 'morluto / rea',
+    repoUrl: 'https://github.com/morluto/rea',
+    badge: 'Agentic Reverse Eng.',
+    badgeI18n: 'home.ossReaRole',
+    badgeAccent: false,
+    desc: '将畸形残差图错误分类从 unreadable_output 修正为 invalid_input，暴露 Evidence ID 与恢复路径。',
+    descI18n: 'home.ossReaDesc',
+    prs: [{ label: '#6321', href: 'https://github.com/morluto/rea/pull/6321' }],
+  },
+];
 ---
 
 <BaseLayout active="home">
   <div class="home-wrapper">
     <SidePhotos />
     <article class="home container">
-    <!-- 1. 自我介绍 -->
-    <section class="intro">
-      <div class="intro-heading">
-        <h1 class="greeting" data-i18n="home.greeting">Hi, I'm JJ.</h1>
-        <div class="intro-sketch"><SignalSketch /></div>
-      </div>
-      <p class="intro-text" data-i18n="home.education">武汉理工大学光电信息科学与工程专业，2028 届本科生。</p>
-      <p class="intro-text"><span data-i18n="home.focusBefore">聚焦 </span><strong data-i18n="home.focus">AI Agent、RAG 与系统可靠性</strong><span data-i18n="home.contributionsBefore">，已向 </span><strong data-i18n="home.projects">n8n、DeepTutor</strong><span data-i18n="home.contributionsMiddle"> 等开源项目贡献 </span><strong data-i18n="home.contributions">7 个已合并 PR</strong><span data-i18n="home.focusAfter">，持续探索 AI 系统的工程实践与可靠性评测。</span></p>
-      <p class="intro-text"><span data-i18n="home.blogBefore">这个博客是我的</span><strong data-i18n="home.blogPurpose">个人成长与思考记录</strong><span data-i18n="home.blogAfter">，在这里分享技术探索、项目实践、学习心得，以及对科技、商业与个人发展的思考。</span></p>
-      <div class="stack-line">
-        <span class="stack-label" data-i18n="home.stackLabel">Tech Stack</span>
-        <div class="stack-value">
-          {['Python', 'TypeScript', 'AI Agent', 'RAG', 'Vitest', 'FPGA', 'ESP32'].map((tech, index) => <><span aria-hidden="true" class:list={['stack-separator', { first: index === 0 }]}>·</span><code>{tech}</code></>)}
+      <!-- 1. 自我介绍与身份定位 -->
+      <section class="intro">
+        <div class="identity-pills">
+          <a
+            href="https://github.com/HKUDS/DeepTutor"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="pill pill-accent mono"
+            data-i18n="home.pillMaintainer"
+          >
+            HKUDS / DeepTutor · 核心维护者
+          </a>
+          <a
+            href={url('/projects/open-source-contributions')}
+            class="pill mono"
+            data-i18n="home.pillPrs"
+          >
+            7 个上游项目 · 10 个已合并 PR
+          </a>
+          <span class="pill mono" data-i18n="home.pillSchool">武汉理工大学 · 2028 届</span>
         </div>
-      </div>
-    </section>
 
-    <UsageSummary compactView />
+        <div class="intro-heading">
+          <h1 class="greeting" data-i18n="home.greeting">Hi, I'm JJ.</h1>
+          <div class="intro-sketch"><SignalSketch /></div>
+        </div>
 
-    <!-- 2. 正在构建 -->
-    <section class="block">
-      <header class="block-head">
-        <span class="section-number mono" aria-hidden="true">01 /</span>
-        <h2 class="block-title" data-i18n="home.currently">代表项目与贡献</h2>
-        <span class="block-sub mono" data-i18n="home.currentlySub">（更新于 2026.10.16）</span>
-      </header>
-      {
-        buildingProjects.length === 0 ? (
-          <p class="empty" data-i18n="home.empty">暂无内容</p>
-        ) : (
-          <div class="list">
-            {buildingProjects.map((p) => (
-              <ProjectCard project={p} variant="compact" />
-            ))}
+        <p class="intro-text" data-i18n="home.introSummary">
+          专注 AI Agent、Hybrid RAG 与系统可靠性。目前担任 HKUDS / DeepTutor 核心维护者，并向 n8n、rea、PixelRAG 等开源项目合并 10 个 PR。
+        </p>
+        <p class="intro-text" data-i18n="home.introBlog">
+          这里记录可验证的工程架构、开源实践、端侧硬件原型与持续思考。
+        </p>
+
+        <div class="cta-row">
+          <a href={url('/projects')} class="cta cta-primary" data-i18n="home.ctaProjects">代表项目 →</a>
+          <a
+            href="https://github.com/OrdoAbChao7"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="cta"
+            data-i18n="home.ctaGithub"
+          >
+            GitHub ↗
+          </a>
+          <a href={url('/contact')} class="cta" data-i18n="home.ctaContact">联系我 →</a>
+        </div>
+
+        <div class="stack-line">
+          <span class="stack-label" data-i18n="home.stackLabel">Tech Stack</span>
+          <div class="stack-value">
+            {
+              ['Python', 'TypeScript', 'AI Agent', 'Hybrid RAG', 'Pydantic / pytest', 'ESP32 / TinyML'].map(
+                (tech, index) => (
+                  <>
+                    <span aria-hidden="true" class:list={['stack-separator', { first: index === 0 }]}>
+                      ·
+                    </span>
+                    <code>{tech}</code>
+                  </>
+                )
+              )
+            }
           </div>
-        )
-      }
-    </section>
+        </div>
+      </section>
 
-    <!-- 3. 近期写作 -->
-    <section class="block">
-      <header class="block-head">
-        <span class="section-number mono" aria-hidden="true">02 /</span>
-        <h2 class="block-title" data-i18n="home.writing">近期写作</h2>
-      </header>
+      <!-- 2. 开源与维护 -->
+      <section class="block">
+        <header class="block-head">
+          <div class="head-left">
+            <span class="section-number mono" aria-hidden="true">01 /</span>
+            <h2 class="block-title" data-i18n="home.ossTitle">开源与维护</h2>
+            <span class="block-sub mono" data-i18n="home.ossSub">（7 仓库 · 10 PR）</span>
+          </div>
+          <a href={url('/projects/open-source-contributions')} class="head-link mono" data-i18n="home.ossViewAll">
+            完整记录 →
+          </a>
+        </header>
 
-      <div class="writing-group">
-        <h3 class="group-label mono" data-i18n="home.writingThinking">思考</h3>
-        <div class="list">
+        <div class="oss-panel">
           {
-            latestThinking.length === 0 ? (
-              <p class="empty" data-i18n="home.empty">暂无内容</p>
-            ) : (
-              latestThinking.map((p) => (
-                <PostCard
-                  title={p.data.title}
-                  date={p.data.date}
-                  tags={p.data.tags}
-                  href={url(`/thinking/${p.id}`)}
-                />
-              ))
-            )
+            ossHighlights.map((item) => (
+              <div class="oss-row">
+                <div class="oss-top">
+                  <div class="oss-repo-group">
+                    <a
+                      href={item.repoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="oss-repo"
+                    >
+                      {item.repo}
+                    </a>
+                    <span
+                      class:list={['oss-badge', 'mono', { accent: item.badgeAccent }]}
+                      data-i18n={item.badgeI18n}
+                    >
+                      {item.badge}
+                    </span>
+                  </div>
+                  <div class="oss-prs">
+                    {item.prs.map((pr) => (
+                      <a
+                        href={pr.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="pr-chip mono"
+                      >
+                        {pr.label}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+                <p class="oss-desc" data-i18n={item.descI18n}>
+                  {item.desc}
+                </p>
+              </div>
+            ))
           }
         </div>
-      </div>
+      </section>
 
-      <div class="writing-group">
-        <h3 class="group-label mono" data-i18n="home.writingEngineering">工程</h3>
-        <div class="list">
-          {
-            latestEngineering.length === 0 ? (
-              <p class="empty" data-i18n="home.empty">暂无内容</p>
-            ) : (
-              latestEngineering.map((p) => (
-                <PostCard
-                  title={p.data.title}
-                  date={p.data.date}
-                  tags={p.data.tags}
-                  href={url(`/engineering/${p.id}`)}
-                />
-              ))
-            )
-          }
+      <!-- 3. 代表项目 -->
+      <section class="block">
+        <header class="block-head">
+          <div class="head-left">
+            <span class="section-number mono" aria-hidden="true">02 /</span>
+            <h2 class="block-title" data-i18n="home.currently">代表项目</h2>
+            <span class="block-sub mono" data-i18n="home.currentlySub">（更新于 2026.11.28）</span>
+          </div>
+          <a href={url('/projects')} class="head-link mono" data-i18n="home.viewAll">
+            全部 →
+          </a>
+        </header>
+        {
+          buildingProjects.length === 0 ? (
+            <p class="empty" data-i18n="home.empty">暂无内容</p>
+          ) : (
+            <div class="project-grid">
+              {buildingProjects.map((p) => (
+                <ProjectCard project={p} variant="grid" />
+              ))}
+            </div>
+          )
+        }
+      </section>
+
+      <!-- 4. 近期写作 -->
+      <section class="block">
+        <header class="block-head">
+          <div class="head-left">
+            <span class="section-number mono" aria-hidden="true">03 /</span>
+            <h2 class="block-title" data-i18n="home.writing">近期写作</h2>
+          </div>
+        </header>
+
+        <div class="writing-group">
+          <div class="group-head">
+            <h3 class="group-label mono" data-i18n="home.writingThinking">思考</h3>
+            <a href={url('/thinking')} class="group-link mono" data-i18n="home.viewAll">
+              全部 →
+            </a>
+          </div>
+          <div class="list">
+            {
+              latestThinking.length === 0 ? (
+                <p class="empty" data-i18n="home.empty">暂无内容</p>
+              ) : (
+                latestThinking.map((p) => (
+                  <PostCard
+                    title={p.data.title}
+                    date={p.data.date}
+                    tags={p.data.tags}
+                    href={url(`/thinking/${p.id}`)}
+                  />
+                ))
+              )
+            }
+          </div>
         </div>
+
+        <div class="writing-group">
+          <div class="group-head">
+            <h3 class="group-label mono" data-i18n="home.writingEngineering">工程</h3>
+            <a href={url('/engineering')} class="group-link mono" data-i18n="home.viewAll">
+              全部 →
+            </a>
+          </div>
+          <div class="list">
+            {
+              latestEngineering.length === 0 ? (
+                <p class="empty" data-i18n="home.empty">暂无内容</p>
+              ) : (
+                latestEngineering.map((p) => (
+                  <PostCard
+                    title={p.data.title}
+                    date={p.data.date}
+                    tags={p.data.tags}
+                    href={url(`/engineering/${p.id}`)}
+                  />
+                ))
+              )
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Token 用量摘要 -->
+      <div class="usage-block">
+        <UsageSummary compactView />
       </div>
-    </section>
-  </article>
+    </article>
   </div>
 </BaseLayout>
 
@@ -127,32 +290,106 @@ const latestEngineering = (await getEngineering()).slice(0, 3);
     border-radius: var(--radius-lg);
     background: var(--color-bg-subtle);
   }
+  .identity-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-elevated);
+    color: var(--color-text-secondary);
+    font-size: var(--text-xs);
+    line-height: 1.4;
+    transition: border-color var(--transition-fast), color var(--transition-fast);
+  }
+  a.pill:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+  .pill-accent {
+    background: var(--color-accent-muted);
+    border-color: transparent;
+    color: var(--color-accent);
+    font-weight: 500;
+  }
   .greeting {
     font-size: var(--text-3xl);
     font-weight: 500;
     line-height: var(--leading-tight);
     margin-bottom: 0;
   }
-  .intro-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
-  .intro-sketch { width: 210px; flex-shrink: 0; }
+  .intro-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .intro-sketch {
+    width: 210px;
+    flex-shrink: 0;
+  }
   .intro-text {
     font-size: var(--text-base);
     color: var(--color-text-secondary);
     line-height: var(--leading-relaxed);
-    max-width: 640px;
-    margin-bottom: var(--space-4);
+    max-width: 660px;
+    margin-bottom: var(--space-3);
+  }
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: var(--space-4) 0 var(--space-5);
+  }
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 14px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--color-border-strong);
+    background: var(--color-bg-elevated);
+    color: var(--color-text);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    transition: border-color var(--transition-fast),
+      color var(--transition-fast),
+      background var(--transition-fast);
+  }
+  .cta:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+  .cta-primary {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #ffffff;
+  }
+  .cta-primary:hover {
+    background: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+    color: #ffffff;
   }
   .stack-line {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
-    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
     font-size: var(--text-sm);
   }
   .stack-label {
     color: var(--color-text);
-    font-size: var(--text-sm);
+    font-size: var(--text-xs);
     font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
   }
   .stack-value {
     display: flex;
@@ -162,24 +399,35 @@ const latestEngineering = (await getEngineering()).slice(0, 3);
     color: var(--color-text-secondary);
     font-size: var(--text-xs);
   }
-  .stack-value code { background: var(--color-bg-elevated); border: 1px solid var(--color-border); font-size: var(--text-xs); }
-  .stack-separator { color: var(--color-text-tertiary); }
-  .stack-separator.first { display: none; }
-  .intro-text strong { color: var(--color-text); font-weight: 600; }
+  .stack-value code {
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    font-size: var(--text-xs);
+  }
+  .stack-separator {
+    color: var(--color-text-tertiary);
+  }
+  .stack-separator.first {
+    display: none;
+  }
 
-  /* 2/3. 区块 */
+  /* 通用区块 */
   .block {
     padding: var(--space-7) 0;
     border-bottom: 1px solid var(--color-border);
   }
-  .block:last-child {
-    border-bottom: none;
-  }
   .block-head {
     display: flex;
     align-items: baseline;
+    justify-content: space-between;
     gap: var(--space-3);
     margin-bottom: var(--space-4);
+    flex-wrap: wrap;
+  }
+  .head-left {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
     flex-wrap: wrap;
   }
   .block-title {
@@ -189,38 +437,151 @@ const latestEngineering = (await getEngineering()).slice(0, 3);
     text-transform: uppercase;
     letter-spacing: var(--tracking-wide);
   }
-  .section-number { font-size: var(--text-xs); color: var(--color-text-tertiary); letter-spacing: .06em; }
+  .section-number {
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    letter-spacing: 0.06em;
+  }
   .block-sub {
     font-size: var(--text-xs);
     color: var(--color-text-tertiary);
   }
+  .head-link,
+  .group-link {
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+    white-space: nowrap;
+  }
+  .head-link:hover,
+  .group-link:hover {
+    color: var(--color-accent-hover);
+  }
 
-  /* 列表容器：仅顶/底分隔线，项目间无卡片 */
+  /* 2. 开源与维护面板 */
+  .oss-panel {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg-elevated);
+    overflow: hidden;
+  }
+  .oss-row {
+    padding: var(--space-4) var(--space-5);
+    border-bottom: 1px solid var(--color-border);
+    transition: background var(--transition-fast);
+  }
+  .oss-row:last-child {
+    border-bottom: none;
+  }
+  .oss-row:hover {
+    background: var(--color-bg-subtle);
+  }
+  .oss-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: 6px;
+  }
+  .oss-repo-group {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .oss-repo {
+    font-size: var(--text-base);
+    font-weight: 500;
+    color: var(--color-text);
+  }
+  .oss-repo:hover {
+    color: var(--color-accent);
+  }
+  .oss-badge {
+    font-size: 11px;
+    padding: 2px 9px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-subtle);
+    color: var(--color-text-tertiary);
+  }
+  .oss-badge.accent {
+    background: var(--color-accent-muted);
+    border-color: transparent;
+    color: var(--color-accent);
+    font-weight: 500;
+  }
+  .oss-prs {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .pr-chip {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-subtle);
+    color: var(--color-accent);
+    transition: border-color var(--transition-fast), background var(--transition-fast);
+  }
+  .pr-chip:hover {
+    border-color: var(--color-accent);
+    background: var(--color-accent-muted);
+  }
+  .oss-desc {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: var(--leading-normal);
+  }
+
+  /* 3. 代表项目 2 列卡片网格 */
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  /* 4. 写作分组 */
   .list {
     display: flex;
     flex-direction: column;
   }
-
   .empty {
     color: var(--color-text-tertiary);
     font-size: var(--text-sm);
     padding: var(--space-3) 0;
   }
-
-  /* 写作分组 */
   .writing-group {
     margin-bottom: var(--space-6);
   }
   .writing-group:last-child {
     margin-bottom: 0;
   }
+  .group-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-2);
+    padding: 0 var(--space-1);
+  }
   .group-label {
     font-size: var(--text-xs);
     color: var(--color-text-tertiary);
     text-transform: uppercase;
     letter-spacing: var(--tracking-wide);
-    margin-bottom: var(--space-2);
-    padding-left: var(--space-4);
+    margin: 0;
+  }
+
+  .usage-block {
+    padding-top: var(--space-4);
+  }
+
+  @media (max-width: 720px) {
+    .project-grid {
+      grid-template-columns: 1fr;
+    }
   }
 
   @media (max-width: 640px) {
@@ -228,14 +589,20 @@ const latestEngineering = (await getEngineering()).slice(0, 3);
       padding-top: var(--space-6);
       padding-bottom: var(--space-6);
     }
-    .intro { padding: var(--space-5); }
-    .intro-heading { gap: 8px; }
-    .intro-sketch { width: 90px; }
+    .intro {
+      padding: var(--space-5);
+    }
+    .intro-heading {
+      gap: 8px;
+    }
+    .intro-sketch {
+      width: 90px;
+    }
     .greeting {
       font-size: var(--text-xl);
     }
-    .group-label {
-      padding-left: var(--space-3);
+    .oss-row {
+      padding: var(--space-4);
     }
   }
 </style>

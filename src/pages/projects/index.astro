@@ -5,6 +5,13 @@ import { getProjects } from '../../lib/content';
 
 const projects = await getProjects();
 const count = projects.length;
+
+const filters = [
+  { id: 'all', label: '全部', i18n: 'projects.filterAll' },
+  { id: 'software', label: '软件与 Agent', i18n: 'projects.filterSoftware' },
+  { id: 'hardware', label: '硬件与端侧', i18n: 'projects.filterHardware' },
+  { id: 'research', label: '研究实验', i18n: 'projects.filterResearch' },
+];
 ---
 
 <BaseLayout active="projects" title="Projects · JJ Lab">
@@ -12,7 +19,26 @@ const count = projects.length;
     <span class="eyebrow mono" data-i18n="projects.eyebrow">/projects</span>
     <h1 data-i18n="projects.title">项目</h1>
     <p class="sub" data-i18n="projects.sub">做过的东西。硬件、软件与研究的交叉实验。</p>
-    <p class="stat mono">{count} <span data-i18n="projects.count">个</span></p>
+    <div class="header-bottom">
+      <div class="filter-bar" role="group" aria-label="项目分类筛选">
+        {
+          filters.map((f, idx) => (
+            <button
+              type="button"
+              class:list={['filter-pill', { active: idx === 0 }]}
+              data-filter={f.id}
+              aria-pressed={idx === 0 ? 'true' : 'false'}
+              data-i18n={f.i18n}
+            >
+              {f.label}
+            </button>
+          ))
+        }
+      </div>
+      <p class="stat mono">
+        <span id="project-count">{count}</span> <span data-i18n="projects.count">个</span>
+      </p>
+    </div>
   </section>
 
   <section class="page-body container">
@@ -20,15 +46,47 @@ const count = projects.length;
       count === 0 ? (
         <p class="empty" data-i18n="home.empty">暂无内容</p>
       ) : (
-        <div class="list">
+        <div class="project-grid" id="project-grid">
           {projects.map((p) => (
-            <ProjectCard project={p} variant="featured" />
+            <ProjectCard project={p} variant="grid" />
           ))}
         </div>
       )
     }
   </section>
 </BaseLayout>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.filter-pill');
+  const cards = document.querySelectorAll<HTMLElement>('#project-grid > .project-card');
+  const countEl = document.getElementById('project-count');
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter || 'all';
+
+      buttons.forEach((b) => {
+        const isActive = b === btn;
+        b.classList.toggle('active', isActive);
+        b.setAttribute('aria-pressed', String(isActive));
+      });
+
+      let visible = 0;
+      cards.forEach((card) => {
+        const cat = card.dataset.category || '';
+        const match =
+          filter === 'all' ||
+          (filter === 'hardware' ? cat === 'hardware' || cat === 'hardware-ai' : cat === filter);
+        card.hidden = !match;
+        if (match) visible += 1;
+      });
+
+      if (countEl) {
+        countEl.textContent = String(visible);
+      }
+    });
+  });
+</script>
 
 <style>
   .page-header {
@@ -49,21 +107,62 @@ const count = projects.length;
     font-size: var(--text-base);
     max-width: 560px;
   }
+  .header-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .filter-pill {
+    padding: 5px 12px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-elevated);
+    color: var(--color-text-secondary);
+    font-size: var(--text-xs);
+    transition: color var(--transition-fast),
+      background var(--transition-fast),
+      border-color var(--transition-fast);
+  }
+  .filter-pill:hover {
+    color: var(--color-text);
+    background: var(--color-bg-hover);
+  }
+  .filter-pill.active {
+    color: var(--color-accent);
+    background: var(--color-accent-muted);
+    border-color: transparent;
+    font-weight: 500;
+  }
   .stat {
-    margin-top: var(--space-3);
     font-size: var(--text-xs);
     color: var(--color-text-tertiary);
   }
   .page-body {
     padding: var(--space-5) var(--space-6) var(--space-7);
   }
-  .list {
-    display: flex;
-    flex-direction: column;
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
   }
-
+  .project-grid > :global([hidden]) {
+    display: none;
+  }
   .empty {
     color: var(--color-text-tertiary);
     font-size: var(--text-sm);
+  }
+  @media (max-width: 720px) {
+    .project-grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

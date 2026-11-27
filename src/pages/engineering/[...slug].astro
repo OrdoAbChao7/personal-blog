@@ -6,6 +6,7 @@ import TableOfContents from '../../components/TableOfContents.astro';
 import ReadingProgress from '../../components/ReadingProgress.astro';
 import ReadingMeta from '../../components/ReadingMeta.astro';
 import MobileTableOfContents from '../../components/MobileTableOfContents.astro';
+import MermaidInit from '../../components/MermaidInit.astro';
 import { getReadingStats } from '../../lib/reading';
 import { formatDate } from '../../lib/content';
 import { url } from '../../lib/url';
@@ -80,6 +81,7 @@ const reading = getReadingStats(post.body ?? '');
       <TableOfContents headings={headings} />
     </div>
   </article>
+  <MermaidInit />
 </BaseLayout>
 
 <style>

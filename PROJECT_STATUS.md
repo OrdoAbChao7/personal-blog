@@ -14,9 +14,10 @@ I built this site to keep project notes, engineering decisions, and learning ref
 
 The blog is a static personal publication, not a continuously updated knowledge base. Articles can become stale, project descriptions are curated summaries, and external links or screenshots may change over time.
 
-## Verified evidence (2026.10.16)
+## Verified evidence (2026.11.28)
 
-- **Open source contributions**: 7 merged upstream PRs across `n8n-io/n8n`, `Draculabo/AntigravityManager`, `HKUDS/DeepTutor`, and `StarTrail-org/PixelRAG`, with linkable CI logs and test coverage.
+- **Open source contributions**: Core Maintainer at `HKUDS/DeepTutor`; 10 merged upstream PRs across 7 repositories (`HKUDS/DeepTutor`, `n8n-io/n8n`, `morluto/rea`, `StarTrail-org/PixelRAG`, `Draculabo/AntigravityManager`, `XiaoDuoYa/codex-with-chatgpt`, `MrcolorH/antigravity-skin`), with linkable CI logs and regression tests.
+- **Showcase & presentation**: Upgraded homepage and `/projects` into a 2-column card grid displaying project roles, descriptions, and verifiable metrics; added a dedicated Open Source & Maintainership section, category filters on `/projects`, and progressive Mermaid diagram rendering on project/engineering detail pages.
 - **CountyResearchAI**: Upgraded to Plan-and-Execute multi-agent architecture with dynamic question trees, Critic loop, and 299 pytest tests passing locally and in CI.
 - **Lingshan AI Guide**: Spatiotemporal tourism agent with dual-engine separation (LLM + deterministic route planner), formal route validation, and reproducible RAG ablation report.
 - **Engineering logs**: Documented real-world debugging workflows on Fastify 413 route scoping, SRS state idempotency, and multimodal visual RAG preprocessing.
