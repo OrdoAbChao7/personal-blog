@@ -145,11 +145,12 @@ if (import.meta.env.DEV) {
 }
 ```
 
-## AI 用量展示（2026-10-29 用户确认）
+## AI 用量展示（2026-11-25 重算口径）
 
 - `/usage/` 与首页摘要读取 `public/data/usage.json`，不直接连接本机数据库。
 - 采集、统计口径、每日同步和运维命令见 [docs/usage-sync.md](docs/usage-sync.md)。
-- 用量来自 `magpie usage --csv`（只读），2026-11-11 起归 magpie，2026-11-10 及更早作为冻结的 `history` 块保留；禁止把台账、会话正文、认证或供应商配置提交到仓库。
+- 用量由 `scripts/export_usage.py` 直接读取本机 `usage.jsonl` 逐条重算（含网关与各 Agent 会话上报），不用 `magpie usage --csv`，也不合并旧 `history`；缓存未命中（`in`）必须计入总量并单独展示。禁止把台账、会话正文、认证或供应商配置提交到仓库。
+- 快照为 `schemaVersion: 4` 单来源结构；显式 `--ledger` 路径不存在时报错，不回退默认值。
 - 修改导出/同步逻辑先运行 `python -m unittest discover -s scripts -p 'test_*.py'`，页面修改运行 `npm run build`。
 - 每日任务仅更新远端汇总 JSON；开发前 fetch 以免遗漏自动同步产生的提交。
 
