@@ -36,3 +36,10 @@ output/playwright/
 
 # OS
 Thumbs.db
+
+# impeccable runtime artifacts
+.impeccable/mocks/
+.impeccable/questions/
+.impeccable/review/
+.impeccable/reference/
+.impeccable/config.local.json

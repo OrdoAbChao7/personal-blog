@@ -14,11 +14,9 @@ const { title, date, tags = [], href, eyebrow } = Astro.props;
 ---
 
 <a href={href} class="post-item">
-  <span class="date mono">{formatDate(date)}</span>
+  <span class="date mono tabular">{formatDate(date)}</span>
   <span class="title">{title}</span>
-  {
-    eyebrow && <span class="eyebrow mono">{eyebrow}</span>
-  }
+  {eyebrow && <span class="eyebrow mono">{eyebrow}</span>}
   {
     tags.length > 0 && (
       <span class="tags">
@@ -33,21 +31,20 @@ const { title, date, tags = [], href, eyebrow } = Astro.props;
 <style>
   .post-item {
     display: grid;
-    grid-template-columns: 96px 1fr auto auto;
-    align-items: baseline;
+    grid-template-columns: 92px 1fr auto;
+    align-items: center;
     gap: var(--space-4);
-    padding: var(--space-3) var(--space-4);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
+    padding: 11px var(--space-4);
+    border-bottom: 1px solid var(--color-border);
     background: var(--color-bg-elevated);
-    margin: 4px 0;
-    transition: border-color var(--transition-base),
-      background var(--transition-base);
+    transition: background var(--transition-fast);
     text-decoration: none;
   }
+  .post-item:last-child {
+    border-bottom: none;
+  }
   .post-item:hover {
-    border-color: var(--color-accent);
-    background: var(--color-bg-hover);
+    background: var(--color-bg-subtle);
   }
   .date {
     font-size: var(--text-xs);
@@ -55,15 +52,16 @@ const { title, date, tags = [], href, eyebrow } = Astro.props;
     white-space: nowrap;
   }
   .title {
-    font-size: var(--text-base);
+    font-size: var(--text-sm);
+    font-weight: 500;
     color: var(--color-text);
     line-height: var(--leading-normal);
-    /* 允许换行但不省略 */
     min-width: 0;
     overflow-wrap: anywhere;
+    transition: color var(--transition-fast);
   }
   .post-item:hover .title {
-    color: var(--color-text);
+    color: var(--color-accent);
   }
   .eyebrow {
     font-size: var(--text-xs);
@@ -75,15 +73,15 @@ const { title, date, tags = [], href, eyebrow } = Astro.props;
   .tags {
     display: inline-flex;
     flex-wrap: wrap;
-    gap: var(--space-2);
+    gap: 6px;
     justify-content: flex-end;
-    max-width: 240px;
+    max-width: 300px;
   }
   @media (max-width: 768px) {
     .post-item {
       grid-template-columns: 1fr;
       gap: var(--space-1);
-      padding: var(--space-3) var(--space-3);
+      padding: var(--space-3);
     }
     .date {
       font-size: var(--text-xs);

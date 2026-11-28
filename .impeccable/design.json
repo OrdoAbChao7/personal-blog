@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-28T03:17:00+08:00",
+  "title": "Design System: JJ Lab",
+  "extensions": {
+    "colorMeta": {
+      "precision-cobalt": {
+        "role": "primary",
+        "displayName": "Precision Cobalt",
+        "canonical": "#0070f3",
+        "tonalRamp": ["#eff6ff", "#dbeafe", "#bfdbfe", "#93c5fd", "#60a5fa", "#3b82f6", "#0070f3", "#005cc5"]
+      },
+      "canvas-white": {
+        "role": "neutral",
+        "displayName": "Canvas White",
+        "canonical": "#ffffff",
+        "tonalRamp": ["#0a0a0a", "#18181b", "#3f3f46", "#71717a", "#a1a1aa", "#e4e4e7", "#fafafa", "#ffffff"]
+      },
+      "ink-primary": {
+        "role": "neutral",
+        "displayName": "Ink Primary",
+        "canonical": "#0a0a0a",
+        "tonalRamp": ["#0a0a0a", "#18181b", "#27272a", "#3f3f46", "#52525b", "#71717a", "#a1a1aa", "#ededed"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Homepage hero headline (Hi, I'm JJ.)" },
+      "headline": { "displayName": "Headline", "purpose": "Page titles and MDX h2 sections" },
+      "title": { "displayName": "Title", "purpose": "Section headers and project card titles" },
+      "body": { "displayName": "Body", "purpose": "Primary descriptions and MDX prose" },
+      "label": { "displayName": "Mono Label", "purpose": "Tabular telemetry, dates, PR hashes, and tags" }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "transition-fast", "value": "120ms cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "Links, buttons, borders, and row hover states" },
+      { "name": "transition-base", "value": "180ms cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "Larger container transitions" }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "720px" },
+      { "name": "lg", "value": "900px" },
+      { "name": "frame", "value": "1060px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "High-contrast monochrome primary action button.",
+      "html": "<a href=\"#\" class=\"ds-btn-primary\">代表项目 →</a>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; padding: 8px 15px; border-radius: var(--radius-sm, 6px); border: 1px solid var(--color-btn-primary-bg, #0a0a0a); background: var(--color-btn-primary-bg, #0a0a0a); color: var(--color-btn-primary-text, #ffffff); font-size: 14px; font-weight: 500; text-decoration: none; transition: background 120ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-btn-primary:hover { background: var(--color-btn-primary-hover, #27272a); border-color: var(--color-btn-primary-hover, #27272a); } .ds-btn-primary:focus-visible { outline: 2px solid var(--color-accent, #0070f3); outline-offset: 4px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Crisp 1px-bordered secondary action button.",
+      "html": "<a href=\"#\" class=\"ds-btn-secondary\">GitHub ↗</a>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; padding: 8px 15px; border-radius: var(--radius-sm, 6px); border: 1px solid var(--color-border, #e4e4e7); background: var(--color-bg-elevated, #ffffff); color: var(--color-text, #0a0a0a); font-size: 14px; font-weight: 500; text-decoration: none; transition: border-color 120ms ease, background 120ms ease; } .ds-btn-secondary:hover { border-color: var(--color-border-strong, #d4d4d8); background: var(--color-bg-hover, #f4f4f5); } .ds-btn-secondary:focus-visible { outline: 2px solid var(--color-accent, #0070f3); outline-offset: 4px; }"
+    },
+    {
+      "name": "Project Card",
+      "kind": "card",
+      "refersTo": "project-card",
+      "description": "Structured engineering project card with index, status dot, highlight proof strip, and stack tags.",
+      "html": "<a href=\"#\" class=\"ds-project-card\"><div class=\"ds-card-top\"><span class=\"ds-idx\">01 · Plan-and-Execute</span><span class=\"ds-date\">2026-07</span></div><h3 class=\"ds-card-title\">CountyResearchAI</h3><p class=\"ds-card-desc\">Plan-and-Execute multi-agent system with dynamic question trees and Critic verification.</p><div class=\"ds-card-proof\">299 pytest · 85% coverage · 3 benchmarks</div></a>",
+      "css": ".ds-project-card { display: flex; flex-direction: column; gap: 12px; padding: 20px; border: 1px solid var(--color-border, #e4e4e7); border-radius: var(--radius-md, 8px); background: var(--color-bg-elevated, #ffffff); text-decoration: none; transition: border-color 120ms ease, background 120ms ease; } .ds-project-card:hover { border-color: var(--color-border-strong, #d4d4d8); background: var(--color-bg-subtle, #fafafa); } .ds-card-top { display: flex; justify-content: space-between; font-family: var(--font-mono, monospace); font-size: 11px; color: var(--color-text-tertiary, #71717a); } .ds-card-title { margin: 0; font-size: 18px; font-weight: 600; letter-spacing: -0.02em; color: var(--color-text, #0a0a0a); } .ds-card-desc { margin: 0; font-size: 14px; color: var(--color-text-secondary, #52525b); line-height: 1.6; } .ds-card-proof { padding: 6px 10px; border-radius: var(--radius-xs, 4px); background: var(--color-bg-subtle, #fafafa); border: 1px solid var(--color-border, #e4e4e7); font-family: var(--font-mono, monospace); font-size: 11px; color: var(--color-text-secondary, #52525b); }"
+    },
+    {
+      "name": "PR Hash Chip",
+      "kind": "chip",
+      "refersTo": "tag-chip",
+      "description": "Clickable monospace PR reference badge.",
+      "html": "<a href=\"#\" class=\"ds-pr-chip\">#1794</a>",
+      "css": ".ds-pr-chip { display: inline-block; font-family: var(--font-mono, monospace); font-variant-numeric: tabular-nums; font-size: 11px; padding: 2px 7px; border-radius: var(--radius-xs, 4px); border: 1px solid var(--color-border, #e4e4e7); background: var(--color-bg, #ffffff); color: var(--color-accent, #0070f3); text-decoration: none; transition: border-color 120ms ease, background 120ms ease; } .ds-pr-chip:hover { border-color: var(--color-accent, #0070f3); background: var(--color-accent-muted, rgba(0, 112, 243, 0.08)); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Precision Engineering Dossier",
+    "overview": "JJ Lab is a technical portfolio and engineering notebook calibrated to the Linear and Vercel craft bar: razor-sharp monochrome contrast, 1px hairline structural grids, tabular monospace telemetry, and zero decorative AI-template gloss.",
+    "keyCharacteristics": [
+      "High-contrast monochrome foregrounds paired with 1px hairline grid dividers.",
+      "Single precision blue accent reserved strictly for interactive links, keyboard focus rings, and active verification tokens.",
+      "Machined small radii (4px-8px) with tabular numerals on all metrics, dates, and PR identifiers.",
+      "Zero gradient text, zero blur/glassmorphism, and zero ungrounded decorative badges."
+    ],
+    "rules": [
+      { "name": "The Single-Accent Discipline Rule", "body": "precision-cobalt never fills large decorative banners or primary CTA buttons; primary buttons stay solid monochrome so cobalt signals purely clickable proof, links, and focus.", "section": "colors" },
+      { "name": "The Semantic Dot Rule", "body": "Status hues appear strictly inside 6px circular StatusDot indicators—never as text colors or badge fills.", "section": "colors" },
+      { "name": "The Tabular Telemetry Rule", "body": "Every metric readout, date, PR chip, and footer counter applies tabular-nums so numbers align cleanly across grids and rows.", "section": "typography" },
+      { "name": "The Hairline Grid Rule", "body": "Multi-cell metric panels achieve structural crispness by setting gap: 1px against a hairline-border container background rather than drawing floating individual boxes.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep all data claims, PR numbers, and test counts linked to real repositories or MDX evidence.",
+      "Do use 1px gap grids (background: var(--color-border)) for multi-cell telemetry and proof matrices.",
+      "Do keep tabular-nums enabled on every metric, date, and counter.",
+      "Do support both [data-theme='light'] and [data-theme='dark'] via CSS custom properties in src/styles/tokens.css."
+    ],
+    "donts": [
+      "Don't add gradient text, neon glows, heavy drop shadows, or backdrop-filter glassmorphism.",
+      "Don't place kickers/eyebrows above section headings or decorative bars down the side of cards.",
+      "Don't introduce Tailwind CSS or client-side UI frameworks (keep Astro 5 + scoped native CSS).",
+      "Don't use status colors (#16a34a, #ca8a04) as full badge backgrounds or body text colors."
+    ]
+  }
+}

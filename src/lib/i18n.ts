@@ -42,7 +42,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     'nav.thinking': '思考',
     'nav.about': '关于',
 
-    // 首页 · 自我介绍与展示
+    // 首页
     'home.pillMaintainer': 'HKUDS / DeepTutor · 核心维护者',
     'home.pillPrs': '7 个上游项目 · 10 个已合并 PR',
     'home.pillSchool': '武汉理工大学 · 2028 届',
@@ -52,12 +52,20 @@ export const translations: Record<Lang, Record<string, string>> = {
     'home.introBlog': '这里记录可验证的工程架构、开源实践、端侧硬件原型与持续思考。',
     'home.ctaProjects': '代表项目 →',
     'home.ctaGithub': 'GitHub ↗',
-    'home.ctaContact': '联系我 →',
-    'home.stackLabel': 'Tech Stack',
+    'home.ctaContact': '联系我',
+    'home.stackLabel': 'STACK',
+
+    'home.metricMaintainerLabel': 'Core Maintainer ↗',
+    'home.metricPrsLabel': '7 个上游仓库合并',
+    'home.metricTestsLabel': 'Pytest · 85% 覆盖率',
+    'home.metricTokensLabel': 'Tokens 实时台账 ↗',
 
     'home.ossTitle': '开源与维护',
     'home.ossSub': '（7 仓库 · 10 PR）',
     'home.ossViewAll': '完整记录 →',
+    'home.ossColRepo': 'REPOSITORY',
+    'home.ossColScope': 'CONTRIBUTION',
+    'home.ossColPrs': 'MERGED PRs',
     'home.ossDeepTutorRole': 'Core Maintainer',
     'home.ossDeepTutorDesc':
       '主导或修复多轮订正防遗忘幂等锁、推理模型探活 token 预算及 Windows 跨平台进程探测。',
@@ -140,9 +148,9 @@ export const translations: Record<Lang, Record<string, string>> = {
     'nav.thinking': 'Thinking',
     'nav.about': 'About',
 
-    // Home · self-intro & showcase
+    // Home
     'home.pillMaintainer': 'HKUDS / DeepTutor · Core Maintainer',
-    'home.pillPrs': '10 Merged Upstream PRs',
+    'home.pillPrs': '10 Merged PRs · 7 Upstream Repos',
     'home.pillSchool': "WUT · Class of '28",
     'home.greeting': "Hi, I'm JJ.",
     'home.introSummary':
@@ -151,12 +159,20 @@ export const translations: Record<Lang, Record<string, string>> = {
       'Documenting verifiable agent architectures, open-source engineering, edge-AI prototypes, and reflections.',
     'home.ctaProjects': 'Projects →',
     'home.ctaGithub': 'GitHub ↗',
-    'home.ctaContact': 'Contact →',
-    'home.stackLabel': 'Tech Stack',
+    'home.ctaContact': 'Contact',
+    'home.stackLabel': 'STACK',
+
+    'home.metricMaintainerLabel': 'Core Maintainer ↗',
+    'home.metricPrsLabel': 'Across 7 Upstream Repos',
+    'home.metricTestsLabel': 'Pytest · 85% Coverage',
+    'home.metricTokensLabel': 'Live Token Ledger ↗',
 
     'home.ossTitle': 'Open Source & Maintainership',
     'home.ossSub': '(7 repos · 10 PRs)',
     'home.ossViewAll': 'all contributions →',
+    'home.ossColRepo': 'REPOSITORY',
+    'home.ossColScope': 'CONTRIBUTION',
+    'home.ossColPrs': 'MERGED PRs',
     'home.ossDeepTutorRole': 'Core Maintainer',
     'home.ossDeepTutorDesc':
       'Maintainer contributions covering multi-turn SRS idempotency, reasoning-model probe budgets, and Windows process decoding.',

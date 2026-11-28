@@ -12,6 +12,7 @@ html {
   font-family: var(--font-sans);
   background-color: var(--color-bg);
   color: var(--color-text);
+  caret-color: var(--color-accent);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   scroll-behavior: smooth;
@@ -101,21 +102,29 @@ pre code {
   font-size: inherit;
 }
 
-/* 标题 · 字重 500，靠字号建层级 */
+/* 标题 · 紧字距建立工程级排版层级 */
 h1,
 h2,
 h3,
 h4 {
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
-  font-weight: 500;
+  font-weight: 600;
   color: var(--color-text);
+  text-wrap: balance;
 }
 
-h1 { font-size: var(--text-3xl); }
+h1 {
+  font-size: var(--text-3xl);
+  letter-spacing: -0.035em;
+}
 h2 { font-size: var(--text-2xl); }
 h3 { font-size: var(--text-xl); }
 h4 { font-size: var(--text-lg); }
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
 
 p {
   line-height: var(--leading-relaxed);

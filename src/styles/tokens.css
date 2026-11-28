@@ -1,31 +1,38 @@
 :root {
-  /* === Color · 浅色优先（默认） === */
-  --color-bg: #fcfcfc;
-  --color-bg-elevated: #FFFFFF;
-  --color-bg-subtle: #f7f7f7;
-  --color-bg-hover: rgba(119, 119, 119, .09);
-  --color-border: rgba(20, 20, 20, .08);
-  --color-border-strong: rgba(20, 20, 20, .15);
-  --color-text: #141414;
-  --color-text-secondary: #525252;
-  --color-text-tertiary: #717171;
+  /* === Color · Precision Monochrome Light (Linear / Vercel Craft Bar) === */
+  --color-bg: #ffffff;
+  --color-bg-elevated: #ffffff;
+  --color-bg-subtle: #fafafa;
+  --color-bg-hover: #f4f4f5;
+  --color-border: #e4e4e7;
+  --color-border-strong: #d4d4d8;
+  --color-text: #0a0a0a;
+  --color-text-secondary: #52525b;
+  --color-text-tertiary: #71717a;
 
-  /* DS-Bot：强调色只用于操作和选中态 */
-  --color-accent: #4059dc;
-  --color-accent-hover: #3048c6;
-  --color-accent-muted: rgba(77, 107, 254, .08);
-  --color-usage-1: #c0cafa;
-  --color-usage-2: #95a6fa;
-  --color-usage-3: #6d87f5;
-  --color-usage-4: #4d6bfe;
+  /* Precision single-accent blue reserved for links, focus, and active states */
+  --color-accent: #0070f3;
+  --color-accent-hover: #005cc5;
+  --color-accent-muted: rgba(0, 112, 243, 0.08);
 
-  /* 状态色：仅用于色点，不用于文字 */
-  --color-building: #CA8A04;
-  --color-shipped: #16A34A;
-  --color-archived: #71717A;
-  --color-idea: #DC2626;
+  /* High-contrast primary action control */
+  --color-btn-primary-bg: #0a0a0a;
+  --color-btn-primary-text: #ffffff;
+  --color-btn-primary-hover: #27272a;
 
-  /* === Spacing · 克制（不再用 64/96） === */
+  /* Usage heatmap ramp */
+  --color-usage-1: #dbeafe;
+  --color-usage-2: #93c5fd;
+  --color-usage-3: #3b82f6;
+  --color-usage-4: #0070f3;
+
+  /* Status colors: strictly for semantic StatusDot */
+  --color-building: #ca8a04;
+  --color-shipped: #16a34a;
+  --color-archived: #71717a;
+  --color-idea: #dc2626;
+
+  /* === Spacing === */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -48,57 +55,62 @@
   --text-2xl: 1.5rem;    /* 24 */
   --text-3xl: 1.875rem;  /* 30 */
 
-  --leading-tight: 1.2;
+  --leading-tight: 1.15;
   --leading-normal: 1.6;
   --leading-relaxed: 1.7;
 
-  --tracking-tight: -0.01em;
+  --tracking-tight: -0.025em;
   --tracking-normal: 0;
-  --tracking-wide: 0.02em;
+  --tracking-wide: 0.04em;
 
-  /* === Radius === */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
+  /* === Radius · Crisp machined corners === */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
   --radius-full: 999px;
 
-  /* === Layout · 收窄到 960px === */
-  --container-max: 960px;
-  --container-narrow: 680px;
+  /* === Layout === */
+  --container-max: 1000px;
+  --container-narrow: 700px;
 
   /* === Transition === */
-  --transition-fast: 120ms ease;
-  --transition-base: 180ms ease;
+  --transition-fast: 120ms cubic-bezier(0.22, 1, 0.36, 1);
+  --transition-base: 180ms cubic-bezier(0.22, 1, 0.36, 1);
 
   /* === Z-index === */
   --z-header: 50;
 
-  /* 透明背景已废弃（不再用毛玻璃） */
   --color-bg-translucent: var(--color-bg);
 }
 
-/* === 深色主题覆盖 === */
+/* === Dark Theme (Obsidian Precision) === */
 [data-theme='dark'] {
-  --color-bg: #141414;
-  --color-bg-elevated: #1f1f1f;
-  --color-bg-subtle: #1b1b1b;
-  --color-bg-hover: rgba(160, 160, 160, .12);
-  --color-border: rgba(255, 255, 255, .08);
-  --color-border-strong: rgba(255, 255, 255, .15);
-  --color-text: #f2f2f2;
-  --color-text-secondary: #A1A1A1;
-  --color-text-tertiary: #969696;
+  --color-bg: #0a0a0a;
+  --color-bg-elevated: #111111;
+  --color-bg-subtle: #141414;
+  --color-bg-hover: #1a1a1a;
+  --color-border: rgba(255, 255, 255, 0.10);
+  --color-border-strong: rgba(255, 255, 255, 0.20);
+  --color-text: #ededed;
+  --color-text-secondary: #a1a1aa;
+  --color-text-tertiary: #71717a;
 
-  --color-accent: #91a4ff;
-  --color-accent-hover: #b2bfff;
-  --color-accent-muted: rgba(77, 107, 254, .15);
-  --color-usage-1: #303c68;
-  --color-usage-2: #465b9e;
-  --color-usage-3: #6d87d9;
-  --color-usage-4: #91a4ff;
+  --color-accent: #3291ff;
+  --color-accent-hover: #52a8ff;
+  --color-accent-muted: rgba(50, 145, 255, 0.14);
 
-  --color-building: #EAB308;
-  --color-shipped: #22C55E;
-  --color-archived: #71717A;
-  --color-idea: #EF4444;
+  --color-btn-primary-bg: #ededed;
+  --color-btn-primary-text: #0a0a0a;
+  --color-btn-primary-hover: #ffffff;
+
+  --color-usage-1: #172554;
+  --color-usage-2: #1e40af;
+  --color-usage-3: #2563eb;
+  --color-usage-4: #3291ff;
+
+  --color-building: #eab308;
+  --color-shipped: #22c55e;
+  --color-archived: #71717a;
+  --color-idea: #ef4444;
 }

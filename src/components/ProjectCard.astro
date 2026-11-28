@@ -6,9 +6,11 @@ import { url } from '../lib/url';
 interface Props {
   project: Project;
   variant?: 'grid' | 'compact' | 'featured';
+  indexLabel?: string;
 }
-const { project, variant = 'grid' } = Astro.props;
-const { title, description, role, highlight, techStack, status, category, startDate, date } = project.data;
+const { project, variant = 'grid', indexLabel } = Astro.props;
+const { title, description, role, highlight, techStack, status, category, startDate, date } =
+  project.data;
 const href = url(`/projects/${project.id}`);
 const isCompact = variant === 'compact';
 const displayDate = startDate || date;
@@ -26,7 +28,7 @@ const displayDate = startDate || date;
           <StatusDot status={status} withLabel={false} />
           <span class="title">{title}</span>
           <span class="stack mono">{techStack.slice(0, 4).join(' · ')}</span>
-          {displayDate && <span class="date mono">{displayDate}</span>}
+          {displayDate && <span class="date mono tabular">{displayDate}</span>}
         </div>
         <p class="compact-desc">{description}</p>
       </>
@@ -35,18 +37,34 @@ const displayDate = startDate || date;
         <div class="card-top">
           <div class="card-meta">
             <StatusDot status={status} withLabel={false} />
+            {indexLabel && <span class="idx mono tabular">{indexLabel}</span>}
             <span class="role mono">{role || category}</span>
           </div>
           <div class="card-right">
-            {displayDate && <span class="date mono">{displayDate}</span>}
-            <span class="arrow mono" aria-hidden="true">↗</span>
+            {displayDate && <span class="date mono tabular">{displayDate}</span>}
+            <svg
+              class="arrow"
+              width="13"
+              height="13"
+              viewBox="0 0 16 16"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M4.5 11.5L11.5 4.5M11.5 4.5H5.5M11.5 4.5V10.5"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
           </div>
         </div>
 
         <h3 class="title">{title}</h3>
         <p class="desc">{description}</p>
 
-        {highlight && <div class="highlight mono">{highlight}</div>}
+        {highlight && <div class="highlight mono tabular">{highlight}</div>}
 
         {techStack.length > 0 && (
           <div class="tech-row">
@@ -70,13 +88,13 @@ const displayDate = startDate || date;
     border-radius: var(--radius-md);
     background: var(--color-bg-elevated);
     text-decoration: none;
-    transition: border-color var(--transition-base),
-      background var(--transition-base);
+    transition: border-color var(--transition-fast),
+      background var(--transition-fast);
     min-width: 0;
   }
   .project-card:hover {
-    border-color: var(--color-accent);
-    background: var(--color-bg-hover);
+    border-color: var(--color-border-strong);
+    background: var(--color-bg-subtle);
   }
   .card-top {
     display: flex;
@@ -93,8 +111,12 @@ const displayDate = startDate || date;
   .card-meta > :global(.status) {
     align-self: center;
   }
+  .idx {
+    font-size: 11px;
+    color: var(--color-text-tertiary);
+  }
   .role {
-    font-size: var(--text-xs);
+    font-size: 11px;
     color: var(--color-text-tertiary);
     white-space: nowrap;
     overflow: hidden;
@@ -103,16 +125,15 @@ const displayDate = startDate || date;
   .card-right {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: 6px;
     flex-shrink: 0;
   }
   .date {
-    font-size: var(--text-xs);
+    font-size: 11px;
     color: var(--color-text-tertiary);
     white-space: nowrap;
   }
   .arrow {
-    font-size: var(--text-xs);
     color: var(--color-text-tertiary);
     transition: color var(--transition-fast), transform var(--transition-fast);
   }
@@ -123,7 +144,8 @@ const displayDate = startDate || date;
   .title {
     margin: 0;
     font-size: var(--text-lg);
-    font-weight: 500;
+    font-weight: 600;
+    letter-spacing: -0.02em;
     color: var(--color-text);
     line-height: var(--leading-tight);
     overflow-wrap: anywhere;
@@ -140,12 +162,12 @@ const displayDate = startDate || date;
   }
   .highlight {
     padding: 6px 10px;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-xs);
     background: var(--color-bg-subtle);
     border: 1px solid var(--color-border);
-    font-size: var(--text-xs);
+    font-size: 11px;
     color: var(--color-text-secondary);
-    line-height: 1.4;
+    line-height: 1.45;
     overflow-wrap: anywhere;
   }
   .tech-row {
@@ -158,10 +180,10 @@ const displayDate = startDate || date;
   .tech-pill {
     font-size: 11px;
     color: var(--color-text-tertiary);
-    background: var(--color-bg-subtle);
+    background: var(--color-bg);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-full);
-    padding: 2px 9px;
+    border-radius: var(--radius-xs);
+    padding: 2px 7px;
     white-space: nowrap;
   }
 
@@ -169,7 +191,13 @@ const displayDate = startDate || date;
   .project-card.compact {
     gap: var(--space-1);
     padding: var(--space-3) var(--space-4);
-    margin: 4px 0;
+    margin: 0;
+    border: none;
+    border-bottom: 1px solid var(--color-border);
+    border-radius: 0;
+  }
+  .project-card.compact:last-child {
+    border-bottom: none;
   }
   .compact-head {
     display: grid;
